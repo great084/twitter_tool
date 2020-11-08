@@ -21,3 +21,10 @@ Processing by Rails::WelcomeController#index as HTML
 Completed 200 OK in 29ms (Views: 19.2ms | ActiveRecord: 0.0ms | Allocations: 2937)
 
 
+Started GET "/" for ::1 at 2020-11-08 09:13:22 +0900
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /Users/nozomi-nakamitsu/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/railties-6.0.3.4/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /Users/nozomi-nakamitsu/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/railties-6.0.3.4/lib/rails/templates/rails/welcome/index.html.erb (Duration: 8.6ms | Allocations: 311)
+Completed 200 OK in 35ms (Views: 16.1ms | ActiveRecord: 0.0ms | Allocations: 1892)
+
+
