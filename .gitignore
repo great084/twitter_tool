@@ -57,3 +57,4 @@ pkg/
 # 追加項目
 .DS_Store
 /vendor/bundle
+.env
