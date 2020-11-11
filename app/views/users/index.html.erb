@@ -2,6 +2,10 @@
 
 <% if logged_in? %>
   <h2>ログイン中</h2>
+  <p><%= @user.uid %></p>
+  <p><%= @user.nickname %></p>
+  <p><%= @user.name %></p>
+  <p><%= @user.image %></p>
 <% else %>
   <h2>ログインしていません</h2>
 <% end %>
