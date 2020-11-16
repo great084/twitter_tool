@@ -10,10 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_16_001903) do
+ActiveRecord::Schema.define(version: 2020_11_16_132911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "media", force: :cascade do |t|
+    t.bigint "tweet_id", null: false
+    t.string "media_url", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tweet_id"], name: "index_media_on_tweet_id"
+  end
+
+  create_table "tweets", force: :cascade do |t|
+    t.datetime "tweet_created_at", null: false
+    t.string "tweet_id", null: false
+    t.string "text", null: false
+    t.integer "retweet_count", null: false
+    t.integer "favorite_count", null: false
+    t.bigint "user_id", null: false
+    t.boolean "tweet_flag", default: false, null: false
+    t.boolean "retweet_flag", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_tweets_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "uid"
@@ -22,4 +44,6 @@ ActiveRecord::Schema.define(version: 2020_11_16_001903) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "media", "tweets"
+  add_foreign_key "tweets", "users"
 end
