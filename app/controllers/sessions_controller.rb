@@ -14,8 +14,6 @@ class SessionsController < ApplicationController
       new_user = User.new(
         uid: user_data[:uid],
         nickname: user_data[:info][:nickname],
-        name: user_data[:info][:name],
-        image: user_data[:info][:image],
       )
       if new_user.save
         log_in(new_user)
