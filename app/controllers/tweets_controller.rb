@@ -9,22 +9,6 @@ class TweetsController < ApplicationController
     client = twitter_client
     @user = User.first
 
-    # @tweets = client.home_timeline
-    # #API用のURLを設定（●にはデベロッパー管理画面のDev environment labelを入力）
-    # uri = "https://api.twitter.com/1.1/tweets/search/30day/dev.json"
-    # #uri = URI.parse("https://api.twitter.com/1.1/search/tweets.json")
-
-    # #paramsに検索ワードや件数、日付などを入力
-    # params = {
-    #   query: '純情エビデンス', #検索したいワード
-    #   maxResults: 10,  #取得件数
-    # }.to_json
-    #res = RestClient.post uri, params, { :Authorization => "#{client}", content_type: :json }
-    #@res = client.search("純情エビデンス", count: 10, result_type: "recent",  exclude: "retweets", since_id: nil)
-
-    #上記で設定したパラメーターをget関数を使い指定URLから取得
-    #@res = client.get(uri, params)
-
     #Twitter developerのコード
     uri = URI.parse("https://api.twitter.com/1.1/tweets/search/30day/dev.json")
 
@@ -32,9 +16,9 @@ class TweetsController < ApplicationController
     request["Authorization"] = "Bearer #{ENV["BEARER_TOKEN"]}"
     request.body = "{
       \"query\":\"from:YUTAJAPAN210\",
-      \"maxResults\":\"50\",
-      \"fromDate\":\"202010161200\",
-      \"toDate\":\"202010161300\"
+      \"maxResults\":\"10\",
+      \"fromDate\":\"202010201200\",
+      \"toDate\":\"202010262000\"
     }"
 
     req_options = {
@@ -44,8 +28,9 @@ class TweetsController < ApplicationController
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
-    @res = JSON.parse(response.body)
+    @response = JSON.parse(response.body)
     binding.pry
+    
   end
 
   def twitter_client
