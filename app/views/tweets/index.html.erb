@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <%  @tweets.each do |tweet|%>
+    <%@tweets.each do |tweet|%>
       <tr>
         <td>
           <% if tweet.retweet_flag? %>
@@ -24,7 +24,11 @@
         </td>
         <td><%= l tweet.tweet_created_at, format: :short%></td>
         <td><%= tweet.text%></td>
-        <td>画像</td>
+        <td>
+          <% tweet.media.each do |media| %>
+            <%= image_tag media.media_url.to_s,size:'80x80',class: "m-1" %>
+          <% end %>
+        </td>
         <td><%= tweet.retweet_count%></td>
         <td><%= tweet.favorite_count%></td>
         <td><%= link_to "詳細", "#",class:"btn btn-success m-auto"%></td>

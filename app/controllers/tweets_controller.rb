@@ -1,8 +1,7 @@
 class TweetsController < ApplicationController
   def index
-    @tweets=Tweet.order(id: :desc)
-    #ユーザーを紐付ける
-    # .includes(:user) 
+    @tweets=Tweet.order(id: :desc).includes(:media)
+
   end
 
 
