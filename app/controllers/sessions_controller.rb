@@ -1,5 +1,9 @@
 class SessionsController < ApplicationController
   include SessionsHelper
+
+  def failure
+    redirect_to root_url, alert: "Authentication failed."
+  end
   
   def create
     unless request.env['omniauth.auth'][:uid]
