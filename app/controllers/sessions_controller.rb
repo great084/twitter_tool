@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
   include SessionsHelper
 
   def failure
-    redirect_to root_url, alert: "Authentication failed."
+    redirect_to root_path
   end
   
   def create
