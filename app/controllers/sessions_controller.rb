@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
   include SessionsHelper
 
   def failure
+    flash[:alert] = 'ログインをキャンセルしました。もう一度ログインしてください'
     redirect_to root_path
   end
   
