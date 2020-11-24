@@ -11,22 +11,11 @@ class SessionsController < ApplicationController
       redirect_to root_url
     end
     user_data = request.env['omniauth.auth']
-    user = User.find_by(uid: user_data[:uid])
-    if user
-      log_in(user)
-      redirect_to root_url
-    else
-      new_user = User.new(
-        uid: user_data[:uid],
-        nickname: user_data[:info][:nickname],
-      )
-      if new_user.save
-        log_in(new_user)
-      end
-      redirect_to root_url
-    end
+    user = User.find_or_initialize_by(uid: user_data[:uid])
+    user.update_attributes(nickname: user_data[:info][:nickname])
+    log_in(user)
+    redirect_to root_url
   end
-
 
   def destroy
     log_out if logged_in?
