@@ -29,5 +29,5 @@ Metrics/MethodLength:
   Max: 20
 
 # private/protected は一段深くインデントする
-Style/IndentationConsistency:
+Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
