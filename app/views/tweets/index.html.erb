@@ -1,5 +1,5 @@
 <h1>tweet一覧表示</h1>
-<table class="table table-striped text-center">
+<table class="table table-striped text-center my-table">
   <thead>
     <tr>
       <th scope="col"></th>
@@ -31,7 +31,7 @@
         </td>
         <td><%= tweet.retweet_count%></td>
         <td><%= tweet.favorite_count%></td>
-        <td><%= link_to "詳細", "#",class:"btn btn-success m-auto"%></td>
+        <td><%= link_to "詳細", tweet,class:"btn btn-success m-auto"%></td>
       </tr>
     <% end %>
   </tbody>

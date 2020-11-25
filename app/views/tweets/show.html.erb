@@ -1,0 +1,46 @@
+
+<h1 class="text-center">過去投稿の詳細</h1>
+<table class="table table-bordered my-5 mx-auto w-75" >
+  <tbody>
+    <tr>
+      <th scope="col">再投稿の状態</th>
+      <td>      
+        <% if @tweet.retweet_flag? %>
+          <button class="btn btn-info m-2 " disabled >リツイート済</button>
+        <% end %>
+        <% if @tweet.tweet_flag? %>
+          <button class="btn btn-warning m-2 " disabled>再投稿済</button>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th scope="col">投稿日時</th>
+      <td><%= l @tweet.tweet_created_at, format: :short%></td>
+    </tr>
+    <tr>
+    <th scope="col">投稿内容</th>
+      <td><%= @tweet.text%></td>
+    </tr>
+    <tr>
+      <th scope="col">画像</th>
+      <td>
+        <% @tweet.media.each do |media| %>
+          <%= image_tag media.media_url.to_s,size:'80x80',class: "m-1" %>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th scope="col">リツイート数</th>
+      <td><%= @tweet.retweet_count%></td>
+    </tr>
+    <tr>
+      <th scope="col">いいね数</th>
+      <td><%= @tweet.favorite_count%></td>
+    </tr>
+  </tbody>
+</table>
+
+ <div class="text-center ">
+  <%= link_to '再投稿する', "#" ,class: "btn btn-warning mx-2" %>
+  <%= link_to '再投稿する', "#",class: "btn btn-info mx-2" %>
+ </div>
