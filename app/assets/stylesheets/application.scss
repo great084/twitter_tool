@@ -15,3 +15,62 @@
  */
 
 @import "bootstrap/scss/bootstrap";
+// 共通部分
+body{
+width: 80%;
+margin-left: auto;
+margin-right: auto;
+}
+table {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+// ツイート一覧テーブル
+.table_index{
+  // テーブルヘッダーを固定
+  thead,
+  tbody {
+    display: inline-block;
+  }
+
+  tbody {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 600px;
+
+  }
+
+  th,
+  td {
+    width: 150px;
+    min-width: 150px;
+  }
+  td{
+    height: 120px;
+  }
+  // テキスト長文時、省略表示
+  .box-read {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 0;
+  }
+}
+// リツイートボタンと再投稿ボタンの大きさ統一
+.flag-btn{
+  width:100px;
+} 
+
+// ツイート詳細ページ
+.table-show{
+  width:80%;
+th{
+  width:20%;
+  background-color: lightgray;;
+}
+
+
+}

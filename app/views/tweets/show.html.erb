@@ -1,7 +1,7 @@
 
 <h1 class="text-center">過去投稿の詳細</h1>
-<table class="table table-bordered my-5 mx-auto w-75" >
-  <tbody>
+<table class="table table-bordered  my-5 mx-auto table-show ">
+  <tbody >
     <tr>
       <th scope="col">再投稿の状態</th>
       <td>      
@@ -22,7 +22,7 @@
       <td><%= @tweet.text%></td>
     </tr>
     <tr>
-      <th scope="col">画像</th>
+      <th scope="col" style='height:100px'>画像</th>
       <td>
         <% @tweet.media.each do |media| %>
           <%= image_tag media.media_url.to_s,size:'80x80',class: "m-1" %>
