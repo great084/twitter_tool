@@ -13,15 +13,12 @@ class Tweet < ApplicationRecord
   def twitter_search_data
     client = twitter_client
     #Twitter developerのコード
-    uri = URI.parse("https://api.twitter.com/1.1/tweets/search/30day/dev.json")
-    request = Net::HTTP::Post.new(uri)
-    request["Authorization"] = "Bearer #{ENV["BEARER_TOKEN"]}"
-    request.body = fetch_request_body
+    uri = URI.parse("https://api.twitter.com/1.1/tweets/search/#{ENV["PLAN"]}/#{ENV["LABEL"]}.json")
     req_options = {
       use_ssl: uri.scheme == "https",
     }
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-      http.request(request)
+      http.request(fetch_request_data(uri))
     end
     @response = JSON.parse(response.body)
   end
@@ -36,16 +33,19 @@ class Tweet < ApplicationRecord
     end
   end
 
-  def fetch_request
-
+  def fetch_request_data(uri)
+    request = Net::HTTP::Post.new(uri)
+    request["Authorization"] = "Bearer #{ENV["BEARER_TOKEN"]}"
+    request.body = fetch_request_query
+    request
   end
 
   #クエリ指定
-  def fetch_request_body
+  def fetch_request_query
     body = "{
       \"query\":\"from:#{ENV["TWEET_USER"]}\",
       \"maxResults\":\"10\",
-      \"fromDate\":\"202010300600\",
+      \"fromDate\":\"202010290600\",
       \"toDate\":\"202010310900\"
     }"
   end

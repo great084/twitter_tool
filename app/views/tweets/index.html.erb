@@ -1,12 +1,14 @@
 <h1>index</h1>
-<%= @tweets.each do |tweet| %>
+<% @tweets.each do |tweet| %>
   <p><%= tweet.text %></p>
   <p><%= tweet.created_at %></p>
   <p><%= tweet.tweet_id %></p>
   <p><%= tweet.text %></p>
   <p><%= tweet.retweet_count %></p>
   <p><%= tweet.favorite_count %></p>
-  <p><%= media.tweet_id %></p>
-  <p><%= media.media_url %></p>
   <hr>
+<% end %>
+<% @media.each do |medium| %>
+  <p><%= medium.tweet_id %></p>
+  <p><%= medium.media_url %></p>
 <% end %>
