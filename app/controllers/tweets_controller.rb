@@ -1,7 +1,4 @@
 class TweetsController < ApplicationController
-  require 'net/http'
-  require 'uri'
-  require 'json'
   include SessionsHelper
 
   def index
@@ -16,7 +13,16 @@ class TweetsController < ApplicationController
         retweet_count: res["retweet_count"],
         favorite_count: res["favorite_count"]
       )
+      if res["extended_entities"]
+        res["extended_entities"]["media"].each do |res_midium|
+          Medium.create!(
+            tweet_id: Tweet.last.id,
+            media_url: res_midium["media_url"]
+          )
+        end
+      end
     end
     @tweets = Tweet.all
+    @media = Medium.all
   end
 end

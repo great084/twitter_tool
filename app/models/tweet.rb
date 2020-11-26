@@ -14,14 +14,12 @@ class Tweet < ApplicationRecord
     client = twitter_client
     #Twitter developerのコード
     uri = URI.parse("https://api.twitter.com/1.1/tweets/search/30day/dev.json")
-
     request = Net::HTTP::Post.new(uri)
     request["Authorization"] = "Bearer #{ENV["BEARER_TOKEN"]}"
     request.body = fetch_request_body
     req_options = {
       use_ssl: uri.scheme == "https",
     }
-
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
@@ -47,8 +45,8 @@ class Tweet < ApplicationRecord
     body = "{
       \"query\":\"from:#{ENV["TWEET_USER"]}\",
       \"maxResults\":\"10\",
-      \"fromDate\":\"202010281200\",
-      \"toDate\":\"202011042000\"
+      \"fromDate\":\"202010300600\",
+      \"toDate\":\"202010310900\"
     }"
   end
 

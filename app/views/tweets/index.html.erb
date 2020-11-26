@@ -6,13 +6,7 @@
   <p><%= tweet.text %></p>
   <p><%= tweet.retweet_count %></p>
   <p><%= tweet.favorite_count %></p>
+  <p><%= media.tweet_id %></p>
+  <p><%= media.media_url %></p>
   <hr>
-<% end %>
-
-<% if logged_in? %>
-  <h2>ログイン中</h2>
-  <p><%= @user.uid %></p>
-  <p><%= @user.nickname %></p>
-<% else %>
-  <h2>ログインしていません</h2>
 <% end %>
