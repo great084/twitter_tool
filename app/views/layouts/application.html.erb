@@ -4,19 +4,11 @@
     <title>TwitterToolApp</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-
   <body>
-  <header>
-  <% if logged_in? %>
-    <%= link_to 'ログアウト', logout_path, class: "logout" %>
-  <% else %>
-    <%= link_to 'ログイン', "/auth/twitter", class: "login" %>
-  <% end %>
-  </header>
+    <%= render 'shared/header'%>
     <%= yield %>
   </body>
 </html>

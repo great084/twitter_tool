@@ -1,33 +1,25 @@
 class SessionsController < ApplicationController
-  def create
-    raise 'request.env[omniauth.auth]がありません' if auth_params.nil?
+  include SessionsHelper
 
-    user = User.find_or_create_from_auth_hash(auth_params)
-    if user
-      log_in(user)
-      flash[:notice] = 'ログインしました'
-      redirect_to root_path
+  def failure
+    flash[:alert] = 'ログインをキャンセルしました。もう一度ログインしてください'
+    redirect_to root_path
+  end
+  
+  def create
+    user_data = request.env['omniauth.auth']
+    if user_data[:uid]
+      user = User.find_or_initialize_by(uid: user_data[:uid])
+      user.update(nickname: user_data[:info][:nickname])
+      log_in(user)  
     else
-      flash[:notice] = '失敗しました'
-      redirect_to root_path
+      flash[:alert] = 'ログインできませんでした。もう一度ログインしてください'
     end
+    redirect_to root_url
   end
 
   def destroy
     log_out if logged_in?
-    flash[:notice] = 'ログアウトしました'
-    redirect_to root_path
-  end
-
-  # callbackに失敗したときに呼ばれるアクション
-  def failure
-    flash[:notice] = 'キャンセルしました'
-    redirect_to root_path
-  end
-
-  private
-  # request.env['omniauth.auth']はTwitter認証で得た情報を格納するもの
-  def auth_params
-    request.env['omniauth.auth']
+    redirect_to root_url
   end
 end
