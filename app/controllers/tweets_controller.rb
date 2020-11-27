@@ -6,16 +6,13 @@ class TweetsController < ApplicationController
     response = tweet.twitter_search_data
     response["results"].each do |res|
       create_tweet_record(res)
-      if res["extended_entities"]
-        res["extended_entities"]["media"].each do |res_midium|
-          create_medium_record(res_midium)
-        end
-      end
+      is_extended_entities_exist?(res["extended_entities"])
     end
     @tweets = Tweet.all
     @media = Medium.all
   end
 
+  private
   def create_tweet_record(res)
     Tweet.create!(
       user_id: current_user.id,
@@ -25,6 +22,14 @@ class TweetsController < ApplicationController
       retweet_count: res["retweet_count"],
       favorite_count: res["favorite_count"]
     )
+  end
+
+  def is_extended_entities_exist?(extended_entities)
+    if extended_entities
+      extended_entities["media"].each do |res_midium|
+        create_medium_record(res_midium)
+      end
+    end
   end
 
   def create_medium_record(res_midium)
