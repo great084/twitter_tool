@@ -14,7 +14,7 @@ AllCops:
     - 'db/schema.rb'
     - 'db/seeds.rb'
     - 'Gemfile'
-    - 'spec/**'
+    - 'spec/rails_helper.rb'
   
 # 日本語でのコメントを許可
 Style/AsciiComments:
@@ -29,9 +29,28 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 # メソッドの行数が 10 行までは厳しすぎるので，20行までに変更
+# テストコード, migrate文は除外
 Metrics/MethodLength:
   Max: 20
+  Exclude: 
+    - 'spec/**/*'
+    - 'db/migrate/*'
 
 # private/protected は一段深くインデントする
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
+
+# Block内の最大行数。テストコードは除外
+Metrics/BlockLength:
+  Exclude: 
+    - 'spec/**/*'
+
+# 変数・メソッドに数字はNG。テストコードは除外
+Naming/VariableNumber:
+  Exclude: 
+    - 'spec/**/*'
+
+# helper内のインスタンス変数利用は不可だが、session_helperのみ許可
+Rails/HelperInstanceVariable:
+  Exclude: 
+    - 'app/helpers/sessions_helper.rb'
