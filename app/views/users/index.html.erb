@@ -1,5 +1,5 @@
 <h1>HOME</h1>
-
+<h2><%= flash.now[:alert] %></h2>
 <% if logged_in? %>
   <h2>ログイン中</h2>
   <p><%= @user.uid %></p>

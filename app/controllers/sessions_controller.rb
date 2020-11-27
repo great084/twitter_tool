@@ -1,29 +1,22 @@
 class SessionsController < ApplicationController
   include SessionsHelper
+
+  def failure
+    flash[:alert] = 'ログインをキャンセルしました。もう一度ログインしてください'
+    redirect_to root_path
+  end
   
   def create
-    unless request.env['omniauth.auth'][:uid]
-      redirect_to root_url
-    end
     user_data = request.env['omniauth.auth']
-    user = User.find_by(uid: user_data[:uid])
-    if user
-      log_in(user)
-      redirect_to root_url
+    if user_data[:uid]
+      user = User.find_or_initialize_by(uid: user_data[:uid])
+      user.update(nickname: user_data[:info][:nickname])
+      log_in(user)  
     else
-      new_user = User.new(
-        uid: user_data[:uid],
-        nickname: user_data[:info][:nickname],
-        name: user_data[:info][:name],
-        image: user_data[:info][:image],
-      )
-      if new_user.save
-        log_in(new_user)
-      end
-      redirect_to root_url
+      flash[:alert] = 'ログインできませんでした。もう一度ログインしてください'
     end
+    redirect_to root_url
   end
-
 
   def destroy
     log_out if logged_in?
