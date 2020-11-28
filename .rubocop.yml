@@ -54,3 +54,8 @@ Naming/VariableNumber:
 Rails/HelperInstanceVariable:
   Exclude: 
     - 'app/helpers/sessions_helper.rb'
+
+# hash内のインデント設定。見づらくなるため除外
+Layout/FirstHashElementIndentation:
+  Exclude:
+    - 'spec/support/omniauth_mocks.rb'
