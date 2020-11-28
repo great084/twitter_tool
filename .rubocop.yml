@@ -55,7 +55,7 @@ Rails/HelperInstanceVariable:
   Exclude: 
     - 'app/helpers/sessions_helper.rb'
 
-# hash内のインデント設定。見づらくなるため除外
+# hash内のインデント設定。defaultの'special_inside_parentheses'は見づらいため変更
 Layout/FirstHashElementIndentation:
-  Exclude:
-    - 'spec/support/omniauth_mocks.rb'
+  EnforcedStyle: consistent
+
