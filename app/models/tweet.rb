@@ -43,8 +43,8 @@ class Tweet < ApplicationRecord
     body = "{
       \"query\":\"from:#{ENV["TWEET_USER"]}\",
       \"maxResults\":\"10\",
-      \"fromDate\":\"202010290600\",
-      \"toDate\":\"202010310900\"
+      \"fromDate\":\"#{ENV["FROM_DATE"]}\",
+      \"toDate\":\"#{ENV["TO_DATE"]}\"
     }"
   end
 
