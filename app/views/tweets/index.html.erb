@@ -1,5 +1,5 @@
 <h1>index</h1>
-<%= @tweets.each do |tweet| %>
+<% @tweets.each do |tweet| %>
   <p><%= tweet.text %></p>
   <p><%= tweet.created_at %></p>
   <p><%= tweet.tweet_id %></p>
@@ -8,11 +8,7 @@
   <p><%= tweet.favorite_count %></p>
   <hr>
 <% end %>
-
-<% if logged_in? %>
-  <h2>ログイン中</h2>
-  <p><%= @user.uid %></p>
-  <p><%= @user.nickname %></p>
-<% else %>
-  <h2>ログインしていません</h2>
+<% @media.each do |medium| %>
+  <p><%= medium.tweet_id %></p>
+  <p><%= medium.media_url %></p>
 <% end %>
