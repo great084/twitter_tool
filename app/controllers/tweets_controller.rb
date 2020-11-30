@@ -5,8 +5,12 @@ class TweetsController < ApplicationController
   def index
     @tweets=Tweet.where(user_id: @user.id).order(id: :desc).includes(:media).page(params[:page]).per(PER_PAGE)
   end
+  
   def show
    @tweet = Tweet.find(params[:id])
+   if @tweet.user_id != current_user.id
+    redirect_to root_path
+   end
   end
 
   private
