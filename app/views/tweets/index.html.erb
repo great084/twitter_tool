@@ -1,4 +1,4 @@
-<h1>tweet一覧表示</h1>
+<h1><%= @user.nickname%>さんのtweet一覧</h1>
 <table class="table table-striped text-center table_index" >
   <thead>
     <tr>
@@ -24,9 +24,11 @@
         </td>
         <td><%= tweet.retweet_count%></td>
         <td><%= tweet.favorite_count%></td>
+
         <td><%= link_to "詳細", tweet,class:"btn btn-success my-auto"%></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 <%= paginate @tweets%>
+
