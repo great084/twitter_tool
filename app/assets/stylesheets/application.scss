@@ -1,19 +1,3 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
-
 @import "bootstrap/scss/bootstrap";
 // 共通部分
 body{
@@ -25,9 +9,7 @@ table {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-
 }
-
 // ツイート一覧テーブル
 .table_index{
   // テーブルヘッダーを固定
@@ -35,14 +17,11 @@ table {
   tbody {
     display: inline-block;
   }
-
   tbody {
     overflow-x: hidden;
     overflow-y: scroll;
     height: 600px;
-
   }
-
   th,
   td {
     width: 150px;
@@ -51,6 +30,15 @@ table {
   td{
     height: 120px;
   }
+  .tweet_media{
+    width:50px;
+    height:50px;
+  }
+  .media_row{
+    width:100px;
+    height:100px;
+  }
+
   // テキスト長文時、省略表示
   .box-read {
     white-space: nowrap;
@@ -59,6 +47,7 @@ table {
     max-width: 0;
   }
 }
+
 // リツイートボタンと再投稿ボタンの大きさ統一
 .flag-btn{
   width:100px;
@@ -71,6 +60,11 @@ th{
   width:20%;
   background-color: lightgray;;
 }
-
-
+.show_media_row{
+  height:100px;
+}
+.show_tweet_media {
+  width: 80px;
+  height: 80px;
+}
 }

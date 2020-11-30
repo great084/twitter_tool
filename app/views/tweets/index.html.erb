@@ -13,20 +13,13 @@
   </thead>
   <tbody >
     <%@tweets.each do |tweet|%>
-      <tr >
-        <td >
-          <% if tweet.retweet_flag? %>
-            <button class="btn btn-info m-2 flag-btn" disabled >リツイート済</button>
-          <% end %>
-          <% if tweet.tweet_flag? %>
-            <button class="btn btn-warning m-2 flag-btn" disabled>再投稿済</button>
-          <% end %>
-        </td>
+      <tr>
+        <%= render partial: 'flag_btn', locals: { tweet: tweet }%>
         <td ><%= l tweet.tweet_created_at, format: :short%></td>
         <td class="box-read"><%= tweet.text %></td>
-        <td style='width:100px height:100px' >
+        <td class="media-row" >
           <% tweet.media.each do |media| %>
-            <%= image_tag media.media_url.to_s,size:'50x50',class: "m-1" %>
+            <%= image_tag media.media_url.to_s,class: "tweet_media m-1 " %>
           <% end %>
         </td>
         <td><%= tweet.retweet_count%></td>

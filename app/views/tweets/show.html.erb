@@ -1,42 +1,25 @@
-
 <h1 class="text-center">過去投稿の詳細</h1>
 <table class="table table-bordered  my-5 mx-auto table-show ">
   <tbody >
     <tr>
       <th scope="col">再投稿の状態</th>
-      <td>      
-        <% if @tweet.retweet_flag? %>
-          <button class="btn btn-info m-2 " disabled >リツイート済</button>
-        <% end %>
-        <% if @tweet.tweet_flag? %>
-          <button class="btn btn-warning m-2 " disabled>再投稿済</button>
-        <% end %>
-      </td>
+        <%= render partial: 'flag_btn', locals: { tweet: @tweet }%>
     </tr>
     <tr>
       <th scope="col">投稿日時</th>
       <td><%= l @tweet.tweet_created_at, format: :short%></td>
     </tr>
+    <%= render partial: 'show_column', locals: { heading: "投稿内容",column_data: @tweet.text}%>
     <tr>
-    <th scope="col">投稿内容</th>
-      <td><%= @tweet.text%></td>
-    </tr>
-    <tr>
-      <th scope="col" style='height:100px'>画像</th>
+      <th scope="col" class="show_media_row">画像</th>
       <td>
         <% @tweet.media.each do |media| %>
-          <%= image_tag media.media_url.to_s,size:'80x80',class: "m-1" %>
+          <%= image_tag media.media_url.to_s,class: "show_tweet_media m-1" %>
         <% end %>
       </td>
     </tr>
-    <tr>
-      <th scope="col">リツイート数</th>
-      <td><%= @tweet.retweet_count%></td>
-    </tr>
-    <tr>
-      <th scope="col">いいね数</th>
-      <td><%= @tweet.favorite_count%></td>
-    </tr>
+    <%= render partial: 'show_column', locals: { heading: "リツイート数",column_data: @tweet.retweet_count}%>
+    <%= render partial: 'show_column', locals: { heading: "いいね数",column_data: @tweet.favorite_count}%>
   </tbody>
 </table>
 
