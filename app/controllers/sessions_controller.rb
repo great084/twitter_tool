@@ -5,13 +5,13 @@ class SessionsController < ApplicationController
     flash[:alert] = 'ログインをキャンセルしました。もう一度ログインしてください'
     redirect_to root_path
   end
-  
+
   def create
     user_data = request.env['omniauth.auth']
     if user_data[:uid]
       user = User.find_or_initialize_by(uid: user_data[:uid])
       user.update(nickname: user_data[:info][:nickname])
-      log_in(user)  
+      log_in(user)
     else
       flash[:alert] = 'ログインできませんでした。もう一度ログインしてください'
     end
