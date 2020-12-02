@@ -1,18 +1,29 @@
 class TweetsController < ApplicationController
   include SessionsHelper
 
-  def index
-    tweet = Tweet.new()
-    response = tweet.twitter_search_data
+  def search
+    date_query = Tweet.set_period_params(form_params[:period])
+    query_params = form_params.merge!(date_query)
+    response = Tweet.twitter_search_data(query_params)
     response["results"].each do |res|
       create_tweet_record(res)
       is_extended_entities_exist?(res["extended_entities"])
     end
+    binding.pry
+    redirect_to tweets_path
+  end
+
+  def index
     @tweets = Tweet.all
     @media = Medium.all
   end
 
   private
+  def form_params
+    params.permit(:period)
+          .merge(login_user: current_user.nickname)
+  end
+
   def create_tweet_record(res)
     Tweet.create!(
       user_id: current_user.id,

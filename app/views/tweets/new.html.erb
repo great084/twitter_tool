@@ -1,0 +1,9 @@
+<h1 class="text-center">過去ツイートの保存</h1>
+
+<h2>今月の残り取得件数</h2>
+
+<%= form_with model: @tweet, url: tweets_search_path, local: true do |f| %>
+  <label><%= f.radio_button :period, "until_one_year" %>〜1年前</label>
+  <label><%= f.radio_button :period, "until_now" %>1年前〜現在</label>
+  <%= f.submit "取得する" %>
+<% end %>
