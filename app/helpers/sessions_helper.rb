@@ -6,7 +6,9 @@ module SessionsHelper
 
   # 現在ログイン中のユーザーを返す (いる場合)
   def current_user
-    @current_user ||= User.find_by(uid: session[:uid]) if session[:uid]
+    return unless session[:uid]
+
+    @current_user ||= User.find_by(uid: session[:uid])
   end
 
   # ユーザーがログインしていればtrue、その他ならfalseを返す
@@ -16,6 +18,7 @@ module SessionsHelper
 
   # 現在のユーザーをログアウトする
   def log_out
+    # binding.pry
     session.delete(:uid)
     @current_user = nil
   end

@@ -26,6 +26,11 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-doc'
   gem 'rspec-rails'
+  gem 'capybara'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
+  gem 'factory_bot_rails'
+  gem 'faker'
 end
 
 group :development do
