@@ -11,7 +11,9 @@ table {
   margin-right: auto;
     // リツイートボタンと再投稿ボタンの大きさ統一
     .flag-btn {
-      width: 100px;
+      width: 120px;
+      height: 50px;
+      font-size: small;
     }
   }
 // ツイート一覧テーブル
