@@ -1,5 +1,22 @@
-  <% if logged_in? %>
-    <%= link_to 'ログアウト', logout_path %>
-  <% else %>
-    <%= link_to 'ログイン', "/auth/twitter" %>
-  <% end %>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <% if logged_in? %>
+      <div class="navbar-nav">
+        <%= link_to 'ツイートの保存', tweets_path, class: "nav-link nav-item" %>
+        <%= link_to 'ツイートの一覧', tweets_path, class: "nav-link nav-item" %>
+      </div>
+    <% end %>
+  </div>
+    <div class="navbar-nav">
+      <% if logged_in? %>
+        <p class="nav-item nav-link my-auto mr-4">ログインアカウント： @<%= current_user.nickname %></p>
+        <%= link_to 'ログアウト', logout_path, class: "nav-link nav-item"  %>
+      <% else %>
+        <%= link_to 'ログイン', "/auth/twitter" , class: "nav-link nav-item" %>
+      <% end %>
+    </div>
+</nav>
+
