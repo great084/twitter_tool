@@ -2,12 +2,16 @@ class TweetsController < ApplicationController
   include SessionsHelper
 
   def search
-    date_query = Tweet.set_period_params(form_params[:period])
-    query_params = form_params.merge!(date_query)
+    query_params = Tweet.fetch_query_params(form_params)
+    binding.pry
     response = Tweet.twitter_search_data(query_params)
-    response["results"].each do |res|
-      create_tweet_record(res)
-      is_extended_entities_exist?(res["extended_entities"])
+    loop do
+      binding.pry
+      response["results"].each do |res|
+        create_tweet_record(res)
+        is_extended_entities_exist?(res["extended_entities"])
+      end
+      response = Tweet.twitter_search_data(query_params)
     end
     binding.pry
     redirect_to tweets_path
