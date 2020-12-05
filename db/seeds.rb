@@ -17,9 +17,9 @@ end
   )
   end
 
-10.times do |n|
-  Medium.create!(
-    tweet_id: n+1,
-    media_url: File.open('./app/assets/images/sample.png')
-  )
-end 
+# 10.times do |n|
+#   Medium.create!(
+#     tweet_id: n+1,
+#     media_url: File.open('./app/assets/images/sample.png')
+#   )
+# end 

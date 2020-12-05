@@ -18,8 +18,10 @@
         <td ><%= l tweet.tweet_created_at, format: :short%></td>
         <td class="box-read"><%= tweet.text %></td>
         <td class="media-row" >
-          <% tweet.media.each do |media| %>
-            <%= image_tag media.media_url.to_s,class: "tweet_media m-1 " %>
+          <% tweet.media.each_with_index do |media,index| %>
+            <% if index==0 %>
+              <%= image_tag media.media_url.to_s,class: "tweet_media m-1 " %>           
+            <% end %>
           <% end %>
         </td>
         <td><%= tweet.retweet_count%></td>
