@@ -36,10 +36,10 @@ class Tweet < ApplicationRecord
     end
 
     def set_period_params(period)
-      datetime = DateTime.now
+      datetime = DateTime.now.gmtime
       if period == "until_now"
         params = {
-          date_to: datetime.ago(9.hours).strftime("%Y%m%d%H%M"),
+          date_to: datetime.ago(0.years).strftime("%Y%m%d%H%M"),
           date_from: datetime.ago(1.years).strftime("%Y%m%d%H%M")
         }
       elsif period == "until_one_year"
