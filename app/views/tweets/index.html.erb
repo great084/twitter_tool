@@ -1,13 +1,38 @@
-<h1>index</h1>
-<% @tweets.each do |tweet| %>
-  <p><%= tweet.text %></p>
-  <p><%= tweet.tweet_created_at %></p>
-  <p><%= tweet.tweet_id %></p>
-  <p><%= tweet.retweet_count %></p>
-  <p><%= tweet.favorite_count %></p>
-  <hr>
-<% end %>
-<% @media.each do |medium| %>
-  <p><%= medium.tweet_id %></p>
-  <p><%= medium.media_url %></p>
-<% end %>
+
+<h1><%= @user.nickname%>さんのtweet一覧</h1>
+<table class="table table-striped text-center table_index" >
+  <thead>
+    <tr>
+      <th scope="col "></th>
+      <th scope="col ">投稿日時</th>
+      <th scope="col">投稿内容</th>
+      <th scope="col ">投稿画像</th>
+      <th scope="col ">リツイート</th>
+      <th scope="col ">いいね</th>
+      <th scope="col "></th>
+    </tr>
+  </thead>
+  <tbody >
+    <%@tweets.each do |tweet|%>
+      <tr>
+        <%= render partial: 'flag_btn', locals: { tweet: tweet }%>
+        <td ><%= l tweet.tweet_created_at, format: :short%></td>
+        <td class="box-read"><%= tweet.text %></td>
+        <td class="media-row" >
+          <% tweet.media.each_with_index do |media,index| %>
+            <% if index==0 %>
+              <%= image_tag media.media_url.to_s,class: "tweet_media m-1 " %>           
+            <% end %>
+          <% end %>
+        </td>
+        <td><%= tweet.retweet_count%></td>
+        <td><%= tweet.favorite_count%></td>
+
+        <td><%= link_to "詳細", tweet,class:"btn btn-success my-auto"%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @tweets%>
+
+

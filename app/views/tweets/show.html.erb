@@ -1,0 +1,29 @@
+<h1 class="text-center">過去投稿の詳細</h1>
+<table class="table table-bordered  my-5 mx-auto table-show ">
+  <tbody >
+    <tr>
+      <th scope="col">再投稿の状態</th>
+        <%= render partial: 'flag_btn', locals: { tweet: @tweet }%>
+    </tr>
+    <tr>
+      <th scope="col">投稿日時</th>
+      <td><%= l @tweet.tweet_created_at, format: :short%></td>
+    </tr>
+    <%= render partial: 'show_column', locals: { heading: "投稿内容",column_data: @tweet.text}%>
+    <tr>
+      <th scope="col" class="show_media_row">画像</th>
+      <td>
+        <% @tweet.media.each do |media| %>
+          <%= image_tag media.media_url.to_s,class: "show_tweet_media m-1" %>
+        <% end %>
+      </td>
+    </tr>
+    <%= render partial: 'show_column', locals: { heading: "リツイート数",column_data: @tweet.retweet_count}%>
+    <%= render partial: 'show_column', locals: { heading: "いいね数",column_data: @tweet.favorite_count}%>
+  </tbody>
+</table>
+
+ <div class="text-center ">
+  <%= link_to '再投稿する', "#" ,class: "btn btn-warning mx-2" %>
+  <%= link_to '再投稿する', "#",class: "btn btn-info mx-2" %>
+ </div>

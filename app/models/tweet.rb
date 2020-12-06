@@ -7,13 +7,14 @@ class Tweet < ApplicationRecord
   validates :favorite_count, presence: true
   validates :tweet_flag, inclusion: [true, false]
   validates :retweet_flag, inclusion: [true, false]
+
   has_many :media, dependent: :destroy
 
   class << self
     def twitter_search_data(query_params)
       uri = URI.parse("https://api.twitter.com/1.1/tweets/search/#{ENV['PLAN']}/#{ENV['LABEL']}.json")
       req_options = {
-        use_ssl: uri.scheme == 'https'
+        use_ssl: uri.scheme == "https"
       }
       response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
         http.request(fetch_request_data(uri, query_params))
@@ -23,30 +24,30 @@ class Tweet < ApplicationRecord
 
     def fetch_request_data(uri, query_params)
       request = Net::HTTP::Post.new(uri)
-      request['Authorization'] = "Bearer #{ENV['BEARER_TOKEN']}"
+      request["Authorization"] = "Bearer #{ENV['BEARER_TOKEN']}"
       request.body = fetch_request_query(query_params)
       request
     end
 
     # apiに送るクエリの取得
     def fetch_query_params(form_params)
-      date_query = writer_period_params(form_params[:period])
+      date_query = period_params(form_params[:period])
       query_params = form_params.merge!(date_query)
       query_params.merge!({ next: nil })
     end
 
-    def writer_period_params(period)
-      datetime = DateTime.now.gmtime
+    def period_params(period)
+      datetime = DateTime.now
       case period
-      when 'until_now' then
+      when "until_now"
         {
-          date_to: datetime.ago(0.years).strftime('%Y%m%d%H%M'),
-          date_from: datetime.ago(27.days).strftime('%Y%m%d%H%M')
+          date_to: datetime.ago(9.hours).strftime("%Y%m%d%H%M"),
+          date_from: datetime.ago(25.days).strftime("%Y%m%d%H%M")
         }
-      when 'until_one_year' then
+      when period == "until_one_year"
         {
-          date_to: datetime.ago(1.year).strftime('%Y%m%d%H%M'),
-          date_from: datetime.ago(10.years).strftime('%Y%m%d%H%M')
+          date_to: datetime.ago(1.year).strftime("%Y%m%d%H%M"),
+          date_from: datetime.ago(10.years).strftime("%Y%m%d%H%M")
         }
       end
     end
