@@ -1,6 +1,16 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_empty?, only: [:search]
+  before_action :tweet_user,only: [:show,:index]
+  PER_PAGE = 10
+  def index
+    @tweets = Tweet.where(user_id: @user.id).order(tweet_created_at: :desc).includes(:media).page(params[:page]).per(PER_PAGE)
+  end
+
+  def show
+    @tweet = Tweet.find(params[:id])
+    redirect_to root_path if @tweet.user_id != current_user.id
+  end
   
   def search
     query_params = Tweet.fetch_query_params(form_params)
@@ -15,11 +25,6 @@ class TweetsController < ApplicationController
       end
     end
     redirect_to tweets_path
-  end
-
-  def index
-    @tweets = Tweet.all.order(tweet_created_at: "DESC")
-    @media = Medium.all
   end
 
   def date_params_empty?
@@ -67,4 +72,10 @@ class TweetsController < ApplicationController
       media_url: res_midium["media_url"]
     )
   end
+  def tweet_user
+    @user = current_user
+  end
+ 
 end
+
+

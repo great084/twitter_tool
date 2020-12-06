@@ -7,6 +7,7 @@ class Tweet < ApplicationRecord
   validates :favorite_count, presence: true
   validates :tweet_flag, inclusion: [true, false]
   validates :retweet_flag, inclusion: [true, false]
+
   has_many :media, dependent: :destroy
 
   class << self
