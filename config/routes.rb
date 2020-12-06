@@ -5,5 +5,4 @@ Rails.application.routes.draw do
   post '/tweets/search', to: 'tweets#search'
   resources :tweets, only: [:new, :index,:show]
   root to: "users#index"
-  resources :tweets
 end
