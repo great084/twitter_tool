@@ -4,7 +4,9 @@ class TweetsController < ApplicationController
   before_action :tweet_user,only: [:show,:index]
   PER_PAGE = 10
   def index
-    @tweets = Tweet.where(user_id: @user.id).order(tweet_created_at: :desc).includes(:media).page(params[:page]).per(PER_PAGE)
+    @q = Tweet.where(user_id: @user.id).ransack(params[:q])
+    @tweets=@q.result(distinct: true).order(tweet_created_at: :desc).includes(:media).page(params[:page]).per(PER_PAGE)
+    @now = Time.current 
   end
 
   def show
