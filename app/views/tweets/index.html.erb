@@ -26,7 +26,6 @@
     <tr>
       <th scope="row"><%= f.label :tweet_created_at %></th>
       <td>
-        <%= f.radio_button :tweet_created_at_eq, '', {:checked => true} %>指定なし
         <%= f.radio_button :tweet_created_at_lteq, @now.ago(2.years)%>2年以上前
         <%= f.radio_button :tweet_created_at_lteq,@now.prev_year %>1年以上前
         <%= f.radio_button :tweet_created_at_lteq	,@now.ago(6.month)%>半年以上前
