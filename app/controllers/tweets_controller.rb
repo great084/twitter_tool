@@ -16,15 +16,18 @@ class TweetsController < ApplicationController
 
   def search
     query_params = Tweet.fetch_query_params(form_params)
-    response = Tweet.twitter_search_data(query_params)
-    response["results"].each do |res|
-      tweet = Tweet.find_by(tweet_id: res["id_str"])
-      if tweet
-        update_tweet_record(tweet, res)
-      else
-        create_tweet_record(res)
-        extended_entities_exist?(res["extended_entities"])
+    loop do
+      response = Tweet.fetch_tweet(query_params)
+      response["results"].each do |res|
+        tweet = Tweet.find_by(tweet_id: res["id_str"])
+        if tweet
+          update_tweet_record(tweet, res)
+        else
+          create_tweet_record(res)
+          extended_entities_exist?(res["extended_entities"])
+        end
       end
+      break unless next_token_exist?(response, query_params)
     end
     redirect_to tweets_path
   end
@@ -78,5 +81,11 @@ class TweetsController < ApplicationController
 
     def tweet_user
       @user = current_user
+    end
+
+    def next_token_exist?(response, query_params)
+      return unless response["next"]
+
+      query_params[:next] = response["next"]
     end
 end
