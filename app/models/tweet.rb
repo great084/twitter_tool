@@ -28,15 +28,14 @@ class Tweet < ApplicationRecord
     def fetch_query_params(form_params)
       date_query = period_params(form_params[:period])
       form_params.merge!(date_query)
-      # query_params.merge!({ next: nil })
     end
 
     def period_params(period)
-      datetime = DateTime.now
+      datetime = DateTime.now.gmtime
       case period
       when "until_now"
         {
-          date_to: datetime.ago(9.hours).strftime("%Y%m%d%H%M"),
+          date_to: datetime.strftime("%Y%m%d%H%M"),
           date_from: datetime.ago(1.year).strftime("%Y%m%d%H%M")
         }
       when period == "until_one_year"
