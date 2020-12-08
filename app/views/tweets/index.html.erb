@@ -7,7 +7,6 @@
     <tr>
       <th scope="row"><%= f.label :tweet_flag %></th>
       <td>
-        <%= f.radio_button :tweet_flag_eq, '', {:checked => true} %>指定なし
         <%= f.radio_button :tweet_flag_eq, true %>含める
         <%= f.radio_button :tweet_flag_eq, false %>含めない
       </td>
@@ -18,7 +17,6 @@
     <tr>
       <th scope="row"><%= f.label :retweet_flag %></th>
       <td>
-        <%= f.radio_button :retweet_flag_eq, '', {:checked => true} %>指定なし
         <%= f.radio_button :retweet_flag_eq, true %>含める
         <%= f.radio_button :retweet_flag_eq, false %>含めない
       </td>
