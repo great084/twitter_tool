@@ -24,10 +24,10 @@ class TweetsController < ApplicationController
           update_tweet_record(tweet, res)
         else
           create_tweet_record(res)
-          extended_entities_exist?(res["extended_entities"])
+          extended_entities_exist(res["extended_entities"])
         end
       end
-      break unless next_token_exist?(response, query_params)
+      break unless next_token_exist(response, query_params)
     end
     redirect_to tweets_path
   end
@@ -64,7 +64,7 @@ class TweetsController < ApplicationController
       )
     end
 
-    def extended_entities_exist?(extended_entities)
+    def extended_entities_exist(extended_entities)
       return unless extended_entities
 
       extended_entities["media"].each do |res_medium|
@@ -83,7 +83,7 @@ class TweetsController < ApplicationController
       @user = current_user
     end
 
-    def next_token_exist?(response, query_params)
+    def next_token_exist(response, query_params)
       return unless response["next"]
 
       query_params[:next] = response["next"]

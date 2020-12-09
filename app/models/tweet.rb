@@ -9,9 +9,6 @@ class Tweet < ApplicationRecord
   validates :retweet_flag, inclusion: [true, false]
 
   has_many :media, dependent: :destroy
-  require "net/http"
-  require "uri"
-  require "json"
 
   class << self
     def fetch_tweet(query_params)
@@ -36,7 +33,7 @@ class Tweet < ApplicationRecord
       when "until_now"
         {
           date_to: datetime.strftime("%Y%m%d%H%M"),
-          date_from: datetime.ago(1.year).strftime("%Y%m%d%H%M")
+          date_from: datetime.ago(28.days).strftime("%Y%m%d%H%M")
         }
       when period == "until_one_year"
         {
@@ -52,7 +49,7 @@ class Tweet < ApplicationRecord
         "fromDate": query_params[:date_from].to_s,
         "toDate": query_params[:date_to].to_s
       }
-      data.merge!({ "next": query_params[:next].to_s }) unless query_params[:next].nil?
+      data.merge!({ "next": query_params[:next].to_s }) if query_params[:next]
       JSON.generate(data)
     end
 
