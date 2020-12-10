@@ -35,7 +35,7 @@ class Tweet < ApplicationRecord
           date_to: datetime.strftime("%Y%m%d%H%M"),
           date_from: datetime.ago(1.year).strftime("%Y%m%d%H%M")
         }
-      when period == "until_one_year"
+      when "until_one_year"
         {
           date_to: datetime.ago(1.year).strftime("%Y%m%d%H%M"),
           date_from: datetime.ago(10.years).strftime("%Y%m%d%H%M")
