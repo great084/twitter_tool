@@ -9,8 +9,7 @@ class SessionsController < ApplicationController
   def create
     user_data = request.env["omniauth.auth"]
     if user_data[:uid]
-      user = User.find_or_initialize_by(uid: user_data[:uid])
-      user.update(nickname: user_data[:info][:nickname])
+      user = user_table_update(user_data)
       log_in(user)
     else
       flash[:alert] = "ログインできませんでした。もう一度ログインしてください"
@@ -21,5 +20,15 @@ class SessionsController < ApplicationController
   def destroy
     log_out if logged_in?
     redirect_to root_url
+  end
+
+  def user_table_update(user_data)
+    user = User.find_or_initialize_by(uid: user_data[:uid])
+    user.update(
+      nickname: user_data[:info][:nickname],
+      token: user_data.credentials.token,
+      secret: user_data.credentials.secret
+    )
+    user
   end
 end
