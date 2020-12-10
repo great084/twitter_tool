@@ -1,11 +1,12 @@
 class TweetsController < ApplicationController
   include SessionsHelper
-  before_action :date_params_empty?, only: [:search]
+  before_action :date_params_check, only: [:search]
   before_action :tweet_user, only: %i[show index]
   PER_PAGE = 10
   def index
-    @q = Tweet.where(user_id: @user.id).ransack(params[:q])
-    @tweets = @q.result(distinct: true).order(tweet_created_at: :desc).includes(:media).page(params[:page]).per(PER_PAGE)
+    @tweets = Tweet.where(user_id: @user.id)
+                   .order(tweet_created_at: :desc).includes(:media)
+                   .page(params[:page]).per(PER_PAGE)
     @now = Time.current
   end
 
@@ -23,17 +24,18 @@ class TweetsController < ApplicationController
         update_tweet_record(tweet, res)
       else
         create_tweet_record(res)
-        is_extended_entities_exist?(res['extended_entities'])
+
+        extended_entities_exist?(res["extended_entities"])
       end
     end
     redirect_to tweets_path
   end
 
-  def date_params_empty?
-    if params.permit(:period).empty?
-      flash[:alert] = '期間が指定されていません。入力し直してください'
-      redirect_to new_tweet_path
-    end
+  def date_params_check
+    return unless params.permit(:period).empty?
+
+    flash[:alert] = "期間が指定されていません。入力し直してください"
+    redirect_to new_tweet_path
   end
 
   private
@@ -46,33 +48,34 @@ class TweetsController < ApplicationController
     def create_tweet_record(res)
       Tweet.create!(
         user_id: current_user.id,
-        tweet_created_at: res['created_at'],
-        tweet_id: res['id_str'],
-        text: res['text'],
-        retweet_count: res['retweet_count'],
-        favorite_count: res['favorite_count']
+        tweet_created_at: res["created_at"],
+        tweet_id: res["id_str"],
+        text: res["text"],
+        retweet_count: res["retweet_count"],
+        favorite_count: res["favorite_count"]
       )
     end
 
     def update_tweet_record(tweet, res)
       tweet.update(
-        retweet_count: res['retweet_count'],
-        favorite_count: res['favorite_count']
+
+        retweet_count: res["retweet_count"],
+        favorite_count: res["favorite_count"]
       )
     end
 
-    def is_extended_entities_exist?(extended_entities)
-      if extended_entities
-        extended_entities['media'].each do |res_midium|
-          create_medium_record(res_midium)
-        end
+    def extended_entities_exist?(extended_entities)
+      return unless extended_entities
+
+      extended_entities["media"].each do |res_medium|
+        create_medium_record(res_medium)
       end
     end
 
-    def create_medium_record(res_midium)
+    def create_medium_record(res_medium)
       Medium.create!(
         tweet_id: Tweet.last.id,
-        media_url: res_midium['media_url']
+        media_url: res_medium["media_url"]
       )
     end
 
