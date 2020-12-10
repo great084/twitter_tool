@@ -4,9 +4,10 @@ class TweetsController < ApplicationController
   before_action :tweet_user, only: %i[show index]
   PER_PAGE = 10
   def index
-    @tweets = Tweet.where(user_id: @user.id)
-                   .order(tweet_created_at: :desc).includes(:media)
-                   .page(params[:page]).per(PER_PAGE)
+    @q = Tweet.where(user_id: @user.id).ransack(params[:q])
+    @tweets = @q.result(distinct: true)
+                .order(tweet_created_at: :desc).includes(:media)
+                .page(params[:page]).per(PER_PAGE)
     @now = Time.current
   end
 
@@ -18,8 +19,8 @@ class TweetsController < ApplicationController
   def search
     query_params = Tweet.fetch_query_params(form_params)
     response = Tweet.twitter_search_data(query_params)
-    response['results'].each do |res|
-      tweet = Tweet.find_by(tweet_id: res['id_str'])
+    response["results"].each do |res|
+      tweet = Tweet.find_by(tweet_id: res["id_str"])
       if tweet
         update_tweet_record(tweet, res)
       else
@@ -58,7 +59,6 @@ class TweetsController < ApplicationController
 
     def update_tweet_record(tweet, res)
       tweet.update(
-
         retweet_count: res["retweet_count"],
         favorite_count: res["favorite_count"]
       )
