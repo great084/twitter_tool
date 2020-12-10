@@ -1,51 +1,49 @@
 
 <h3 class="m-5 text-center">ツイートの一覧</h3>
 <%# 検索ボックス %>
-<table class="table table-bordered table_search">
 <%= search_form_for @q do |f| %>
-  <tbody>
-    <tr>
-      <th scope="row"><%= f.label :tweet_flag %></th>
-      <td>
-        <%= f.radio_button :tweet_flag_eq, true %>含める
-        <%= f.radio_button :tweet_flag_eq, false %>含めない
-      </td>
-      <td rowspan= 5 vAlign=middle class="pb-o">
-        <%= f.submit "絞り込む" ,class:"btn btn-primary "%>
-      </td>
-    </tr>
-    <tr>
-      <th scope="row"><%= f.label :retweet_flag %></th>
-      <td>
-        <%= f.radio_button :retweet_flag_eq, true %>含める
-        <%= f.radio_button :retweet_flag_eq, false %>含めない
-      </td>
-    </tr>
-    <tr>
-      <th scope="row"><%= f.label :tweet_created_at %></th>
-      <td>
-        <%= f.radio_button :tweet_created_at_lteq, @now.ago(2.years)%>2年以上前
-        <%= f.radio_button :tweet_created_at_lteq,@now.prev_year %>1年以上前
-        <%= f.radio_button :tweet_created_at_lteq	,@now.ago(6.month)%>半年以上前
-      </td>
-      
-    </tr>
-    <tr>
-      <th scope="row"><%= f.label :retweet_count %></th>
-      <td>
-        <%= f.number_field :retweet_count_gteq,min:"0"%>以上〜
-      </td>
-    </tr>
-    <tr>
-      <th scope="row"><%= f.label :favorite_count %></th>
-      <td>
-        <%= f.number_field :favorite_count_gteq,min:"0"%>以上〜
-      </td>
-    </tr>
-  </tbody>
-  <% end %>
-</table>
-
+  <table class="table table-bordered table_search">
+    <tbody>
+      <tr>
+        <th scope="row"><%= f.label :tweet_flag %></th>
+        <td>
+          <%= f.radio_button :tweet_flag_eq, true %>含める
+          <%= f.radio_button :tweet_flag_eq, false %>含めない
+        </td>
+        <td rowspan= 5 vAlign=middle class="pb-o">
+          <%= f.submit "絞り込む" ,class:"btn btn-primary "%>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row"><%= f.label :retweet_flag %></th>
+        <td>
+          <%= f.radio_button :retweet_flag_eq, true %>含める
+          <%= f.radio_button :retweet_flag_eq, false %>含めない
+        </td>
+      </tr>
+      <tr>
+        <th scope="row"><%= f.label :tweet_created_at %></th>
+        <td>
+          <%= f.radio_button :tweet_created_at_lteq, @now.ago(2.years)%>2年以上前
+          <%= f.radio_button :tweet_created_at_lteq,@now.prev_year %>1年以上前
+          <%= f.radio_button :tweet_created_at_lteq	,@now.ago(6.month)%>半年以上前
+        </td>
+      </tr>
+      <tr>
+        <th scope="row"><%= f.label :retweet_count %></th>
+        <td>
+          <%= f.number_field :retweet_count_gteq,min:"0"%>以上〜
+        </td>
+      </tr>
+      <tr>
+        <th scope="row"><%= f.label :favorite_count %></th>
+        <td>
+          <%= f.number_field :favorite_count_gteq,min:"0"%>以上〜
+        </td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>
 <%# ツイート一覧表示 %>
 <% if @tweets.blank?  %>
   <p class="text-center">該当データがありません。</p>

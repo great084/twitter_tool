@@ -32,7 +32,6 @@ class Tweet < ApplicationRecord
     # apiに送るクエリの取得
     def fetch_query_params(form_params)
       date_query = period_params(form_params[:period])
-      binding.pry
       query_params = form_params.merge!(date_query)
       query_params.merge!({ next: nil })
     end
