@@ -9,7 +9,7 @@ class TweetsController < ApplicationController
     @tweets = @q.result(distinct: true)
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
-    @now = Date.today
+    @now = Time.zone.today
   end
 
   def show
