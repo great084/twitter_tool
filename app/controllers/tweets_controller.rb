@@ -3,12 +3,13 @@ class TweetsController < ApplicationController
   before_action :date_params_check, only: [:search]
   before_action :tweet_user, only: %i[show index]
   PER_PAGE = 10
+  require "date"
   def index
     @q = Tweet.where(user_id: @user.id).ransack(params[:q])
     @tweets = @q.result(distinct: true)
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
-    @now = Time.current
+    @now = Date.today
   end
 
   def show
