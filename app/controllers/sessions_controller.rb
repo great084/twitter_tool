@@ -26,8 +26,8 @@ class SessionsController < ApplicationController
     user = User.find_or_initialize_by(uid: user_data[:uid])
     user.update(
       nickname: user_data[:info][:nickname],
-      token: user_data.credentials.token,
-      secret: user_data.credentials.secret
+      token: user_data[:credentials][:token],
+      secret: user_data[:credentials][:secret]
     )
     user
   end
