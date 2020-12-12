@@ -16,17 +16,26 @@ class TweetsController < ApplicationController
 
   def search
     query_params = Tweet.fetch_query_params(form_params)
-    response = Tweet.twitter_search_data(query_params)
+    loop do
+      response = Tweet.fetch_tweet(query_params)
+      return if response_data_nil?(response)
+
+      create_records(response)
+      break unless next_token_exist(response, query_params)
+    end
+    redirect_to tweets_path
+  end
+
+  def create_records(response)
     response["results"].each do |res|
       tweet = Tweet.find_by(tweet_id: res["id_str"])
       if tweet
         update_tweet_record(tweet, res)
       else
         create_tweet_record(res)
-        extended_entities_exist?(res["extended_entities"])
+        extended_entities_exist(res["extended_entities"])
       end
     end
-    redirect_to tweets_path
   end
 
   def date_params_check
@@ -61,7 +70,7 @@ class TweetsController < ApplicationController
       )
     end
 
-    def extended_entities_exist?(extended_entities)
+    def extended_entities_exist(extended_entities)
       return unless extended_entities
 
       extended_entities["media"].each do |res_medium|
@@ -78,5 +87,17 @@ class TweetsController < ApplicationController
 
     def tweet_user
       @user = current_user
+    end
+
+    def next_token_exist(response, query_params)
+      return unless response["next"]
+
+      query_params[:next] = response["next"]
+    end
+
+    def response_data_nil?(response)
+      !!if response["results"].empty?
+          redirect_to new_tweet_path, flash: { alert: "指定した期間内にデータはありませんでした。" }
+        end
     end
 end
