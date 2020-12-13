@@ -4,11 +4,11 @@
   <thead>
     <tr>
       <th scope="col "></th>
-      <th scope="col ">投稿日時</th>
+      <th scope="col" class= "Editlink"><%= sort_link(@q, :tweet_created_at, "投稿日時" ,{ default_order: :desc }, { class: "Editlink" }) %></th>
       <th scope="col">投稿内容</th>
       <th scope="col ">投稿画像</th>
-      <th scope="col ">リツイート</th>
-      <th scope="col ">いいね</th>
+      <th scope="col "><%= sort_link(@q, :retweet_count, "リツイート数", { default_order: :desc }, { class: "Editlink" }) %></th>
+      <th scope="col "><%= sort_link(@q, :favarite_count, "いいね数", { default_order: :desc }, { class: "Editlink" }) %></th>
       <th scope="col "></th>
     </tr>
   </thead>
