@@ -45,6 +45,18 @@ class TweetsController < ApplicationController
     redirect_to new_tweet_path
   end
 
+  def retweet
+    begin
+      tweet = params_retweet
+      client = Tweet.twitter_client(current_user)
+      binding.prye
+      client.retweet(tweet.tweet_id.to_i)
+      redirect_to tweet_path(tweet), success: "リツイートに成功しました"
+    rescue => e
+      redirect_to tweets_path, danger: "リツイートに失敗しました"
+    end
+  end
+
   private
 
     def form_params
@@ -99,5 +111,9 @@ class TweetsController < ApplicationController
       !!if response["results"].empty?
           redirect_to new_tweet_path, flash: { alert: "指定した期間内にデータはありませんでした。" }
         end
+    end
+
+    def params_retweet
+      Tweet.find(params[:format])
     end
 end
