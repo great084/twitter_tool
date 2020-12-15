@@ -54,15 +54,25 @@ class TweetsController < ApplicationController
   def post_create
     # 再投稿する
     @tweet = Tweet.new(post_params)
-    @client.update("#{@tweet.text}\r")
-    if @client.update("#{@tweet.text}\r")
-      @tweet_flag = Tweet.find(params[:id])
-      @tweet_flag.tweet_flag = true
-      @tweet_flag.save
-      redirect_to root_path
+    if @tweet.text.blank?
+      flash[:alert] = "空欄で投稿はできません。"
+      render :post_new
+    elsif @tweet.text.length >= 140
+      flash[:alert] = "140字以内で投稿してください"
+      render :post_new
     else
-      flash[:alert] = "再投稿できませんでした"
-      redirect_to tweet_path(@tweet_flag)
+      @client.update("#{@tweet.text}\r")
+      if @client.update("#{@tweet.text}\r")
+        # 再投稿フラッグをtrueにする
+        @tweet_flag = Tweet.find(params[:id])
+        @tweet_flag.tweet_flag = true
+        @tweet_flag.save
+        redirect_to tweet_path(@tweet_flag)
+        flash[:alert] = "再投稿しました"
+      else
+        flash[:alert] = "再投稿できませんでした"
+        render :post_new
+      end
     end
   end
 
