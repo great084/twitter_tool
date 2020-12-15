@@ -8,7 +8,7 @@
       <th scope="col">投稿内容</th>
       <th scope="col">投稿画像</th>
       <th scope="col"><%= sort_link(@q, :retweet_count, "リツイート数", { default_order: :desc }, { class: "Editlink" }) %></th>
-      <th scope="col"><%= sort_link(@q, :favarite_count, "いいね数", { default_order: :desc }, { class: "Editlink" }) %></th>
+      <th scope="col"><%= sort_link(@q, :favorite_count, "いいね数", { default_order: :desc }, { class: "Editlink" }) %></th>
       <th scope="col"></th>
     </tr>
   </thead>
