@@ -2,6 +2,8 @@ class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_check, only: [:search]
   before_action :tweet_user, only: %i[show index]
+  before_action :twitter_client, only: [:post_create]
+
   PER_PAGE = 10
   def index
     @tweets = Tweet.where(user_id: @user.id)
@@ -43,6 +45,17 @@ class TweetsController < ApplicationController
 
     flash[:alert] = "期間が指定されていません。入力し直してください"
     redirect_to new_tweet_path
+  end
+
+  def post_new
+    @tweet = Tweet.find(params[:id])
+  end
+
+  def post_create
+    @tweet = Tweet.new(post_params)
+    # \rで改行する
+    @client.update("#{@tweet.text}\r")
+    redirect_to root_path
   end
 
   private
@@ -97,7 +110,20 @@ class TweetsController < ApplicationController
 
     def response_data_nil?(response)
       !!if response["results"].empty?
-          redirect_to new_tweet_path, flash: { alert: "指定した期間内にデータはありませんでした。" }
+          redirect_to new_tweet_path, flash: { aler: "指定した期間内にデータはありませんでした。" }
         end
+    end
+
+    def post_params
+      params.require(:tweet).permit(:text)
+    end
+
+    def twitter_client
+      @client = Twitter::REST::Client.new do |config|
+        config.consumer_key = ENV["TWITTER_API_KEY"]
+        config.consumer_secret = ENV["TWITTER_API_SECRET"]
+        config.access_token = ENV["TWITTER_ACCESS_TOKEN"]
+        config.access_token_secret = ENV["ACCESS_TOKEN_SECRET"]
+      end
     end
 end
