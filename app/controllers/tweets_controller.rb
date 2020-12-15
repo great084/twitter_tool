@@ -52,10 +52,18 @@ class TweetsController < ApplicationController
   end
 
   def post_create
+    # 再投稿する
     @tweet = Tweet.new(post_params)
-    # \rで改行する
     @client.update("#{@tweet.text}\r")
-    redirect_to root_path
+    if @client.update("#{@tweet.text}\r")
+      @tweet_flag = Tweet.find(params[:id])
+      @tweet_flag.tweet_flag = true
+      @tweet_flag.save
+      redirect_to root_path
+    else
+      flash[:alert] = "再投稿できませんでした"
+      redirect_to tweet_path(@tweet_flag)
+    end
   end
 
   private
