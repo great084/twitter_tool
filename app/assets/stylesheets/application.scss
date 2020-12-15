@@ -3,11 +3,10 @@
 // リンク色消す
 .Editlink {
   text-decoration: none;
-  color: #272343;
+  color:black;
   &:hover {
     text-decoration: none;
-    color: #272343;
-  }
+    color: black  }
 }
 table {
   width: 100%;
