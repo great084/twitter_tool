@@ -3,6 +3,7 @@ class TweetsController < ApplicationController
   before_action :date_params_check, only: [:search]
   before_action :tweet_user, only: %i[show index]
   PER_PAGE = 10
+  require "date"
   def index
     @q = Tweet.where(user_id: @user.id).ransack(params[:q])
     @tweets = @q.result(distinct: true)
@@ -35,7 +36,9 @@ class TweetsController < ApplicationController
         update_tweet_record(tweet, res)
       else
         create_tweet_record(res)
+
         extended_entities_exist(res["extended_entities"])
+
       end
     end
   end

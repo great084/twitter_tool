@@ -7,9 +7,7 @@ class Tweet < ApplicationRecord
   validates :favorite_count, presence: true
   validates :tweet_flag, inclusion: [true, false]
   validates :retweet_flag, inclusion: [true, false]
-
   has_many :media, dependent: :destroy
-
   class << self
     def fetch_tweet(query_params)
       uri = URI.parse("https://api.twitter.com/1.1/tweets/search/#{ENV['PLAN']}/#{ENV['LABEL']}.json")
