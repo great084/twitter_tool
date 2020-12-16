@@ -2,7 +2,7 @@ ja:
   time:
     formats:
       default: "%Y/%m/%d %H:%M:%S"
-      short: "%m/%d %H:%M"
+      short: "%Y %m/%d %H:%M"
   views:
     pagination:
       first: "最初"
@@ -10,3 +10,16 @@ ja:
       previous: "前"
       next: "次"
       truncate: "..."
+  activerecord:
+    models:
+      tweet: ツイート
+      media: 画像
+      user: ユーザー
+    attributes:
+      tweet:
+        tweet_created_at: 投稿日時
+        text: 投稿内容
+        retweet_count: リツイート数
+        favorite_count: いいね数
+        retweet_flag: リツイート済みの投稿
+        tweet_flag: 再投稿済の投稿
