@@ -1,7 +1,7 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show index]
+  before_action :tweet_user, only: %i[show index search]
   PER_PAGE = 10
   def index
     @tweets = Tweet.where(user_id: @user.id)
@@ -17,8 +17,10 @@ class TweetsController < ApplicationController
   def search
     query_params = Tweet.fetch_query_params(form_params)
     loop do
-      response = Tweet.fetch_tweet(query_params)
-      return if response_data_nil?(response)
+      api_response = Tweet.fetch_tweet(query_params)
+      res_status = Tweet.status_in_code(api_response)
+      response = JSON.parse(api_response.body)
+      return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
       break unless next_token_exist(response, query_params)
@@ -39,7 +41,7 @@ class TweetsController < ApplicationController
   end
 
   def date_params_check
-    return unless params.permit(:period).empty?
+    return if params.permit(:period).present?
 
     flash[:alert] = "期間が指定されていません。入力し直してください"
     redirect_to new_tweet_path
@@ -86,6 +88,7 @@ class TweetsController < ApplicationController
     end
 
     def tweet_user
+      redirect_to root_path, flash: { alert: "ログインしてください" } if current_user.nil?
       @user = current_user
     end
 
@@ -98,6 +101,13 @@ class TweetsController < ApplicationController
     def response_data_nil?(response)
       !!if response["results"].empty?
           redirect_to new_tweet_path, flash: { alert: "指定した期間内にデータはありませんでした。" }
+        end
+    end
+
+    def error_status?(res_status)
+      !!if res_status[:code] != "200"
+          flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
+          redirect_to new_tweet_path
         end
     end
 end
