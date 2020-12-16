@@ -49,6 +49,7 @@ class TweetsController < ApplicationController
     tweet = params_retweet
     client = Tweet.twitter_client(current_user)
     client.retweet(tweet.tweet_id.to_i)
+    tweet.update(retweet_flag: true)
     redirect_to tweet_path(tweet), success: "リツイートに成功しました"
   rescue StandardError => e
     redirect_to tweets_path, danger: "リツイートに失敗しました #{e}"
