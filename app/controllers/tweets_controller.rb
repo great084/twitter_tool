@@ -46,13 +46,12 @@ class TweetsController < ApplicationController
   end
 
   def retweet
-    tweet = params_retweet
-    client = Tweet.twitter_client(current_user)
-    client.retweet(tweet.tweet_id.to_i)
+    tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
+    post_add_comment_retweet(params_retweet)
     tweet.update(retweet_flag: true)
     redirect_to tweet_path(tweet), success: "リツイートに成功しました"
   rescue StandardError => e
-    redirect_to tweets_path, danger: "リツイートに失敗しました #{e}"
+    redirect_to tweet_path(tweet), danger: "リツイートに失敗しました #{e}"
   end
 
   private
@@ -112,6 +111,12 @@ class TweetsController < ApplicationController
     end
 
     def params_retweet
-      Tweet.find(params[:format])
+      params.require(:tweet).permit(:add_comments, :tweet_id)
+    end
+
+    def post_add_comment_retweet(params_retweet)
+      client = Tweet.twitter_client(current_user)
+      old_tweet_url = "https://twitter.com/#{current_user.nickname}/status/#{params_retweet[:tweet_id]}"
+      client.update(params_retweet[:add_comments] + " " + old_tweet_url)
     end
 end
