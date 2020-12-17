@@ -117,6 +117,6 @@ class TweetsController < ApplicationController
     def post_add_comment_retweet(params_retweet)
       client = Tweet.twitter_client(current_user)
       old_tweet_url = "https://twitter.com/#{current_user.nickname}/status/#{params_retweet[:tweet_id]}"
-      client.update(params_retweet[:add_comments] + " " + old_tweet_url)
+      client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
     end
 end
