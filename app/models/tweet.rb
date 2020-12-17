@@ -7,9 +7,7 @@ class Tweet < ApplicationRecord
   validates :favorite_count, presence: true
   validates :tweet_flag, inclusion: [true, false]
   validates :retweet_flag, inclusion: [true, false]
-
   has_many :media, dependent: :destroy
-
   class << self
     def fetch_tweet(query_params)
       uri = URI.parse("https://api.twitter.com/1.1/tweets/search/#{ENV['PLAN']}/#{ENV['LABEL']}.json")
@@ -33,7 +31,7 @@ class Tweet < ApplicationRecord
       when "until_now"
         {
           date_to: datetime.strftime("%Y%m%d%H%M"),
-          date_from: datetime.ago(1.year).strftime("%Y%m%d%H%M")
+          date_from: datetime.ago(28.days).strftime("%Y%m%d%H%M")
         }
       when "until_one_year"
         {
@@ -51,6 +49,12 @@ class Tweet < ApplicationRecord
       }
       data.merge!({ "next": query_params[:next].to_s }) if query_params[:next]
       JSON.generate(data)
+    end
+
+    def next_token_exist(response, query_params)
+      return unless response["next"]
+
+      query_params[:next] = response["next"]
     end
 
     def fetch_headers

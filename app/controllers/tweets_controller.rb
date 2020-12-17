@@ -1,12 +1,15 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show index]
+  before_action :tweet_user, only: %i[show index retweet]
   PER_PAGE = 10
+  require "date"
   def index
-    @tweets = Tweet.where(user_id: @user.id)
-                   .order(tweet_created_at: :desc).includes(:media)
-                   .page(params[:page]).per(PER_PAGE)
+    @q = Tweet.where(user_id: @user.id).ransack(params[:q])
+    @tweets = @q.result(distinct: true)
+                .order(tweet_created_at: :desc).includes(:media)
+                .page(params[:page]).per(PER_PAGE)
+    @now = Time.zone.today
   end
 
   def show
@@ -21,7 +24,7 @@ class TweetsController < ApplicationController
       return if response_data_nil?(response)
 
       create_records(response)
-      break unless next_token_exist(response, query_params)
+      break unless Tweet.next_token_exist(response, query_params)
     end
     redirect_to tweets_path
   end
@@ -98,12 +101,6 @@ class TweetsController < ApplicationController
       @user = current_user
     end
 
-    def next_token_exist(response, query_params)
-      return unless response["next"]
-
-      query_params[:next] = response["next"]
-    end
-
     def response_data_nil?(response)
       !!if response["results"].empty?
           redirect_to new_tweet_path, flash: { alert: "指定した期間内にデータはありませんでした。" }
@@ -115,8 +112,8 @@ class TweetsController < ApplicationController
     end
 
     def post_add_comment_retweet(params_retweet)
-      client = Tweet.twitter_client(current_user)
-      old_tweet_url = "https://twitter.com/#{current_user.nickname}/status/#{params_retweet[:tweet_id]}"
+      client = Tweet.twitter_client(@user)
+      old_tweet_url = "https://twitter.com/#{@user.nickname}/status/#{params_retweet[:tweet_id]}"
       client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
     end
 end

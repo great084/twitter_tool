@@ -1,10 +1,8 @@
 @import "bootstrap/scss/bootstrap";
 // 共通部分
-// body{
-// width: 80%;
-// margin-left: auto;
-// margin-right: auto;
-// }
+
+
+
 table {
   width: 100%;
   margin-left: auto;
@@ -72,4 +70,13 @@ table {
 .show_tweet_media {
   width: 80px;
   height: 80px;
+}
+
+// 検索テーブル
+.table_search{
+
+  th {
+    background-color: lightgray;
+  }
+
 }
