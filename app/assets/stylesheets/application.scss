@@ -1,8 +1,13 @@
 @import "bootstrap/scss/bootstrap";
 // 共通部分
-
-
-
+// リンク色消す
+.Editlink {
+  text-decoration: none;
+  color:black;
+  &:hover {
+    text-decoration: none;
+    color: black  }
+}
 table {
   width: 100%;
   margin-left: auto;
