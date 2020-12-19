@@ -36,7 +36,9 @@ class TweetsController < ApplicationController
         update_tweet_record(tweet, res)
       else
         create_tweet_record(res)
+
         extended_entities_exist(res["extended_entities"])
+
       end
     end
   end
