@@ -1,7 +1,7 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show index retweet]
+  before_action :tweet_user, only: %i[show index search retweet]
   PER_PAGE = 10
   require "date"
   def index
@@ -52,7 +52,7 @@ class TweetsController < ApplicationController
 
   def retweet
     tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
-    post_add_comment_retweet(params_retweet)
+    Tweet.post_add_comment_retweet(params_retweet, current_user)
     tweet.update(retweet_flag: true)
     redirect_to tweet_path(tweet), success: "リツイートに成功しました"
   rescue StandardError => e
@@ -119,11 +119,5 @@ class TweetsController < ApplicationController
           flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
           redirect_to new_tweet_path
         end
-    end
-
-    def post_add_comment_retweet(params_retweet)
-      client = Tweet.twitter_client(@user)
-      old_tweet_url = "https://twitter.com/#{@user.nickname}/status/#{params_retweet[:tweet_id]}"
-      client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
     end
 end

@@ -93,5 +93,11 @@ class Tweet < ApplicationRecord
       res_status = statuses.select { |status| status[:code] == response.code }
       res_status[0]
     end
+
+    def post_add_comment_retweet(params_retweet, user)
+      client = twitter_client(user)
+      old_tweet_url = "https://twitter.com/#{user.nickname}/status/#{params_retweet[:tweet_id]}"
+      client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
+    end
   end
 end
