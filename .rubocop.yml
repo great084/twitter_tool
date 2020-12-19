@@ -60,5 +60,5 @@ Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 # 文字列の囲み文字はダブルクオートを使う
-StringLiterals:
+Style/StringLiterals:
   EnforcedStyle: double_quotes
