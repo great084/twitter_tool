@@ -1,5 +1,5 @@
 
-<h3 class="m-5 text-center">ツイートの一覧</h3>
+<h1><%= @user.nickname%>さんのtweet一覧</h1>
 <%# 検索ボックス %>
 <%= search_form_for @q do |f| %>
   <table class="table table-bordered table_search">
@@ -50,15 +50,15 @@
 <% else %>
   <table class="table table-striped text-center table_index" >
     <thead>
-      <tr>
-        <th scope="col "></th>
-        <th scope="col ">投稿日時</th>
-        <th scope="col">投稿内容</th>
-        <th scope="col ">投稿画像</th>
-        <th scope="col ">リツイート</th>
-        <th scope="col ">いいね</th>
-        <th scope="col "></th>
-      </tr>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col"><%= sort_link(@q, :tweet_created_at, "投稿日時" ,{ default_order: :desc }, { class: "Editlink" }) %></th>
+      <th scope="col">投稿内容</th>
+      <th scope="col">投稿画像</th>
+      <th scope="col"><%= sort_link(@q, :retweet_count, "リツイート数", { default_order: :desc }, { class: "Editlink" }) %></th>
+      <th scope="col"><%= sort_link(@q, :favorite_count, "いいね数", { default_order: :desc }, { class: "Editlink" }) %></th>
+      <th scope="col"></th>
+    </tr>
     </thead>
     <tbody >
       <%@tweets.each do |tweet|%>
