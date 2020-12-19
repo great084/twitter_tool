@@ -20,8 +20,10 @@ class TweetsController < ApplicationController
   def search
     query_params = Tweet.fetch_query_params(form_params)
     loop do
-      response = Tweet.fetch_tweet(query_params)
-      return if response_data_nil?(response)
+      api_response = Tweet.fetch_tweet(query_params)
+      res_status = Tweet.status_in_code(api_response)
+      response = JSON.parse(api_response.body)
+      return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
       break unless Tweet.next_token_exist(response, query_params)
@@ -36,15 +38,13 @@ class TweetsController < ApplicationController
         update_tweet_record(tweet, res)
       else
         create_tweet_record(res)
-
         extended_entities_exist(res["extended_entities"])
-
       end
     end
   end
 
   def date_params_check
-    return unless params.permit(:period).empty?
+    return if params.permit(:period).present?
 
     flash[:alert] = "期間が指定されていません。入力し直してください"
     redirect_to new_tweet_path
@@ -100,6 +100,7 @@ class TweetsController < ApplicationController
     end
 
     def tweet_user
+      redirect_to root_path, flash: { alert: "ログインしてください" } if current_user.nil?
       @user = current_user
     end
 
@@ -111,6 +112,13 @@ class TweetsController < ApplicationController
 
     def params_retweet
       params.require(:tweet).permit(:add_comments, :tweet_id)
+    end
+
+    def error_status?(res_status)
+      !!if res_status[:code] != "200"
+          flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
+          redirect_to new_tweet_path
+        end
     end
 
     def post_add_comment_retweet(params_retweet)

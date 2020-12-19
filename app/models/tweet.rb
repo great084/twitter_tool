@@ -15,8 +15,7 @@ class Tweet < ApplicationRecord
       http = http_settings(uri)
       request = Net::HTTP::Post.new(uri.request_uri, headers)
       request.body = sent_query(query_params)
-      response = http.request(request)
-      JSON.parse(response.body)
+      http.request(request)
     end
 
     # apiに送るクエリの取得
@@ -77,6 +76,22 @@ class Tweet < ApplicationRecord
         config.access_token = current_user.token
         config.access_token_secret = current_user.secret
       end
+    end
+
+    def status_in_code(response)
+      statuses =
+        { code: "200", message: "データの取得に成功しました。" },
+        { code: "400", message: "リクエストが不正です。" },
+        { code: "401", message: "アクセスには認証が必要です。" },
+        { code: "403", message: "このリソースへのアクセスは許可されておりません。" },
+        { code: "404", message: "リソースが見つかりませんでした。URLが間違っている可能性があります。" },
+        { code: "422", message: "入力値が無効です。" },
+        { code: "429", message: "アプリのリクエスト回数上限を超えました。" },
+        { code: "500", message: "サーバ内部でエラーが発生しました。" },
+        { code: "502", message: "ゲートウェイが不正です。プロキシサーバのエラーです。" },
+        { code: "503", message: "メンテナンス中です。アプリは利用できません。" }
+      res_status = statuses.select { |status| status[:code] == response.code }
+      res_status[0]
     end
   end
 end
