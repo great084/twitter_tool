@@ -1,7 +1,0 @@
-  <h2><%= flash.now[:alert] %></h2>
-
-<%= form_with model: @tweet,method: :post, url: "/tweets/#{params[:id]}/post_create", local:true do |f| %>
- <div><%= f.text_area :text,maxlength: 140 ,:required => true%></div>
-  <div><%= f.submit %></div>
-<% end %>
-

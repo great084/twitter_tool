@@ -54,10 +54,6 @@ class TweetsController < ApplicationController
     redirect_to new_tweet_path
   end
 
-  def post_new
-    @tweet = Tweet.find(params[:id])
-  end
-
   def post_create
     # 再投稿する
     @tweet = Tweet.new(post_params)
