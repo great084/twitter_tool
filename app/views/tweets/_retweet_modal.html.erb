@@ -1,30 +1,34 @@
-<div class="modal fade" id="modal2" tabindex="-1"
+<div class="modal fade" id="modal1" tabindex="-1"
       role="dialog" aria-labelledby="label1" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="label1">再投稿する</h5>
+        <h5 class="modal-title" id="label1">リツイートする</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <%= form_with model: @tweet,method: :post, url: "/tweets/#{params[:id]}/post_create", local:true do |f| %>
+      <%= form_with model: @tweet, url: tweets_retweet_path, method: :post, local: true do |f| %>
         <div class="modal-body">
           <div class="p-2">
+            <p><%= f.label :label_add_comments, "コメントを追加" %></p>
+            <p><%= f.text_area :add_comments, class: "form-control", rows: 4 %></p>
+          </div>
+          <div class="p-2">
             <p><%= f.label :label_old_tweet, "元投稿内容" %></p>
-            <p><%= f.text_area  :text,maxlength: 140 ,:required => true, class: "form-control", rows: 4, value: @tweet.text %></p>
+            <p><%= f.text_area :old_tweet, class: "form-control", rows: 4, readonly: true, value: @tweet.text %></p>
           </div>
           <div class="p-2">
             <p><%= f.label :label_show_image, "画像" %></p>
             <% @tweet.media.each do |media| %>
-              <%= image_tag media.media_url.to_s,class: "mordal-image "  %>
+              <%= image_tag media.media_url.to_s,class: "show_tweet_media m-1" %>
             <% end %>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <%= f.hidden_field :tweet_id, value: @tweet.tweet_id %>
-          <%= f.submit "再投稿する", class: "btn btn-primary" %>
+          <%= f.submit "リツイートする", class: "btn btn-primary" %>
         </div>
       <% end %>
     </div>

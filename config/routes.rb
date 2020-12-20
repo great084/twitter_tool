@@ -5,10 +5,9 @@ Rails.application.routes.draw do
   post '/tweets/search', to: 'tweets#search'
   resources :tweets, only: [:new, :index,:show] do
     member do
-      get "post_new"
       post "post_create"
     end
   end
-
+  post '/tweets/retweet', to: 'tweets#retweet'
   root to: "users#index"
 end

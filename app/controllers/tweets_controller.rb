@@ -2,8 +2,7 @@ class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_check, only: [:search]
   before_action :twitter_client, only: [:post_create]
-
-  before_action :tweet_user, only: %i[show index search]
+  before_action :tweet_user, only: %i[show index search retweet]
   PER_PAGE = 10
   require "date"
   def index
@@ -28,23 +27,9 @@ class TweetsController < ApplicationController
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
-      break unless next_token_exist(response, query_params)
+      break unless Tweet.next_token_exist(response, query_params)
     end
     redirect_to tweets_path
-  end
-
-  def create_records(response)
-    response["results"].each do |res|
-      tweet = Tweet.find_by(tweet_id: res["id_str"])
-      if tweet
-        update_tweet_record(tweet, res)
-      else
-        create_tweet_record(res)
-
-        extended_entities_exist(res["extended_entities"])
-
-      end
-    end
   end
 
   def date_params_check
@@ -55,29 +40,37 @@ class TweetsController < ApplicationController
   end
 
   def post_create
-    # 再投稿する
     @tweet = Tweet.new(post_params)
-    if @tweet.text.length >= 140
-      flash[:alert] = "140字以内で投稿してください"
-      render :post_new
-    elsif @client.update("#{@tweet.text}\r")
-      @tweet_data_all = Tweet.find(params[:id])
-      @tweet_data_all.tweet_flag = true
-      @tweet_data_all.save
-      redirect_to tweet_path(@tweet_data_all)
-      flash[:alert] = "再投稿しました"
-    # 再投稿フラッグをtrueにする
-    else
-      flash[:alert] = "再投稿できませんでした"
-      render :post_new
-    end
+    @client.update("#{@tweet.text}\r")
+    @tweet_data_all = Tweet.find(params[:id])
+    @tweet_data_all.tweet_flag = true
+    @tweet_data_all.save
+    redirect_to tweet_path(@tweet_data_all),success: "再投稿に成功しました"
+  rescue StandardError => e
+    redirect_to tweet_path(@tweet_data_all), danger: "再投稿に失敗しました#{e}"
+  end
+
+  def retweet
+    tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
+    Tweet.post_add_comment_retweet(params_retweet, current_user)
+    tweet.update(retweet_flag: true)
+    redirect_to tweet_path(tweet), success: "リツイートに成功しました"
+  rescue StandardError => e
+    redirect_to tweet_path(tweet), danger: "リツイートに失敗しました #{e}"
   end
 
   private
 
-    def form_params
-      params.permit(:period)
-            .merge(login_user: current_user.nickname)
+    def create_records(response)
+      response["results"].each do |res|
+        tweet = Tweet.find_by(tweet_id: res["id_str"])
+        if tweet
+          update_tweet_record(tweet, res)
+        else
+          create_tweet_record(res)
+          extended_entities_exist(res["extended_entities"])
+        end
+      end
     end
 
     def create_tweet_record(res)
@@ -113,15 +106,14 @@ class TweetsController < ApplicationController
       )
     end
 
+    def form_params
+      params.permit(:period)
+            .merge(login_user: current_user.nickname)
+    end
+
     def tweet_user
       redirect_to root_path, flash: { alert: "ログインしてください" } if current_user.nil?
       @user = current_user
-    end
-
-    def next_token_exist(response, query_params)
-      return unless response["next"]
-
-      query_params[:next] = response["next"]
     end
 
     def response_data_nil?(response)
@@ -141,6 +133,9 @@ class TweetsController < ApplicationController
         config.access_token = current_user.token
         config.access_token_secret = current_user.secret
       end
+    end
+    def params_retweet
+      params.require(:tweet).permit(:add_comments, :tweet_id)
     end
 
     def error_status?(res_status)

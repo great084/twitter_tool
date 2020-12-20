@@ -35,6 +35,7 @@ Metrics/MethodLength:
   Exclude:
     - "spec/**/*"
     - "db/migrate/*"
+
 # 1ファイルの行数制限を無視
 Metrics/ClassLength:
   Enabled: false
