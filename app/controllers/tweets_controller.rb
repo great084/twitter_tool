@@ -20,13 +20,13 @@ class TweetsController < ApplicationController
   def search
     query_params = Tweet.fetch_query_params(form_params)
     loop do
-      api_response = Tweet.fetch_tweet(query_params)
-      res_status = Tweet.status_in_code(api_response)
+      api_response = TwitterApi.fetch_tweet(query_params)
+      res_status = TwitterApi.status_in_code(api_response)
       response = JSON.parse(api_response.body)
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
-      break unless next_token_exist(response, query_params)
+      break unless Tweet.next_token_exist(response, query_params)
     end
     redirect_to tweets_path
   end
@@ -38,9 +38,7 @@ class TweetsController < ApplicationController
         update_tweet_record(tweet, res)
       else
         create_tweet_record(res)
-
         extended_entities_exist(res["extended_entities"])
-
       end
     end
   end
@@ -95,12 +93,6 @@ class TweetsController < ApplicationController
     def tweet_user
       redirect_to root_path, flash: { alert: "ログインしてください" } if current_user.nil?
       @user = current_user
-    end
-
-    def next_token_exist(response, query_params)
-      return unless response["next"]
-
-      query_params[:next] = response["next"]
     end
 
     def response_data_nil?(response)
