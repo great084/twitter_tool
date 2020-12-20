@@ -54,6 +54,10 @@ class TweetsController < ApplicationController
   def post_create
     # 再投稿する
     @tweet = Tweet.new(post_params)
+    if @tweet.text.length >= 140
+      flash[:alert] = "140字以内で投稿してください"
+      render :post_new
+    else
       if @client.update("#{@tweet.text}\r")
         # 再投稿フラッグをtrueにする
         @tweet_data_all = Tweet.find(params[:id])
@@ -65,7 +69,7 @@ class TweetsController < ApplicationController
         flash[:alert] = "再投稿できませんでした"
         render :post_new
       end
-
+    end
   end
 
   private
