@@ -16,5 +16,11 @@ class Tweet < ApplicationRecord
 
       query_params[:next] = response["next"]
     end
+
+    def post_add_comment_retweet(params_retweet, user)
+      client = twitter_client(user)
+      old_tweet_url = "https://twitter.com/#{user.nickname}/status/#{params_retweet[:tweet_id]}"
+      client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
+    end
   end
 end
