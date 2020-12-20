@@ -10,7 +10,6 @@ class TweetsController < ApplicationController
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
     @now = Time.zone.today
-    @all_tweet_count = user_tweets.count
   end
 
   def show
