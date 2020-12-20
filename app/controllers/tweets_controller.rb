@@ -45,7 +45,7 @@ class TweetsController < ApplicationController
     @tweet_data_all = Tweet.find(params[:id])
     @tweet_data_all.tweet_flag = true
     @tweet_data_all.save
-    redirect_to tweet_path(@tweet_data_all),success: "再投稿に成功しました"
+    redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
   rescue StandardError => e
     redirect_to tweet_path(@tweet_data_all), danger: "再投稿に失敗しました#{e}"
   end
@@ -134,6 +134,7 @@ class TweetsController < ApplicationController
         config.access_token_secret = current_user.secret
       end
     end
+
     def params_retweet
       params.require(:tweet).permit(:add_comments, :tweet_id)
     end
