@@ -18,11 +18,9 @@ class TweetsController < ApplicationController
   end
 
   def search
-    query_params = Tweet.fetch_query_params(form_params)
+    query_params = TwitterApi.fetch_query_params(form_params)
     loop do
-      api_response = TwitterApi.fetch_tweet(query_params)
-      res_status = TwitterApi.status_in_code(api_response)
-      response = JSON.parse(api_response.body)
+      res_status, response = TwitterApi.fetch_tweet(query_params)
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)

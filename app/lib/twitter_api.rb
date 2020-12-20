@@ -6,7 +6,10 @@ class TwitterApi
       http = http_settings(uri)
       request = Net::HTTP::Post.new(uri.request_uri, headers)
       request.body = sent_query(query_params)
-      http.request(request)
+      api_response = http.request(request)
+      res_status = status_in_code(api_response)
+      response = JSON.parse(api_response.body)
+      [res_status, response]
     end
 
     def fetch_headers
@@ -20,6 +23,23 @@ class TwitterApi
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = uri.scheme == "https"
       http
+    end
+
+    def fetch_query_params(form_params)
+      datetime = DateTime.now.gmtime
+      case form_params[:period]
+      when "until_now"
+        date_query = {
+          date_to: datetime.strftime("%Y%m%d%H%M"),
+          date_from: datetime.ago(28.days).strftime("%Y%m%d%H%M")
+        }
+      when "until_one_year"
+        date_query = {
+          date_to: datetime.ago(1.year).strftime("%Y%m%d%H%M"),
+          date_from: datetime.ago(10.years).strftime("%Y%m%d%H%M")
+        }
+      end
+      form_params.merge!(date_query)
     end
 
     def sent_query(query_params)
