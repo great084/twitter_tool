@@ -50,6 +50,12 @@ class Tweet < ApplicationRecord
       JSON.generate(data)
     end
 
+    def next_token_exist(response, query_params)
+      return unless response["next"]
+
+      query_params[:next] = response["next"]
+    end
+
     def fetch_headers
       {
         "Authorization": "Bearer #{ENV['BEARER_TOKEN']}",
@@ -61,6 +67,15 @@ class Tweet < ApplicationRecord
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = uri.scheme == "https"
       http
+    end
+
+    def twitter_client(current_user)
+      Twitter::REST::Client.new do |config|
+        config.consumer_key = ENV["TWITTER_API_KEY"]
+        config.consumer_secret = ENV["TWITTER_API_SECRET"]
+        config.access_token = current_user.token
+        config.access_token_secret = current_user.secret
+      end
     end
 
     def status_in_code(response)
@@ -77,6 +92,12 @@ class Tweet < ApplicationRecord
         { code: "503", message: "メンテナンス中です。アプリは利用できません。" }
       res_status = statuses.select { |status| status[:code] == response.code }
       res_status[0]
+    end
+
+    def post_add_comment_retweet(params_retweet, user)
+      client = twitter_client(user)
+      old_tweet_url = "https://twitter.com/#{user.nickname}/status/#{params_retweet[:tweet_id]}"
+      client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
     end
   end
 end
