@@ -2,20 +2,20 @@
 # 追加した規約ファイルを読み込み
 require:
   - rubocop-rails
-  
+
 AllCops:
   TargetRubyVersion: 2.6
-  NewCops: enable    # ← 新しい規約が登録された場合に、適用するかどうかの判定
-  Exclude:           # 自動生成・初期作成ファイル、およびロジックとは無関係のファイル（ex. Gemfile, spec関連）は除外
-    - 'bin/**'
-    - 'node_modules/**/*'
-    - 'config/**/*'
-    - 'config.ru'
-    - 'db/schema.rb'
-    - 'db/seeds.rb'
-    - 'Gemfile'
-    - 'spec/rails_helper.rb'
-  
+  NewCops: enable # ← 新しい規約が登録された場合に、適用するかどうかの判定
+  Exclude: # 自動生成・初期作成ファイル、およびロジックとは無関係のファイル（ex. Gemfile, spec関連）は除外
+    - "bin/**"
+    - "node_modules/**/*"
+    - "config/**/*"
+    - "config.ru"
+    - "db/schema.rb"
+    - "db/seeds.rb"
+    - "Gemfile"
+    - "spec/rails_helper.rb"
+
 # 日本語でのコメントを許可
 Style/AsciiComments:
   Enabled: false
@@ -32,9 +32,12 @@ Style/FrozenStringLiteralComment:
 # テストコード, migrate文は除外
 Metrics/MethodLength:
   Max: 20
-  Exclude: 
-    - 'spec/**/*'
-    - 'db/migrate/*'
+  Exclude:
+    - "spec/**/*"
+    - "db/migrate/*"
+# 1ファイルの行数制限を無視
+Metrics/ClassLength:
+  Enabled: false
 
 # private/protected は一段深くインデントする
 Layout/IndentationConsistency:
@@ -42,18 +45,18 @@ Layout/IndentationConsistency:
 
 # Block内の最大行数。テストコードは除外
 Metrics/BlockLength:
-  Exclude: 
-    - 'spec/**/*'
+  Exclude:
+    - "spec/**/*"
 
 # 変数・メソッドに数字はNG。テストコードは除外
 Naming/VariableNumber:
-  Exclude: 
-    - 'spec/**/*'
+  Exclude:
+    - "spec/**/*"
 
 # helper内のインスタンス変数利用は不可だが、session_helperのみ許可
 Rails/HelperInstanceVariable:
-  Exclude: 
-    - 'app/helpers/sessions_helper.rb'
+  Exclude:
+    - "app/helpers/sessions_helper.rb"
 
 # hash内のインデント設定。defaultの'special_inside_parentheses'は見づらいため変更
 Layout/FirstHashElementIndentation:
@@ -62,3 +65,6 @@ Layout/FirstHashElementIndentation:
 # 文字列の囲み文字はダブルクオートを使う
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+#メソッドの複雑性の制限解除
+Metrics/AbcSize:
+  Enabled: false

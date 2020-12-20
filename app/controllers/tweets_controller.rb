@@ -145,11 +145,12 @@ class TweetsController < ApplicationController
         config.access_token = current_user.token
         config.access_token_secret = current_user.secret
       end
-      def error_status?(res_status)
-        !!if res_status[:code] != "200"
-            flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
-            redirect_to new_tweet_path
-          end
-      end
+    end
+
+    def error_status?(res_status)
+      !!if res_status[:code] != "200"
+          flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
+          redirect_to new_tweet_path
+        end
     end
 end
