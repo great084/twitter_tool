@@ -61,13 +61,12 @@ class TweetsController < ApplicationController
       flash[:alert] = "140字以内で投稿してください"
       render :post_new
     else
-      @client.update("#{@tweet.text}\r")
       if @client.update("#{@tweet.text}\r")
         # 再投稿フラッグをtrueにする
-        @tweet_flag = Tweet.find(params[:id])
-        @tweet_flag.tweet_flag = true
-        @tweet_flag.save
-        redirect_to tweet_path(@tweet_flag)
+        @tweet_data_all = Tweet.find(params[:id])
+        @tweet_data_all.tweet_flag = true
+        @tweet_data_all.save
+        redirect_to tweet_path(@tweet_data_all)
         flash[:alert] = "再投稿しました"
       else
         flash[:alert] = "再投稿できませんでした"
@@ -128,7 +127,7 @@ class TweetsController < ApplicationController
 
     def response_data_nil?(response)
       !!if response["results"].empty?
-          redirect_to new_tweet_path, flash: { aler: "指定した期間内にデータはありませんでした。" }
+          redirect_to new_tweet_path, flash: { alert: "指定した期間内にデータはありませんでした。" }
         end
     end
 
