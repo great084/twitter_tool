@@ -1,14 +1,17 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show index]
   before_action :twitter_client, only: [:post_create]
 
+  before_action :tweet_user, only: %i[show index search]
   PER_PAGE = 10
+  require "date"
   def index
-    @tweets = Tweet.where(user_id: @user.id)
-                   .order(tweet_created_at: :desc).includes(:media)
-                   .page(params[:page]).per(PER_PAGE)
+    @q = Tweet.where(user_id: @user.id).ransack(params[:q])
+    @tweets = @q.result(distinct: true)
+                .order(tweet_created_at: :desc).includes(:media)
+                .page(params[:page]).per(PER_PAGE)
+    @now = Time.zone.today
   end
 
   def show
@@ -19,8 +22,10 @@ class TweetsController < ApplicationController
   def search
     query_params = Tweet.fetch_query_params(form_params)
     loop do
-      response = Tweet.fetch_tweet(query_params)
-      return if response_data_nil?(response)
+      api_response = Tweet.fetch_tweet(query_params)
+      res_status = Tweet.status_in_code(api_response)
+      response = JSON.parse(api_response.body)
+      return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
       break unless next_token_exist(response, query_params)
@@ -35,13 +40,15 @@ class TweetsController < ApplicationController
         update_tweet_record(tweet, res)
       else
         create_tweet_record(res)
+
         extended_entities_exist(res["extended_entities"])
+
       end
     end
   end
 
   def date_params_check
-    return unless params.permit(:period).empty?
+    return if params.permit(:period).present?
 
     flash[:alert] = "期間が指定されていません。入力し直してください"
     redirect_to new_tweet_path
@@ -57,18 +64,16 @@ class TweetsController < ApplicationController
     if @tweet.text.length >= 140
       flash[:alert] = "140字以内で投稿してください"
       render :post_new
+    elsif @client.update("#{@tweet.text}\r")
+      @tweet_data_all = Tweet.find(params[:id])
+      @tweet_data_all.tweet_flag = true
+      @tweet_data_all.save
+      redirect_to tweet_path(@tweet_data_all)
+      flash[:alert] = "再投稿しました"
+    # 再投稿フラッグをtrueにする
     else
-      if @client.update("#{@tweet.text}\r")
-        # 再投稿フラッグをtrueにする
-        @tweet_data_all = Tweet.find(params[:id])
-        @tweet_data_all.tweet_flag = true
-        @tweet_data_all.save
-        redirect_to tweet_path(@tweet_data_all)
-        flash[:alert] = "再投稿しました"
-      else
-        flash[:alert] = "再投稿できませんでした"
-        render :post_new
-      end
+      flash[:alert] = "再投稿できませんでした"
+      render :post_new
     end
   end
 
@@ -113,6 +118,7 @@ class TweetsController < ApplicationController
     end
 
     def tweet_user
+      redirect_to root_path, flash: { alert: "ログインしてください" } if current_user.nil?
       @user = current_user
     end
 
@@ -138,6 +144,12 @@ class TweetsController < ApplicationController
         config.consumer_secret = ENV["TWITTER_API_SECRET"]
         config.access_token = current_user.token
         config.access_token_secret = current_user.secret
+      end
+      def error_status?(res_status)
+        !!if res_status[:code] != "200"
+            flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
+            redirect_to new_tweet_path
+          end
       end
     end
 end

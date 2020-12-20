@@ -1,10 +1,13 @@
 @import "bootstrap/scss/bootstrap";
 // 共通部分
-// body{
-// width: 80%;
-// margin-left: auto;
-// margin-right: auto;
-// }
+// リンク色消す
+.Editlink {
+  text-decoration: none;
+  color:black;
+  &:hover {
+    text-decoration: none;
+    color: black  }
+}
 table {
   width: 100%;
   margin-left: auto;
@@ -76,4 +79,13 @@ table {
 .mordal-image{
   width:150px;
   height:150px;
+}
+
+// 検索テーブル
+.table_search{
+
+  th {
+    background-color: lightgray;
+  }
+
 }
