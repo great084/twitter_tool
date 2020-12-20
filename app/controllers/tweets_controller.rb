@@ -5,11 +5,12 @@ class TweetsController < ApplicationController
   PER_PAGE = 10
   require "date"
   def index
-    @q = Tweet.where(user_id: @user.id).ransack(params[:q])
+    @q = user_tweets.ransack(params[:q])
     @tweets = @q.result(distinct: true)
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
     @now = Time.zone.today
+    @all_tweet_count = user_tweets.count
   end
 
   def show
@@ -18,6 +19,7 @@ class TweetsController < ApplicationController
   end
 
   def search
+    @res_count = 0
     query_params = Tweet.fetch_query_params(form_params)
     loop do
       api_response = Tweet.fetch_tweet(query_params)
@@ -26,9 +28,10 @@ class TweetsController < ApplicationController
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
+      @res_count += response["results"].count
       break unless next_token_exist(response, query_params)
     end
-    redirect_to tweets_path
+    redirect_to tweets_path, success: "#{@res_count}件のツイートを取得しました"
   end
 
   def create_records(response)
@@ -38,9 +41,7 @@ class TweetsController < ApplicationController
         update_tweet_record(tweet, res)
       else
         create_tweet_record(res)
-
         extended_entities_exist(res["extended_entities"])
-
       end
     end
   end
@@ -53,6 +54,10 @@ class TweetsController < ApplicationController
   end
 
   private
+
+    def user_tweets
+      Tweet.where(user_id: @user.id)
+    end
 
     def form_params
       params.permit(:period)

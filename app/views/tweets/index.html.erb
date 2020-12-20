@@ -1,5 +1,5 @@
-
-<h1><%= @user.nickname%>さんのtweet一覧</h1>
+<h1><%= @user.nickname%>さんのtweet一覧 &nbsp; ツイート総数：<%= @all_tweet_count %>件</h1>
+<%= render 'flash' %>
 <%# 検索ボックス %>
 <%= search_form_for @q do |f| %>
   <table class="table table-bordered table_search">
