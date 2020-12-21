@@ -10,17 +10,19 @@ class Tweet < ApplicationRecord
   has_many :media, dependent: :destroy
   class << self
     # apiに送るクエリの取得
-
-    def next_token_exist(response, query_params)
-      return unless response["next"]
-
-      query_params[:next] = response["next"]
-    end
-
     def post_add_comment_retweet(params_retweet, user)
       client = twitter_client(user)
       old_tweet_url = "https://twitter.com/#{user.nickname}/status/#{params_retweet[:tweet_id]}"
       client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
+    end
+
+    def twitter_client(current_user)
+      Twitter::REST::Client.new do |config|
+        config.consumer_key = ENV["TWITTER_API_KEY"]
+        config.consumer_secret = ENV["TWITTER_API_SECRET"]
+        config.access_token = current_user.token
+        config.access_token_secret = current_user.secret
+      end
     end
   end
 end

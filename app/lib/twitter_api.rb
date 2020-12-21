@@ -1,11 +1,12 @@
 class TwitterApi
   class << self
-    def fetch_tweet(query_params)
+    def fetch_tweet(search_params)
       uri = URI.parse("https://api.twitter.com/1.1/tweets/search/#{ENV['PLAN']}/#{ENV['LABEL']}.json")
       headers = fetch_headers
       http = http_settings(uri)
       request = Net::HTTP::Post.new(uri.request_uri, headers)
-      request.body = sent_query(query_params)
+      request.body = sent_query(search_params)
+      binding.pry
       api_response = http.request(request)
       res_status = status_in_code(api_response)
       response = JSON.parse(api_response.body)
@@ -25,30 +26,13 @@ class TwitterApi
       http
     end
 
-    def fetch_query_params(form_params)
-      datetime = DateTime.now.gmtime
-      case form_params[:period]
-      when "until_now"
-        date_query = {
-          date_to: datetime.strftime("%Y%m%d%H%M"),
-          date_from: datetime.ago(28.days).strftime("%Y%m%d%H%M")
-        }
-      when "until_one_year"
-        date_query = {
-          date_to: datetime.ago(1.year).strftime("%Y%m%d%H%M"),
-          date_from: datetime.ago(10.years).strftime("%Y%m%d%H%M")
-        }
-      end
-      form_params.merge!(date_query)
-    end
-
-    def sent_query(query_params)
+    def sent_query(search_params)
       data = {
-        "query": "from:#{query_params[:login_user]}".to_s,
-        "fromDate": query_params[:date_from].to_s,
-        "toDate": query_params[:date_to].to_s
+        "query": "from:#{search_params["login_user"]}",
+        "fromDate": search_params["date_from"],
+        "toDate": search_params["date_to"]
       }
-      data.merge!({ "next": query_params[:next].to_s }) if query_params[:next]
+      data.merge!({ "next": search_params["next"] }) if search_params["next"]
       JSON.generate(data)
     end
 

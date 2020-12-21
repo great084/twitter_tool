@@ -9,9 +9,20 @@
 
     <%= form_with model: @tweet, url: tweets_search_path, local: true do |f| %>
       <div class="p-5">
-        <p><label><%= f.radio_button :period, "until_one_year" %>〜1年前</label><div>
-        <p><label><%= f.radio_button :period, "until_now" %>1年前〜現在</label></p>
-      </div>
+        <p><label>
+          <%= f.radio_button :period, {
+            "date_from": @datetime.ago(1.year).strftime("%Y%m%d%H%M"),
+            "date_to": @datetime.ago(10.years).strftime("%Y%m%d%H%M")
+          }.to_json %>
+          〜1年前
+        </label></p>
+        <p><label>
+          <%= f.radio_button :period, {
+            "date_from": @datetime.ago(1.year).strftime("%Y%m%d%H%M"), 
+            "date_to": @datetime.strftime("%Y%m%d%H%M")
+          }.to_json %>1年前〜現在
+        </label></p>
+      </p>
       <div class="m-5">
         <%= f.submit "取得する", class: "btn btn-primary btn-lg" %>
       </div>

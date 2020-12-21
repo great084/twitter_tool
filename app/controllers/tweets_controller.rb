@@ -17,14 +17,21 @@ class TweetsController < ApplicationController
     redirect_to root_path if @tweet.user_id != current_user.id
   end
 
+  def new
+    @datetime = DateTime.now.gmtime
+  end
+
   def search
-    query_params = TwitterApi.fetch_query_params(form_params)
+    search_params = params_search
+    binding.pry
     loop do
-      res_status, response = TwitterApi.fetch_tweet(query_params)
+      res_status, response = TwitterApi.fetch_tweet(search_params)
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
-      break unless Tweet.next_token_exist(response, query_params)
+      break unless response["next"]
+
+      search_params.store("next", response["next"])
     end
     redirect_to tweets_path
   end
@@ -77,6 +84,13 @@ class TweetsController < ApplicationController
       )
     end
 
+    def create_medium_record(res_medium)
+      Medium.create!(
+        tweet_id: Tweet.last.id,
+        media_url: res_medium["media_url"]
+      )
+    end
+
     def extended_entities_exist(extended_entities)
       return unless extended_entities
 
@@ -85,16 +99,10 @@ class TweetsController < ApplicationController
       end
     end
 
-    def create_medium_record(res_medium)
-      Medium.create!(
-        tweet_id: Tweet.last.id,
-        media_url: res_medium["media_url"]
-      )
-    end
-
-    def form_params
-      params.permit(:period)
-            .merge(login_user: current_user.nickname)
+    def params_search
+      period = JSON.parse(params.require(:period))
+      period.store("login_user", current_user.nickname)
+      period
     end
 
     def tweet_user
@@ -104,7 +112,7 @@ class TweetsController < ApplicationController
 
     def response_data_nil?(response)
       !!if response["results"].empty?
-          redirect_to new_tweet_path, flash: { alert: "指定した期間内にデータはありませんでした。" }
+          redirect_to new_tweet_path, alert: "指定した期間内にデータはありませんでした。"
         end
     end
 
