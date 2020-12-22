@@ -30,7 +30,7 @@ class Tweet < ApplicationRecord
       when "until_now"
         {
           date_to: datetime.strftime("%Y%m%d%H%M"),
-          date_from: datetime.ago(28.days).strftime("%Y%m%d%H%M")
+          date_from: datetime.ago(1.year).strftime("%Y%m%d%H%M")
         }
       when "until_one_year"
         {

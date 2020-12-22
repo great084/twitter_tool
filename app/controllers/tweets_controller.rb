@@ -19,7 +19,7 @@ class TweetsController < ApplicationController
   end
 
   def search
-    @res_count = 0
+    old_tweet_counts = @user.tweets.count
     query_params = Tweet.fetch_query_params(form_params)
     loop do
       api_response = Tweet.fetch_tweet(query_params)
@@ -28,10 +28,9 @@ class TweetsController < ApplicationController
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
-      @res_count += response["results"].count
-      break unless next_token_exist(response, query_params)
+      break unless Tweet.next_token_exist(response, query_params)
     end
-    redirect_to tweets_path, success: "#{@res_count}件のツイートを取得しました"
+    redirect_to tweets_path, success: "#{@user.tweets.count - old_tweet_counts}件のツイートを新しく取得しました"
   end
 
   def date_params_check
