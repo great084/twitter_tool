@@ -1,7 +1,8 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show index search]
+  before_action :twitter_client, only: [:post_create]
+  before_action :tweet_user, only: %i[show index search retweet]
   PER_PAGE = 10
   require "date"
   def index
@@ -33,23 +34,31 @@ class TweetsController < ApplicationController
     redirect_to tweets_path, success: "#{@res_count}件のツイートを取得しました"
   end
 
-  def create_records(response)
-    response["results"].each do |res|
-      tweet = Tweet.find_by(tweet_id: res["id_str"])
-      if tweet
-        update_tweet_record(tweet, res)
-      else
-        create_tweet_record(res)
-        extended_entities_exist(res["extended_entities"])
-      end
-    end
-  end
-
   def date_params_check
     return if params.permit(:period).present?
 
     flash[:alert] = "期間が指定されていません。入力し直してください"
     redirect_to new_tweet_path
+  end
+
+  def post_create
+    @tweet = Tweet.new(post_params)
+    @client.update("#{@tweet.text}\r")
+    @tweet_data_all = Tweet.find(params[:id])
+    @tweet_data_all.tweet_flag = true
+    @tweet_data_all.save
+    redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
+  rescue StandardError => e
+    redirect_to tweet_path(@tweet_data_all), danger: "再投稿に失敗しました#{e}"
+  end
+
+  def retweet
+    tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
+    Tweet.post_add_comment_retweet(params_retweet, current_user)
+    tweet.update(retweet_flag: true)
+    redirect_to tweet_path(tweet), success: "リツイートに成功しました"
+  rescue StandardError => e
+    redirect_to tweet_path(tweet), danger: "リツイートに失敗しました #{e}"
   end
 
   private
@@ -58,9 +67,16 @@ class TweetsController < ApplicationController
       Tweet.where(user_id: @user.id)
     end
 
-    def form_params
-      params.permit(:period)
-            .merge(login_user: current_user.nickname)
+    def create_records(response)
+      response["results"].each do |res|
+        tweet = Tweet.find_by(tweet_id: res["id_str"])
+        if tweet
+          update_tweet_record(tweet, res)
+        else
+          create_tweet_record(res)
+          extended_entities_exist(res["extended_entities"])
+        end
+      end
     end
 
     def create_tweet_record(res)
@@ -96,21 +112,37 @@ class TweetsController < ApplicationController
       )
     end
 
+    def form_params
+      params.permit(:period)
+            .merge(login_user: current_user.nickname)
+    end
+
     def tweet_user
       redirect_to root_path, flash: { alert: "ログインしてください" } if current_user.nil?
       @user = current_user
-    end
-
-    def next_token_exist(response, query_params)
-      return unless response["next"]
-
-      query_params[:next] = response["next"]
     end
 
     def response_data_nil?(response)
       !!if response["results"].empty?
           redirect_to new_tweet_path, flash: { alert: "指定した期間内にデータはありませんでした。" }
         end
+    end
+
+    def post_params
+      params.require(:tweet).permit(:text)
+    end
+
+    def twitter_client
+      @client = Twitter::REST::Client.new do |config|
+        config.consumer_key = ENV["TWITTER_API_KEY"]
+        config.consumer_secret = ENV["TWITTER_API_SECRET"]
+        config.access_token = current_user.token
+        config.access_token_secret = current_user.secret
+      end
+    end
+
+    def params_retweet
+      params.require(:tweet).permit(:add_comments, :tweet_id)
     end
 
     def error_status?(res_status)

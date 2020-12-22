@@ -1,4 +1,6 @@
+<h2><%= flash.now[:alert] %></h2>
 <h1 class="text-center">過去投稿の詳細</h1>
+<%= render 'flash' %>
 <table class="table table-bordered  my-5 mx-auto table-show ">
   <tbody >
     <tr>
@@ -24,6 +26,14 @@
 </table>
 
  <div class="text-center ">
-  <%= link_to '再投稿する', "#" ,class: "btn btn-warning mx-2" %>
-  <%= link_to '再投稿する', "#",class: "btn btn-info mx-2" %>
+
+   <button type="button" class="btn btn-warning " data-toggle="modal" data-target="#modal2" value=@tweet>
+   再投稿する
+  </button>
+  <%= render 'tweet_modal' %>
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal1" value=@tweet>
+    リツイートする
+  </button>
+  <%= render 'retweet_modal' %>
+
  </div>

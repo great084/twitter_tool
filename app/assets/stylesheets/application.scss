@@ -70,10 +70,16 @@ table {
   .show_media_row{
     height:100px;
   }
-  .show_tweet_media {
-    width: 80px;
-    height: 80px;
-  }
+}
+
+.show_tweet_media {
+  width: 80px;
+  height: 80px;
+}
+// 再投稿モーダル
+.mordal-image{
+  width:150px;
+  height:150px;
 }
 
 // 検索テーブル
