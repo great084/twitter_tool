@@ -40,10 +40,6 @@ Metrics/MethodLength:
 Metrics/ClassLength:
   Enabled: false
 
-# 1ファイルの行数制限を無視
-Metrics/ClassLength:
-  Enabled: false 
-
 # private/protected は一段深くインデントする
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
