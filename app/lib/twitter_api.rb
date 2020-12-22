@@ -6,11 +6,22 @@ class TwitterApi
       http = http_settings(uri)
       request = Net::HTTP::Post.new(uri.request_uri, headers)
       request.body = sent_query(search_params)
-      binding.pry
       api_response = http.request(request)
       res_status = status_in_code(api_response)
       response = JSON.parse(api_response.body)
       [res_status, response]
+    end
+
+    def post_tweet(post_params, login_user)
+      client = twitter_client(login_user)
+      @tweet = Tweet.new(post_params)
+      client.update("#{@tweet.text}\r")
+    end
+
+    def post_retweet(params_retweet, login_user)
+      client = twitter_client(login_user)
+      old_tweet_url = "https://twitter.com/#{login_user.nickname}/status/#{params_retweet[:tweet_id]}"
+      client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
     end
 
     def fetch_headers
@@ -28,7 +39,7 @@ class TwitterApi
 
     def sent_query(search_params)
       data = {
-        "query": "from:#{search_params["login_user"]}",
+        "query": "from:#{search_params['login_user']}",
         "fromDate": search_params["date_from"],
         "toDate": search_params["date_to"]
       }
@@ -50,6 +61,15 @@ class TwitterApi
         { code: "503", message: "メンテナンス中です。アプリは利用できません。" }
       res_status = statuses.select { |status| status[:code] == response.code }
       res_status[0]
+    end
+
+    def twitter_client(login_user)
+      Twitter::REST::Client.new do |config|
+        config.consumer_key = ENV["TWITTER_API_KEY"]
+        config.consumer_secret = ENV["TWITTER_API_SECRET"]
+        config.access_token = login_user.token
+        config.access_token_secret = login_user.secret
+      end
     end
   end
 end

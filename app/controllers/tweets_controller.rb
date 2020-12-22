@@ -1,8 +1,7 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   before_action :date_params_check, only: [:search]
-  before_action :twitter_client, only: [:post_create]
-  before_action :tweet_user, only: %i[show index search retweet]
+  before_action :tweet_user, only: %i[show index search retweet post_create]
   PER_PAGE = 10
   require "date"
   def index
@@ -24,7 +23,6 @@ class TweetsController < ApplicationController
 
   def search
     search_params = params_search
-    binding.pry
     loop do
       res_status, response = TwitterApi.fetch_tweet(search_params)
       return if error_status?(res_status) || response_data_nil?(response)
@@ -45,8 +43,7 @@ class TweetsController < ApplicationController
   end
 
   def post_create
-    @tweet = Tweet.new(post_params)
-    @client.update("#{@tweet.text}\r")
+    TwitterApi.post_tweet(post_params, @user)
     @tweet_data_all = Tweet.find(params[:id])
     @tweet_data_all.tweet_flag = true
     @tweet_data_all.save
@@ -57,7 +54,7 @@ class TweetsController < ApplicationController
 
   def retweet
     tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
-    Tweet.post_add_comment_retweet(params_retweet, current_user)
+    TwitterApi.post_retweet(params_retweet, current_user)
     tweet.update(retweet_flag: true)
     redirect_to tweet_path(tweet), success: "リツイートに成功しました"
   rescue StandardError => e
@@ -130,15 +127,6 @@ class TweetsController < ApplicationController
 
     def post_params
       params.require(:tweet).permit(:text)
-    end
-
-    def twitter_client
-      @client = Twitter::REST::Client.new do |config|
-        config.consumer_key = ENV["TWITTER_API_KEY"]
-        config.consumer_secret = ENV["TWITTER_API_SECRET"]
-        config.access_token = current_user.token
-        config.access_token_secret = current_user.secret
-      end
     end
 
     def params_retweet
