@@ -6,7 +6,7 @@ class TweetsController < ApplicationController
   PER_PAGE = 10
   require "date"
   def index
-    @q = user_tweets.ransack(params[:q])
+    @q = @user.tweets.ransack(params[:q])
     @tweets = @q.result(distinct: true)
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
@@ -62,10 +62,6 @@ class TweetsController < ApplicationController
   end
 
   private
-
-    def user_tweets
-      Tweet.where(user_id: @user.id)
-    end
 
     def create_records(response)
       response["results"].each do |res|

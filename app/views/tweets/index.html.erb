@@ -44,7 +44,7 @@
     </tbody>
   </table>
 <% end %>
-<h2>検索：<%= @q.result(distinct: true).count %>件</h2>
+<h2>検索結果：<%= @q.result(distinct: true).count %>件</h2>
 <%# ツイート一覧表示 %>
 <% if @tweets.blank?  %>
   <p class="text-center">該当データがありません。</p>
