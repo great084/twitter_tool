@@ -5,7 +5,7 @@ class TweetsController < ApplicationController
   PER_PAGE = 10
   require "date"
   def index
-    @q = Tweet.where(user_id: @user.id).ransack(params[:q])
+    @q = @user.tweets.ransack(params[:q])
     @tweets = @q.result(distinct: true)
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
@@ -23,6 +23,7 @@ class TweetsController < ApplicationController
 
   def search
     search_params = params_search
+    old_tweet_counts = @user.tweets.count
     loop do
       res_status, response = TwitterApi.fetch_tweet(search_params)
       return if error_status?(res_status) || response_data_nil?(response)
@@ -32,7 +33,7 @@ class TweetsController < ApplicationController
 
       search_params.store("next", response["next"])
     end
-    redirect_to tweets_path
+    redirect_to tweets_path, success: "#{@user.tweets.count - old_tweet_counts}件のツイートを新しく取得しました"
   end
 
   def date_params_check
