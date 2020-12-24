@@ -1,5 +1,6 @@
 class TweetsController < ApplicationController
   include SessionsHelper
+  include TwitterApi
   before_action :date_params_check, only: [:search]
   before_action :tweet_user, only: %i[show index search retweet post_create]
   PER_PAGE = 10
@@ -17,15 +18,12 @@ class TweetsController < ApplicationController
     redirect_to root_path if @tweet.user_id != current_user.id
   end
 
-  def new
-    @datetime = DateTime.now.gmtime
-  end
-
   def search
-    search_params = params_search
+    search_params = first_search_params
+    binding.pry
     old_tweet_counts = @user.tweets.count
     loop do
-      res_status, response = TwitterApi.fetch_tweet(search_params)
+      res_status, response = fetch_tweet(search_params)
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
@@ -44,7 +42,7 @@ class TweetsController < ApplicationController
   end
 
   def post_create
-    TwitterApi.post_tweet(post_params, @user)
+    post_tweet(post_params, @user)
     @tweet_data_all = Tweet.find(params[:id])
     @tweet_data_all.tweet_flag = true
     @tweet_data_all.save
@@ -55,7 +53,7 @@ class TweetsController < ApplicationController
 
   def retweet
     tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
-    TwitterApi.post_retweet(params_retweet, current_user)
+    post_retweet(params_retweet, current_user)
     tweet.update(retweet_flag: true)
     redirect_to tweet_path(tweet), success: "リツイートに成功しました"
   rescue StandardError => e
@@ -109,7 +107,7 @@ class TweetsController < ApplicationController
       end
     end
 
-    def params_search
+    def first_search_params
       period = JSON.parse(params.require(:period))
       period.store("login_user", current_user.nickname)
       period
