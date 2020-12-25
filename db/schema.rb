@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_10_132308) do
+ActiveRecord::Schema.define(version: 2020_12_25_135203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2020_12_10_132308) do
 
   create_table "tweets", force: :cascade do |t|
     t.datetime "tweet_created_at", null: false
-    t.string "tweet_id", null: false
+    t.string "tweet_string_id", null: false
     t.string "text", null: false
     t.integer "retweet_count", null: false
     t.integer "favorite_count", null: false

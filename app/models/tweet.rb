@@ -1,7 +1,7 @@
 class Tweet < ApplicationRecord
   belongs_to :user
   validates :tweet_created_at, presence: true
-  validates :tweet_id, presence: true
+  validates :tweet_string_id, presence: true
   validates :text, presence: true
   validates :retweet_count, presence: true
   validates :favorite_count, presence: true
@@ -96,7 +96,7 @@ class Tweet < ApplicationRecord
 
     def post_add_comment_retweet(params_retweet, user)
       client = twitter_client(user)
-      old_tweet_url = "https://twitter.com/#{user.nickname}/status/#{params_retweet[:tweet_id]}"
+      old_tweet_url = "https://twitter.com/#{user.nickname}/status/#{params_retweet[:tweet_string_id]}"
       client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
     end
   end
