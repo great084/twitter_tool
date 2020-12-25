@@ -46,6 +46,7 @@ class TweetsController < ApplicationController
     @tweet_data_all = Tweet.find(params[:id])
     @tweet_data_all.tweet_flag = true
     @tweet_data_all.save
+    Repost.create!(tweet_id: @tweet_data_all.id)
     redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
   rescue StandardError => e
     redirect_to tweet_path(@tweet_data_all), danger: "再投稿に失敗しました#{e}"
@@ -55,6 +56,7 @@ class TweetsController < ApplicationController
     tweet = Tweet.find_by(tweet_string_id: params_retweet[:tweet_string_id])
     Tweet.post_add_comment_retweet(params_retweet, current_user)
     tweet.update(retweet_flag: true)
+    Retweet.create!(tweet_id: tweet.id)
     redirect_to tweet_path(tweet), success: "リツイートに成功しました"
   rescue StandardError => e
     redirect_to tweet_path(tweet), danger: "リツイートに失敗しました #{e}"
@@ -105,10 +107,6 @@ class TweetsController < ApplicationController
         tweet_id: Tweet.last.id,
         media_url: res_medium["media_url"]
       )
-    end
-
-    def create_again_tweet_record(tid)
-
     end
 
     def form_params

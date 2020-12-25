@@ -1,0 +1,12 @@
+<td >
+  <% if tweet.retweet_flag? %>
+    <button class="btn btn-info m-2 flag-btn-add-date" disabled>
+      最新リツイート &emsp; <%= again_post_date(@tweet.retweets) %>
+    </button>
+  <% end %>
+  <% if tweet.tweet_flag? %>
+    <button class="btn btn-warning m-2 flag-btn-add-date" disabled>
+      最新再投稿 &emsp; <%= again_post_date(@tweet.reposts) %>
+    </button>
+  <% end %>
+</td>
