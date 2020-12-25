@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_25_135203) do
+ActiveRecord::Schema.define(version: 2020_12_25_224613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,20 @@ ActiveRecord::Schema.define(version: 2020_12_25_135203) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["tweet_id"], name: "index_media_on_tweet_id"
+  end
+
+  create_table "reposts", force: :cascade do |t|
+    t.bigint "tweet_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tweet_id"], name: "index_reposts_on_tweet_id"
+  end
+
+  create_table "retweets", force: :cascade do |t|
+    t.bigint "tweet_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tweet_id"], name: "index_retweets_on_tweet_id"
   end
 
   create_table "tweets", force: :cascade do |t|
@@ -52,5 +66,7 @@ ActiveRecord::Schema.define(version: 2020_12_25_135203) do
   end
 
   add_foreign_key "media", "tweets"
+  add_foreign_key "reposts", "tweets"
+  add_foreign_key "retweets", "tweets"
   add_foreign_key "tweets", "users"
 end
