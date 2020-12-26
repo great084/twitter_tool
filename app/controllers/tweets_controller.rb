@@ -5,6 +5,8 @@ class TweetsController < ApplicationController
   before_action :tweet_user, only: %i[show index search retweet]
   PER_PAGE = 10
   require "date"
+  require "open-uri"
+
   def index
     @q = Tweet.where(user_id: @user.id).ransack(params[:q])
     @tweets = @q.result(distinct: true)
@@ -41,8 +43,13 @@ class TweetsController < ApplicationController
 
   def post_create
     @tweet = Tweet.new(post_params)
-    @client.update("#{@tweet.text}\r")
     @tweet_data_all = Tweet.find(params[:id])
+
+    # 投稿画像のURLを取得
+    @tweet_media = @tweet_data_all.media.pluck(:media_url)
+    @img = @tweet_media.map { |img_url| URI.parse(img_url).open }
+    @client.update_with_media("#{@tweet.text}\r", @img)
+
     @tweet_data_all.tweet_flag = true
     @tweet_data_all.save
     redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
