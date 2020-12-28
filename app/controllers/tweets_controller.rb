@@ -20,7 +20,6 @@ class TweetsController < ApplicationController
 
   def search
     search_params = first_search_params
-    binding.pry
     old_tweet_counts = @user.tweets.count
     loop do
       res_status, response = fetch_tweet(search_params)
@@ -52,12 +51,12 @@ class TweetsController < ApplicationController
   end
 
   def retweet
-    tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
+    @tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
     post_retweet(params_retweet, current_user)
-    tweet.update(retweet_flag: true)
-    redirect_to tweet_path(tweet), success: "リツイートに成功しました"
+    @tweet.update(retweet_flag: true)
+    redirect_to tweet_path(@tweet), success: "リツイートに成功しました"
   rescue StandardError => e
-    redirect_to tweet_path(tweet), danger: "リツイートに失敗しました #{e}"
+    redirect_to tweet_path(@tweet), danger: "リツイートに失敗しました #{e}"
   end
 
   private
