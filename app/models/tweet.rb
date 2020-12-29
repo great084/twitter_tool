@@ -1,13 +1,15 @@
 class Tweet < ApplicationRecord
   belongs_to :user
   validates :tweet_created_at, presence: true
-  validates :tweet_id, presence: true
+  validates :tweet_string_id, presence: true
   validates :text, presence: true
   validates :retweet_count, presence: true
   validates :favorite_count, presence: true
   validates :tweet_flag, inclusion: [true, false]
   validates :retweet_flag, inclusion: [true, false]
   has_many :media, dependent: :destroy
+  has_many :retweets, dependent: :destroy
+  has_many :reposts, dependent: :destroy
   class << self
     def fetch_tweet(query_params)
       uri = URI.parse("https://api.twitter.com/1.1/tweets/search/#{ENV['PLAN']}/#{ENV['LABEL']}.json")
@@ -96,7 +98,7 @@ class Tweet < ApplicationRecord
 
     def post_add_comment_retweet(params_retweet, user)
       client = twitter_client(user)
-      old_tweet_url = "https://twitter.com/#{user.nickname}/status/#{params_retweet[:tweet_id]}"
+      old_tweet_url = "https://twitter.com/#{user.nickname}/status/#{params_retweet[:tweet_string_id]}"
       client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
     end
   end
