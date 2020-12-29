@@ -27,7 +27,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= f.hidden_field :tweet_id, value: @tweet.tweet_id %>
+          <%= f.hidden_field :tweet_string_id, value: @tweet.tweet_string_id %>
+          <%= f.hidden_field :id, value: @tweet.id %>
           <%= f.submit "リツイートする", class: "btn btn-primary" %>
         </div>
       <% end %>
