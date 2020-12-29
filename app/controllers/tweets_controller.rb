@@ -45,15 +45,17 @@ class TweetsController < ApplicationController
     @tweet_data_all = Tweet.find(params[:id])
     @tweet_data_all.tweet_flag = true
     @tweet_data_all.save
+    Repost.create!(tweet_id: @tweet_data_all.id)
     redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
   rescue StandardError => e
     redirect_to tweet_path(@tweet_data_all), danger: "再投稿に失敗しました#{e}"
   end
 
   def retweet
-    @tweet = Tweet.find_by(tweet_id: params_retweet[:tweet_id])
+    @tweet = Tweet.find_by(tweet_string_id: params_retweet[:tweet_string_id])
     post_retweet(params_retweet, current_user)
     @tweet.update(retweet_flag: true)
+    Retweet.create!(tweet_id: @tweet.id)
     redirect_to tweet_path(@tweet), success: "リツイートに成功しました"
   rescue StandardError => e
     redirect_to tweet_path(@tweet), danger: "リツイートに失敗しました #{e}"
@@ -63,7 +65,7 @@ class TweetsController < ApplicationController
 
     def create_records(response)
       response["results"].each do |res|
-        tweet = Tweet.find_by(tweet_id: res["id_str"])
+        tweet = Tweet.find_by(tweet_string_id: res["id_str"])
         if tweet
           update_tweet_record(tweet, res)
         else
@@ -77,7 +79,7 @@ class TweetsController < ApplicationController
       Tweet.create!(
         user_id: current_user.id,
         tweet_created_at: res["created_at"],
-        tweet_id: res["id_str"],
+        tweet_string_id: res["id_str"],
         text: res["text"],
         retweet_count: res["retweet_count"],
         favorite_count: res["favorite_count"]
@@ -128,7 +130,7 @@ class TweetsController < ApplicationController
     end
 
     def params_retweet
-      params.require(:tweet).permit(:add_comments, :tweet_id)
+      params.require(:tweet).permit(:add_comments, :tweet_string_id)
     end
 
     def error_status?(res_status)
