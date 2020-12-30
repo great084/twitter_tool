@@ -17,6 +17,7 @@ class TweetsController < ApplicationController
 
   def show
     @tweet = Tweet.find(params[:id])
+    @tweet.media.build
     redirect_to root_path if @tweet.user_id != current_user.id
   end
 
@@ -43,12 +44,15 @@ class TweetsController < ApplicationController
   end
 
   def post_create
-    @tweet = Tweet.new(post_params)
+    # @tweet = Tweet.new(post_params)
+    @tweet = current_user.tweets.build(post_params)
     @tweet_data_all = Tweet.find(params[:id])
+    @tweet_new_media = post_params[:media_attributes]
 
     # 投稿画像のURLを取得
     @tweet_media = @tweet_data_all.media.pluck(:media_url)
     @img = @tweet_media.map { |img_url| URI.parse(img_url).open }
+
     @client.update_with_media("#{@tweet.text}\r", @img)
 
     @tweet_data_all.tweet_flag = true
@@ -56,7 +60,8 @@ class TweetsController < ApplicationController
     Repost.create!(tweet_id: @tweet_data_all.id)
     redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
   rescue StandardError => e
-    redirect_to tweet_path(@tweet_data_all), danger: "再投稿に失敗しました#{e}"
+    redirect_to tweet_path(params[:id]), danger: "再投稿に失敗しました#{e} "
+    binding.pry
   end
 
   def retweet
@@ -133,7 +138,7 @@ class TweetsController < ApplicationController
     end
 
     def post_params
-      params.require(:tweet).permit(:text)
+      params.require(:tweet).permit(:text, :tweet,:tweet_string_id,media_attributes: [:media_url, :tweet_id ,:id])
     end
 
     def twitter_client

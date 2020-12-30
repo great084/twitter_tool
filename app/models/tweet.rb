@@ -10,6 +10,7 @@ class Tweet < ApplicationRecord
   has_many :media, dependent: :destroy
   has_many :retweets, dependent: :destroy
   has_many :reposts, dependent: :destroy
+  accepts_nested_attributes_for :media
   class << self
     def fetch_tweet(query_params)
       uri = URI.parse("https://api.twitter.com/1.1/tweets/search/#{ENV['PLAN']}/#{ENV['LABEL']}.json")

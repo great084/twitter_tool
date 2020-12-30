@@ -8,7 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <%= form_with model: @tweet,method: :post, url: "/tweets/#{params[:id]}/post_create", local:true do |f| %>
+      <%= form_with model: @tweet,method: :post, url: "/tweets/#{params[:id]}/post_create", local:true,multipart: true do |f| %>
         <div class="modal-body">
           <div class="p-2">
             <p><%= f.label :label_old_tweet, "元投稿内容" %></p>
@@ -16,9 +16,19 @@
           </div>
           <div class="p-2">
             <p><%= f.label :label_show_image, "画像" %></p>
-            <% @tweet.media.each do |media| %>
-              <%= image_tag media.media_url.to_s,class: "mordal-image "  %>
+             <%= f.fields_for :media,  local: true do |i| %>
+                <%= i.file_field :media_url %>
+           <%= i.hidden_field :tweet_id, value: @tweet.id %>
+  
+             <% end %>
+             
+            <% @tweet.media.each_with_index do |media,index| %>
+              <% if index==0 %>
+                <%= image_tag media.media_url.to_s,class: "mordal-image " %>    
+                       
+              <% end %>
             <% end %>
+
           </div>
         </div>
         <div class="modal-footer">
