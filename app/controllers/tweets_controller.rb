@@ -50,8 +50,9 @@ class TweetsController < ApplicationController
     # 投稿画像のURLを取得
     @tweet_media = @tweet_data_all.media.pluck(:media_url)
     @img = @tweet_media.map { |img_url| URI.parse(img_url).open }
+    @img.push(@new_img.path)
     @client.update_with_media("#{@tweet.text}\r",@img)
-    @client.update_with_media("#{@tweet.text}\r",@new_img.path)
+
 
     @tweet_data_all.tweet_flag = true
     @tweet_data_all.save
@@ -59,7 +60,7 @@ class TweetsController < ApplicationController
     redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
   rescue StandardError => e
     redirect_to tweet_path(params[:id]), danger: "再投稿に失敗しました#{e} "
-
+binding.pry
   end
 
   def retweet
