@@ -16,8 +16,8 @@
           </div>
           <div class="p-2">
             <p><%= f.label :label_show_image, "画像" %></p>
-             <%= f.fields_for :media,  local: true do |i| %>
-                <%= i.file_field :media_url %>
+             <%= f.fields_for :media,  local: true  do |i| %>
+                <%= i.file_field :media_url, multiple: true %>
            <%= i.hidden_field :tweet_id, value: @tweet.id %>
   
              <% end %>

@@ -46,11 +46,15 @@ class TweetsController < ApplicationController
   def post_create
     @tweet = Tweet.new(post_params)
     @tweet_data_all = Tweet.find(params[:id])
-    @new_img=post_params[:media_attributes]["0"]["media_url"]
+    # @new_img=post_params[:media_attributes]["0"]["media_url"]
+    post_params[:media_attributes]["0"]["media_url"].each do |media_url|
+      @new_img= media_url
+    end
     # 投稿画像のURLを取得
     @tweet_media = @tweet_data_all.media.pluck(:media_url)
     @img = @tweet_media.map { |img_url| URI.parse(img_url).open }
     @img.push(@new_img.path)
+
     @client.update_with_media("#{@tweet.text}\r",@img)
 
 
@@ -137,7 +141,7 @@ binding.pry
     end
 
     def post_params
-      params.require(:tweet).permit(:text, :tweet,:tweet_string_id,media_attributes: [:media_url, :tweet_id ])
+      params.require(:tweet).permit(:text, :tweet,:tweet_string_id,media_attributes: [{ media_url: []}, :tweet_id ])
     end
 
     def twitter_client
