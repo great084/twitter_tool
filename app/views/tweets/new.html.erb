@@ -1,9 +1,9 @@
-<div class="container text-center">
+<div class="container text-center tweet_save_form">
   <h2><%= flash.now[:alert] %></h2>
-  <h1>過去ツイートの保存</h1>
+  <h2 class="mt-5">ツイートの保存</h2>
 
-  <div class="bg-light m-5">
-    <div class="show-api-count p-4 border border-dark">
+  <div class="bg-light m-3 p-5 ">
+    <div class="show-api-count p-4 border border-dark ">
       今月の残り取得件数:
     </div>
 
@@ -16,7 +16,7 @@
           <%= f.radio_button :period, search_period(5.days, 0.year) %>1年前〜現在
         </label></p>
       </p>
-      <div class="m-5">
+      <div class="mt-5 mb-1">
         <%= f.submit "取得する", class: "btn btn-primary btn-lg" %>
       </div>
     <% end %>
