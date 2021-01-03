@@ -1,4 +1,7 @@
-<h1><%= @user.nickname%>さんのtweet一覧</h1>
+<div class="container text-center">
+
+
+<h2 class="text-center mt-5">ツイートの一覧</h2>
 <%= render 'flash' %>
 <%# 検索ボックス %>
 <%= search_form_for @q do |f| %>
@@ -44,12 +47,14 @@
     </tbody>
   </table>
 <% end %>
-<h2>検索結果：<%= @q.result(distinct: true).count %>件</h2>
+
+<h4 class="text-left mt-3 mb-5">検索結果：<%= @q.result(distinct: true).count %>件</h4>
+
 <%# ツイート一覧表示 %>
 <% if @tweets.blank?  %>
   <p class="text-center">該当データがありません。</p>
 <% else %>
-  <table class="table table-striped text-center table_index" >
+  <table class="table table-striped text-center table_index align-middle" >
     <thead>
     <tr>
       <th scope="col"></th>
@@ -77,10 +82,13 @@
           <td><%= tweet.retweet_count%></td>
           <td><%= tweet.favorite_count%></td>
 
-          <td><%= link_to "詳細", tweet,class:"btn btn-success my-auto"%></td>
+          <td><%= link_to "詳細", tweet,class:"btn btn-success"%></td>
         </tr>
       <% end %>
     </tbody>
   </table>
   <%= paginate @tweets%>
 <% end %>
+</div>
+
+

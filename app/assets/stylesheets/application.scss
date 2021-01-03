@@ -8,7 +8,6 @@
     text-decoration: none;
     color: black  }
 }
-
 table {
   width: 100%;
   margin-left: auto;
@@ -29,7 +28,12 @@ table {
 .navbar-dark .navbar-nav .nav-link{
   color: #ffffff;
 }
-// ツイート一覧テーブル
+
+// ツイート一覧ページ
+.pagination {
+  justify-content: center;
+}
+// ツイート表示テーブル
 .table_index{
   // テーブルヘッダーを固定
   thead,
@@ -64,7 +68,17 @@ table {
     text-overflow: ellipsis;
     max-width: 0;
   }
+
 }
+// 検索テーブル
+.table_search {
+
+  th {
+    background-color: lightgray;
+  }
+
+}
+
 
 // ツイート詳細ページ
 .table-show{
@@ -88,14 +102,7 @@ table {
   height:150px;
 }
 
-// 検索テーブル
-.table_search{
 
-  th {
-    background-color: lightgray;
-  }
-
-}
 
 
 // ツイート取得ページ
