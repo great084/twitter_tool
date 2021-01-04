@@ -79,14 +79,19 @@ table {
 }
 // 検索テーブル
 .table_search {
-
+text-align: left;
   th {
     background-color:rgba(0, 0, 0, 0.05);
     vertical-align: middle;
-    text-align: left;
-     
+    text-align: left; 
   }
-
+.search_btn{
+  width: 20px;
+  background-color:rgba(0, 0, 0, 0.05);
+  .btn-primary{
+    width: 100%; 
+  }
+}
 }
 
 

@@ -9,12 +9,12 @@
     <tbody>
       <tr>
         <th scope="row" ><%= f.label :tweet_flag %></th>
-        <td >
+        <td>
           <%= f.radio_button :tweet_flag_eq, true %>含める
           <%= f.radio_button :tweet_flag_eq, false %>含めない
         </td>
-        <td rowspan= 5 class="pb-o align-middle" style="width: 20px;">
-          <%= f.submit "絞り込む" ,class:"btn btn-primary m-3"%>
+        <td rowspan= 5 class="pb-o align-middle search_btn">
+          <%= f.submit "絞り込む" ,class:"btn btn-primary"%>
         </td>
       </tr>
       <tr>
