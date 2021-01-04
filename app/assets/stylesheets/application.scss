@@ -12,10 +12,14 @@ table {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  height: auto;
+
+
+
     // リツイートボタンと再投稿ボタンの大きさ統一
     .flag-btn {
       width: 120px;
-      height: 50px;
+      height: 30px;
       font-size: small;
     }
     .flag-btn-add-date {
@@ -59,7 +63,7 @@ table {
       }
   }
   td{
-    height: 120px;
+    height: 80px;
   }
   // テキスト長文時、省略表示
   .box-read {
@@ -68,13 +72,19 @@ table {
     text-overflow: ellipsis;
     max-width: 0;
   }
+  .btn-success{
+    width:90%;
+  }
 
 }
 // 検索テーブル
 .table_search {
 
   th {
-    background-color: lightgray;
+    background-color:rgba(0, 0, 0, 0.05);
+    vertical-align: middle;
+    text-align: left;
+     
   }
 
 }
