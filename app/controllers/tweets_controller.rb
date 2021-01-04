@@ -21,12 +21,13 @@ class TweetsController < ApplicationController
   def search
     search_params = first_search_params
     old_tweet_counts = @user.tweets.count
+    remaing_number = RemaingNumber.new(search_params["count"].to_i)
     loop do
       res_status, response = fetch_tweet(search_params)
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
-      break unless response["next"]
+      break if response["next"].nil? || remaing_number.lower_count.zero?
 
       search_params.store("next", response["next"])
     end
@@ -110,8 +111,10 @@ class TweetsController < ApplicationController
 
     def first_search_params
       period = JSON.parse(params.require(:period))
-      period.store("login_user", current_user.nickname)
-      period
+      count = params.permit(:count)
+      conditions = period.merge(count)
+      conditions.store("login_user", current_user.nickname)
+      conditions
     end
 
     def tweet_user

@@ -11,4 +11,10 @@ module TweetsHelper
     latest_date = table.last.created_at
     "#{latest_date.year}年#{latest_date.month}月#{latest_date.day}日"
   end
+
+  def order_tweet_count
+    tweet_count = []
+    1.upto(10) { |count| tweet_count << (100 * count) }
+    tweet_count
+  end
 end
