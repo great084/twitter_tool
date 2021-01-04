@@ -77,7 +77,7 @@ class TweetsController < ApplicationController
     end
 
     def create_tweet_record(res)
-      Tweet.create!(
+      tweet = Tweet.create!(
         user_id: current_user.id,
         tweet_created_at: res["created_at"],
         tweet_string_id: res["id_str"],
@@ -85,6 +85,7 @@ class TweetsController < ApplicationController
         retweet_count: res["retweet_count"],
         favorite_count: res["favorite_count"]
       )
+      tweet.update(text: res["extended_tweet"]["full_text"]) if res["extended_tweet"].present?
     end
 
     def update_tweet_record(tweet, res)
