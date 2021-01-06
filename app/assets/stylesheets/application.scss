@@ -14,8 +14,6 @@ table {
   margin-right: auto;
   height: auto;
 
-
-
     // リツイートボタンと再投稿ボタンの大きさ統一
     .flag-btn {
       width: 120px;
@@ -40,19 +38,26 @@ table {
 // ツイート表示テーブル
 .table_index{
   // テーブルヘッダーを固定
+
   thead,
   tbody {
     display: inline-block;
+    width: 100%;
   }
   tbody {
+    width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
     height: 600px;
   }
+  .table-title{
+    // white-space: nowrap;
+     width:10%;
+  }
   th,
   td {
-    width: 150px;
-    min-width: 150px;
+    // width: 100%;
+    // min-width: 150px;
       .media_row {
         width: 100px;
         height: 100px;
@@ -62,8 +67,20 @@ table {
         height: 50px;
       }
   }
+
   td{
     height: 80px;
+  }
+  .text{
+    width:30%;
+  }
+  .day{
+    width:15%;
+  
+  }
+  .t-column{
+    width:10%;
+    white-space: nowrap;
   }
   // テキスト長文時、省略表示
   .box-read {
@@ -71,6 +88,7 @@ table {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 0;
+    text-align: left;
   }
   .btn-success{
     width:90%;
@@ -93,8 +111,6 @@ text-align: left;
   }
 }
 }
-
-
 // ツイート詳細ページ
 .table-show{
   width:80%;
@@ -116,9 +132,6 @@ text-align: left;
   width:150px;
   height:150px;
 }
-
-
-
 
 // ツイート取得ページ
 .tweet_save_form{

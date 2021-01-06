@@ -1,8 +1,8 @@
-<td >
+<td class="t-column">
   <% if tweet.retweet_flag? %>
-    <button class="btn btn-info m-1 flag-btn" disabled >リツイート済</button>
+    <div><span class="badge badge-info">リツイート済</span></div>
   <% end %>
   <% if tweet.tweet_flag? %>
-    <button class="btn btn-warning m-1 flag-btn" disabled>再投稿済</button>
+    <div><span class="badge badge-warning">リツイート済</span></div> 
   <% end %>
 </td>
