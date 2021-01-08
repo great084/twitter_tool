@@ -1,12 +1,18 @@
-<td >
-  <% if @tweet.retweet_flag? && @tweet.retweets.present? %>
-    <button class="btn btn-info m-2 flag-btn-add-date" disabled>
-      最新リツイート &emsp; <%= again_post_date(@tweet.retweets) %>
-    </button>
-  <% end %>
-  <% if @tweet.tweet_flag? && @tweet.reposts.present? %>
-    <button class="btn btn-warning m-2 flag-btn-add-date" disabled>
-      最新再投稿 &emsp; <%= again_post_date(@tweet.reposts) %>
-    </button>
-  <% end %>
+<td>
+  <div class="row">
+    <% if @tweet.tweet_flag? && @tweet.reposts.present? %>
+       <h6>
+       <span class="badge badge-pill badge-warning p-3 m-2 col show-badge">
+        最新再投稿 &emsp; <%= again_post_date(@tweet.reposts) %>
+      </span>
+      </h6> 
+    <% end %>
+    <% if @tweet.retweet_flag? && @tweet.retweets.present? %>
+      <h6>
+        <span class="badge badge-pill badge-info p-3 m-2 col show-badge" >
+        最新リツイート &emsp; <%= again_post_date(@tweet.retweets) %>
+      </span>
+      </h6>
+    <% end %>
+  </div>
 </td>
