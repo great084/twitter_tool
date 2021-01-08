@@ -2,10 +2,13 @@ class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show index search retweet post_create]
+  before_action :tweet_user, only: %i[show search retweet post_create]
   PER_PAGE = 10
   require "date"
   def index
+    return if current_user.nil?
+
+    @user = current_user
     @q = @user.tweets.ransack(params[:q])
     @tweets = @q.result(distinct: true)
                 .order(tweet_created_at: :desc).includes(:media)

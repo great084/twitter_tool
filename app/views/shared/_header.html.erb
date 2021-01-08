@@ -6,7 +6,7 @@
     <% if logged_in? %>
       <div class="navbar-nav">
         <%= link_to 'ツイートの保存', new_tweet_path, class: "nav-link nav-item" %>
-        <%= link_to 'ツイートの一覧', tweets_path, class: "nav-link nav-item" %>
+        <%= link_to 'ツイートの一覧', root_path, class: "nav-link nav-item" %>
       </div>
     <% end %>
   </div>

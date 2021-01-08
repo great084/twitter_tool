@@ -9,5 +9,5 @@ Rails.application.routes.draw do
     end
   end
   post '/tweets/retweet', to: 'tweets#retweet'
-  root to: "users#index"
+  root to: "tweets#index"
 end
