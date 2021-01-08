@@ -2,14 +2,14 @@
   <div class="row">
     <% if @tweet.tweet_flag? && @tweet.reposts.present? %>
        <h6>
-       <span class="badge badge-pill badge-warning p-3 m-2 col show-badge">
+       <span class="badge badge-pill badge-warning  col show-badge">
         最新再投稿 &emsp; <%= again_post_date(@tweet.reposts) %>
       </span>
       </h6> 
     <% end %>
     <% if @tweet.retweet_flag? && @tweet.retweets.present? %>
       <h6>
-        <span class="badge badge-pill badge-info p-3 m-2 col show-badge" >
+        <span class="badge badge-pill badge-info col show-badge" >
         最新リツイート &emsp; <%= again_post_date(@tweet.retweets) %>
       </span>
       </h6>
