@@ -33,14 +33,13 @@ class TweetsController < ApplicationController
 
       search_params.store("next", response["next"])
     end
-    redirect_to tweets_path, success: "#{@user.tweets.count - old_tweet_counts}件のツイートを新しく取得しました"
+    redirect_to root_path, success: "#{@user.tweets.count - old_tweet_counts}件のツイートを新しく取得しました"
   end
 
   def date_params_check
     return if params.permit(:period).present?
 
-    flash[:alert] = "期間が指定されていません。入力し直してください"
-    redirect_to new_tweet_path
+    redirect_to new_tweet_path, danger: "期間が指定されていません。入力し直してください"
   end
 
   def post_create
@@ -119,13 +118,13 @@ class TweetsController < ApplicationController
     end
 
     def tweet_user
-      redirect_to root_path, flash: { alert: "ログインしてください" } if current_user.nil?
+      redirect_to root_path, danger: "ログインしてください" if current_user.nil?
       @user = current_user
     end
 
     def response_data_nil?(response)
       !!if response["results"].empty?
-          redirect_to new_tweet_path, alert: "指定した期間内にデータはありませんでした。"
+          redirect_to new_tweet_path, danger: "指定した期間内にデータはありませんでした。"
         end
     end
 
@@ -139,8 +138,8 @@ class TweetsController < ApplicationController
 
     def error_status?(res_status)
       !!if res_status[:code] != "200"
-          flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
-          redirect_to new_tweet_path
+          # flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
+          redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
         end
     end
 end

@@ -1,10 +1,10 @@
 <div class="container text-center ">
-<h2><%= flash.now[:alert] %></h2>
+
 <% if logged_in? %>
 <h2 class="text-center mt-5 mb-3">ツイートの一覧</h2>
 <%= render 'flash' %>
 <%# 検索ボックス %>
-<%= search_form_for @q do |f| %>
+<%= search_form_for(@q,url: root_path) do |f| %>
 <div class="table-responsive">
   <table class="table table-bordered table_search ">
     <tbody>
@@ -92,7 +92,7 @@
 
   <%= paginate @tweets%>
 <% end %>
-<% else %>
+<% else %> 
   <%= link_to 'Twitterアカウントでログイン', "/auth/twitter" ,class:"btn btn-primary login_btn m-5" %>
 <% end %>
 </div>
