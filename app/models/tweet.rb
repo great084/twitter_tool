@@ -11,13 +11,3 @@ class Tweet < ApplicationRecord
   has_many :reposts, dependent: :destroy
   has_many :retweets, dependent: :destroy
 end
-
-class RemaingNumber
-  def initialize(tweet_count)
-    @remaing_number = tweet_count / 100
-  end
-
-  def lower_count
-    @remaing_number -= 1
-  end
-end

@@ -14,7 +14,9 @@ module TweetsHelper
 
   def order_tweet_count
     tweet_count = []
-    1.upto(10) { |count| tweet_count << (100 * count) }
+    1.upto(RemaingNumber::REPETITION_NUMBER) do |count|
+      tweet_count << (RemaingNumber::UNIT_NUMBER * count)
+    end
     tweet_count
   end
 end
