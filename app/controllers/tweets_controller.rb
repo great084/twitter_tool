@@ -18,8 +18,9 @@ class TweetsController < ApplicationController
 
   def show
     @tweet = Tweet.find(params[:id])
+    # 再投稿時の最大4件分の画像登録のためのオブジェクト生成
     media_count = @tweet.media.count
-    (MEDIA_MAX_COUNT - media_count).times{ @tweet.media.build }
+    (MEDIA_MAX_COUNT - media_count).times { @tweet.media.build }
     redirect_to root_path if @tweet.user_id != current_user.id
   end
 
@@ -46,36 +47,30 @@ class TweetsController < ApplicationController
   end
 
   def post_create
-    binding.pry
-    # @tweet = Tweet.new(post_params)
-    @tweet_data_all = Tweet.find(params[:id])
-    # @new_img=post_params[:media_attributes]["0"]["media_url"]
-    # post_params[:media_attributes]["0"]["media_url"].each do |media_url|
-    #   @new_img= media_url
-    # end
-    imgs = []
-    post_params[:media_attributes].to_h.each do |k, v|
+    # binding.pry
+    @original_tweet = Tweet.find(params[:id])
+    post_images = []
+    post_params[:media_attributes].to_h.each do |_k, v|
+      # 画面で画像登録された場合
       if v["media_url"]
-        imgs << v["media_url"].first.tempfile  
+        post_images << v["media_url"].first.tempfile
+      # 画面で画像登録されておらず、元投稿の画像が存在する場合
       elsif v["id"]
         img_url = Medium.find(v[:id]).media_url
-        imgs << URI.parse(img_url).open
+        post_images << URI.parse(img_url).open
       end
     end
 
-    # @tweet_media = @tweet_data_all.media.pluck(:media_url)
-    # @img = @tweet_media.map { |img_url| URI.parse(img_url).open }
-    # @img.push(@new_img.path)
-
     # @client.update_with_media("#{@tweet.text}\r",@img)
-    @client.update_with_media("#{post_params[:text]}\r",imgs)
+    @client.update_with_media("#{post_params[:text]}\r", post_images)
 
-    @tweet_data_all.tweet_flag = true
-    @tweet_data_all.save
-    Repost.create!(tweet_id: @tweet_data_all.id)
-    redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
+    @original_tweet.update(tweet_flag: true)
+    # @tweet_data_all.tweet_flag = true
+    # @tweet_data_all.save
+    Repost.create!(tweet_id: @original_tweet.id)
+    redirect_to tweet_path(@original_tweet), success: "再投稿に成功しました"
   rescue StandardError => e
-    redirect_to tweet_path(params[:id]), danger: "再投稿に失敗しました#{e} "
+    redirect_to tweet_path(@original_tweet), danger: "再投稿に失敗しました#{e} "
   end
 
   def retweet
@@ -152,7 +147,7 @@ class TweetsController < ApplicationController
     end
 
     def post_params
-      params.require(:tweet).permit(:text, :tweet,:tweet_string_id,media_attributes: [{ media_url: []}, :id, :tweet_id ])
+      params.require(:tweet).permit(:text, media_attributes: [{ media_url: [] }, :id, :tweet_id])
     end
 
     def twitter_client

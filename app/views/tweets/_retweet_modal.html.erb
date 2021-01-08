@@ -21,7 +21,7 @@
           <div class="p-2">
             <p><%= f.label :label_show_image, "画像" %></p>
             <% @tweet.media.each do |media| %>
-              <%= image_tag media.media_url.to_s,class: "show_tweet_media m-1" %>
+              <%= image_tag media.media_url.to_s,class: "show_tweet_media m-1" if media.media_url%>
             <% end %>
           </div>
         </div>

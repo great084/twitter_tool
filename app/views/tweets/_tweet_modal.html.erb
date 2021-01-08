@@ -17,25 +17,13 @@
           <div class="p-2">
             <p><%= f.label :label_show_image, "画像" %></p>
             <%= f.fields_for :media,  local: true  do |i| %>
-              <%= image_tag i.object.media_url, class: "mordal-image" if i.object.media_url %>    
+              <%= image_tag i.object.media_url, class: "show_tweet_media m-1" if i.object.media_url %>    
               <%= i.file_field :media_url, value: i.object.media_url, multiple: true %>
-              <%#= i.hidden_field :tweet_id, value: @tweet.id %>
-              <%#= i.hidden_field :media_id, value: i.object.id  if i.object.id %>
-  
             <% end %>
-             
-            <% @tweet.media.each_with_index do |media,index| %>
-              <%# if index==0 %>
-                <%#= image_tag media.media_url.to_s,class: "mordal-image " %>    
-                       
-              <%# end %>
-            <% end %>
-
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= f.hidden_field :tweet_string_id, value: @tweet.tweet_string_id %>
           <%= f.submit "再投稿する", class: "btn btn-primary" %>
         </div>
       <% end %>
