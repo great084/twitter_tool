@@ -42,8 +42,8 @@ class TweetsController < ApplicationController
   end
 
   def post_create
-    post_tweet(post_params, @user)
     @tweet_data_all = Tweet.find(params[:id])
+    post_tweet(post_params, @user)
     @tweet_data_all.tweet_flag = true
     @tweet_data_all.save
     Repost.create!(tweet_id: @tweet_data_all.id)
