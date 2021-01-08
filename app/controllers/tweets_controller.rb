@@ -47,10 +47,9 @@ class TweetsController < ApplicationController
   end
 
   def post_create
-    # binding.pry
     @original_tweet = Tweet.find(params[:id])
     post_images = []
-    post_params[:media_attributes].to_h.each do |_k, v|
+    post_params[:media_attributes].each do |_k, v|
       # 画面で画像登録された場合
       if v["media_url"]
         post_images << v["media_url"].first.tempfile
@@ -61,12 +60,8 @@ class TweetsController < ApplicationController
       end
     end
 
-    # @client.update_with_media("#{@tweet.text}\r",@img)
     @client.update_with_media("#{post_params[:text]}\r", post_images)
-
     @original_tweet.update(tweet_flag: true)
-    # @tweet_data_all.tweet_flag = true
-    # @tweet_data_all.save
     Repost.create!(tweet_id: @original_tweet.id)
     redirect_to tweet_path(@original_tweet), success: "再投稿に成功しました"
   rescue StandardError => e
