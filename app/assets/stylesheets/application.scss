@@ -38,11 +38,13 @@ table {
 // ツイート表示テーブル
 .table_index{
   // テーブルヘッダーを固定
-
+  text-align: center;
   thead,
   tbody {
     display: inline-block;
     width: 100%;
+    padding-left:20px;
+    padding-right:20px;
   }
   tbody {
     width: 100%;
@@ -51,13 +53,10 @@ table {
     height: 600px;
   }
   .table-title{
-    // white-space: nowrap;
      width:10%;
   }
   th,
   td {
-    // width: 100%;
-    // min-width: 150px;
       .media_row {
         width: 100px;
         height: 100px;
@@ -81,6 +80,9 @@ table {
   .t-column{
     width:10%;
     white-space: nowrap;
+    .fas{
+      display: none;
+    }
   }
   // テキスト長文時、省略表示
   .box-read {
@@ -155,24 +157,120 @@ text-align: left;
      margin-left:10px;
 }
 
-@media screen and (max-width: 640px) {
-   .last td:last-child {
-     border-bottom: solid 1px #ccc;
-     width: 100%;
-   }
+@media screen and (max-width: 768px) {
+  .last td:last-child {
+    border-bottom: solid 1px #ccc;
+    width: 100%;
+  }
 
-   .table-show {
-     width: 80%;
-   }
+  .table-show {
+    width: 80%;
+  }
 
-   .table-show th,
-   .table-show td,{
-     border-bottom: none;
-     display: block;
-     width: 100%;
-   }
+  .table-show th,
+  .table-show td,{
+    border-bottom: none;
+    display: block;
+    width: 100%;
+  }
   .show-badge {
   padding:10px;
   margin-left:10px;
   }
+// ツイート一覧
+  .table_index {
+    width: 100%;
+    text-align: left;
+
+  }
+
+  .table_index thead {
+    display: none;
+  }
+
+  .table_index tr,
+  .table_index td {
+    display: block;
+    width: 100%;
+    position: relative;
+    height: auto;
+    border: none;
+    padding:5px;
+  }
+
+  .table_index tr {
+    margin-bottom: 40px;
+    border: 1px black solid;
+
+  }
+
+  .table_index {
+    thead,
+    tbody {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .table-title {
+      width: 100%;
+    }
+    th,
+    td {
+      .media_row {
+        width: 20%;
+        height: auto;
+        
+      }
+      .tweet_media {
+        width: 50px;
+        height: 50px;
+      }
+    }
+    .day {
+      width: 100%;
+
+    }
+    .t-column {
+      width: auto;
+      white-space: nowrap;
+      .fas {
+       display: inline-block;
+      }
+      .fa-heart {
+        color: #007bff;
+      }
+    }
+    .show_btn{
+      display: none;
+    }
+    .box-read {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+      max-width: 200px;
+      width: 100%;
+    }
+    .badge-area{
+      display: inline-block;
+      margin-left:auto;
+      margin-left:auto;
+
+    }
+    .count{
+    flex-basis: 10%
+    }
+  
+  .waku {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .in {
+    padding: 10px;
+    width: 50%;
+    box-sizing: border-box;
+  }
+}
 }
