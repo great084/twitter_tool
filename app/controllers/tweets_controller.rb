@@ -9,11 +9,20 @@ class TweetsController < ApplicationController
     return if current_user.nil?
 
     @user = current_user
-    @q = @user.tweets.ransack(params[:q])
+    @now = Time.zone.today
+    if params[:q].present?
+      @q = if params[:sorts]
+             @user.tweets.ransack(sort_params)
+           else
+             @user.tweets.ransack(params[:q])
+           end
+    else
+      params[:q] = { sorts: "tweet_created_at desc" }
+      @q = @user.tweets.ransack
+    end
     @tweets = @q.result(distinct: true)
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
-    @now = Time.zone.today
   end
 
   def show
@@ -141,5 +150,9 @@ class TweetsController < ApplicationController
           # flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
           redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
         end
+    end
+
+    def sort_params
+      params.require(:q).permit(:sorts)
     end
 end
