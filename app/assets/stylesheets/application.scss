@@ -127,6 +127,10 @@ text-align: left;
   width: 80px;
   height: 80px;
 }
+.sort-item{
+  display: none;
+}
+
 // 再投稿モーダル
 .mordal-image{
   width:150px;
@@ -272,5 +276,10 @@ text-align: left;
     width: 50%;
     box-sizing: border-box;
   }
+
 }
+  // 検索テーブル
+  .sort-item {
+   display: block;
+  }
 }
