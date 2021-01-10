@@ -8,22 +8,26 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <%= form_with model: @tweet,method: :post, url: "/tweets/#{params[:id]}/post_create", local:true do |f| %>
+      <%= form_with model: @tweet,method: :post, url: "/tweets/#{params[:id]}/post_create", local:true,multipart: true do |f| %>
         <div class="modal-body">
           <div class="p-2">
             <p><%= f.label :label_old_tweet, "元投稿内容" %></p>
             <p><%= f.text_area  :text,maxlength: 140 ,:required => true, class: "form-control", rows: 4, value: @tweet.text %></p>
           </div>
-          <div class="p-2">
+          <div class="p-2 tweet-images">
             <p><%= f.label :label_show_image, "画像" %></p>
-            <% @tweet.media.each do |media| %>
-              <%= image_tag media.media_url.to_s,class: "mordal-image "  %>
+            <%= f.fields_for :media,  local: true  do |i| %>
+              <%  if i.object.media_url %>
+                <%= image_tag i.object.media_url, class: "show_tweet_media m-1 img-preview" %>
+              <% else %>
+                <%= image_tag "no-image.png", class: "show_tweet_media m-1 img-preview" %>
+              <% end %>
+              <%= i.file_field :media_url, value: i.object.media_url, multiple: true, class: "tweet-img-file" %>
             <% end %>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= f.hidden_field :tweet_string_id, value: @tweet.tweet_string_id %>
           <%= f.submit "再投稿する", class: "btn btn-primary" %>
         </div>
       <% end %>
