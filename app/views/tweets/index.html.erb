@@ -103,16 +103,23 @@
 
 
 <script>
+// 検索テーブルの表示・非表示の切り替え
 var $target = document.querySelector('.table_search ')
 var $button = document.querySelector('.button')
 $button.addEventListener('click', function() {
   $target.classList.toggle('is-open')
 })
 
-$('tr[data-href]').addClass('clickable')
+// スマホ時のみセルをクリックすると詳細ページへリダイレクト
+var windowWidth = $(window).width();
+var windowSm = 768;
+if (windowWidth <= windowSm) {
+  $('tr[data-href]').addClass('clickable')
   .click(function (e) {
     if (!$(e.target).is('a')) {
       window.location = $(e.target).closest('tr').data('href');
     };
 });
+
+} 
 </script>
