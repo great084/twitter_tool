@@ -1,8 +1,8 @@
-<td >
-  <% if tweet.retweet_flag? %>
-    <button class="btn btn-info m-2 flag-btn" disabled >リツイート済</button>
-  <% end %>
+<td class="t-column">
   <% if tweet.tweet_flag? %>
-    <button class="btn btn-warning m-2 flag-btn" disabled>再投稿済</button>
+    <div class="badge-area" ><span class="badge badge-pill badge-warning index-badge p-2 my-1">再投稿済</span></div> 
+  <% end %>
+  <% if tweet.retweet_flag? %>
+    <div class="badge-area"><span class="badge badge-pill badge-info index-badge p-2 my-1">リツイート済</span></div>
   <% end %>
 </td>

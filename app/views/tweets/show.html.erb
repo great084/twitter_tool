@@ -1,5 +1,5 @@
-<h2><%= flash.now[:alert] %></h2>
-<h1 class="text-center">過去投稿の詳細</h1>
+
+<h2 class="text-center mt-5 mb-3">ツイートの詳細</h2>
 <%= render 'flash' %>
 <table class="table table-bordered  my-5 mx-auto table-show ">
   <tbody >
@@ -13,7 +13,7 @@
     </tr>
     <%= render partial: 'show_column', locals: { heading: "投稿内容",column_data: @tweet.text}%>
     <tr>
-      <th scope="col" class="show_media_row">画像</th>
+      <th scope="col" class="">画像</th>
       <td>
         <% @tweet.media.each do |media| %>
           <%# binding.pry %>
@@ -28,13 +28,15 @@
 
  <div class="text-center ">
 
-   <button type="button" class="btn btn-warning " data-toggle="modal" data-target="#modal2" value=@tweet>
+   <button type="button" class="btn btn-warning mx-2 method-btn" data-toggle="modal" data-target="#modal2" value=@tweet>
    再投稿する
   </button>
   <%= render 'tweet_modal' %>
-  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal1" value=@tweet>
+  <button type="button" class="btn btn-info m-2 method-btn " data-toggle="modal" data-target="#modal1" value=@tweet>
     リツイートする
   </button>
   <%= render 'retweet_modal' %>
 
  </div>
+
+<div class="nozomi"></div>
