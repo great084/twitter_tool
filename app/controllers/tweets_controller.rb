@@ -6,9 +6,7 @@ class TweetsController < ApplicationController
   PER_PAGE = 10
   require "date"
   def index
-    return if current_user.nil?
-
-    @user = current_user
+    tweet_user
     @now = Time.zone.today
     if params[:q].present?
       @q = if params[:sorts]
@@ -24,7 +22,6 @@ class TweetsController < ApplicationController
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
   end
-
   def show
     @tweet = Tweet.find(params[:id])
     redirect_to root_path if @tweet.user_id != current_user.id
