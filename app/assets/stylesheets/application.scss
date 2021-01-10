@@ -13,6 +13,7 @@ table {
   margin-left: auto;
   margin-right: auto;
   height: auto;
+  
   }
 // ナビゲーションメニュー
 .navbar-dark .navbar-nav .nav-link{
@@ -30,9 +31,11 @@ table {
   tbody {
     display: inline-block;
     width: 100%;
-    padding-left:20px;
-    padding-right:20px;
   }
+    thead,{
+ padding-left:25px;
+
+    }
   tbody {
     width: 100%;
     overflow-x: hidden;
@@ -92,7 +95,6 @@ table {
   .search_btn{
     .btn-primary{
     width: 50%;
-
     }
   }
 }
@@ -266,15 +268,23 @@ table {
 // 検索テーブル
   .sort-item {
    display: block;
+   width: 100%;
   }
   .table_search{
     display: none;
+       width:100%;
+       margin-left: auto;
+       margin-right: auto;
     th,td{
-      font-size: small;
+      // font-size: small;
     }
   }
   .table_search.is-open {
     display: table-cell;
+    width:100%;
+    margin-left: auto;
+    margin-right: auto;
+
   }
   .search-condition-btn {
     display: block;
@@ -283,5 +293,19 @@ table {
   .login_btn{
     font-size: small;
     width:80%
+  }
+}
+@media screen and (max-width: 468px) {
+ 
+.table_search {
+    display: none;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    th,
+    td {
+      font-size: small;
+    }
   }
 }

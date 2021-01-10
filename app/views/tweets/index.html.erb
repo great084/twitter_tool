@@ -5,7 +5,6 @@
 <%# 検索ボックス %>
 <h5 class="text-left my-3 search-condition-btn">検索条件<i class="fas fa-plus-circle button"></i></h5>
   <%= search_form_for(@q,url: root_path) do |f| %>
-  <div class="table-responsive">
     <table class="table table-bordered table_search ">
       <tbody>
         <tr>
@@ -50,12 +49,11 @@
         </tr>
       </tbody>
     </table>
-    </div>
     <div class="sort-item">
       <%= f.select :sorts, { '並び替え': 'id desc', '投稿日時：昇順': 'tweet_created_at asc', '投稿日時：降順': 'tweet_created_at desc', 'リツート数：昇順': 'retweet_count asc', 'リツイート数：降順': 'retweet_count desc','いいね数：昇順': 'favorite_count asc', 'いいね数：降順': 'favorite_count desc' } , { selected: params[:q][:sorts] }, { onchange: 'this.form.submit()',class: "form-control my-3"}%> 
       <% f.submit "完了"%>
     </div>
-    <h4 class="text-left my-4 font-weight-bold search_count">検索結果：<%= @q.result(distinct: true).count %>件</h4>
+    <h4 class="text-left my-4 font-weight-bold search_count ml-2">検索結果：<%= @q.result(distinct: true).count %>件</h4>
 <% end %>
 
   
