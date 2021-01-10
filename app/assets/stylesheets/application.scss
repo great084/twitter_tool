@@ -115,6 +115,9 @@ table {
 .sort-item{
   display: none;
 }
+.method-btn {
+  width: 200px;
+}
 // 再投稿モーダル
 .mordal-image{
   width:150px;
@@ -162,6 +165,10 @@ table {
   padding:10px;
   margin-left:10px;
   }
+  .method-btn{
+  width:150px;
+  }
+
 // ツイート一覧
   .table_index {
     width: 100%;
