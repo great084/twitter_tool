@@ -11,6 +11,7 @@ class TweetsController < ApplicationController
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
     @now = Time.zone.today
+
   end
 
   def show

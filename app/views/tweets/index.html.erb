@@ -7,8 +7,7 @@
       <tr>
         <th scope="row"><%= f.label :tweet_flag %></th>
         <td>
-          <%= f.radio_button :tweet_flag_eq, true %>含める
-          <%= f.radio_button :tweet_flag_eq, false %>含めない
+          <%= f.check_box :tweet_flag_eq,{},true,false %>含める
         </td>
         <td rowspan= 5 vAlign=middle class="pb-o">
           <%= f.submit "絞り込む" ,class:"btn btn-primary "%>
@@ -17,16 +16,16 @@
       <tr>
         <th scope="row"><%= f.label :retweet_flag %></th>
         <td>
-          <%= f.radio_button :retweet_flag_eq, true %>含める
-          <%= f.radio_button :retweet_flag_eq, false %>含めない
+          <%= f.check_box :retweet_flag_eq,{},true,false %>含める
+
         </td>
       </tr>
       <tr>
         <th scope="row"><%= f.label :tweet_created_at %></th>
-        <td>
-          <%= f.radio_button :tweet_created_at_lteq, @now.ago(2.years)%>2年以上前
-          <%= f.radio_button :tweet_created_at_lteq,@now.ago(1.years) %>1年以上前
-          <%= f.radio_button :tweet_created_at_lteq	,@now.ago(6.month)%>半年以上前
+        <td class="day_checkbox-items">
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(2.years) %>2年以上前
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(1.years) %>1年以上前
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(6.month) %>半年以上前
         </td>
       </tr>
       <tr>
@@ -84,3 +83,11 @@
   </table>
   <%= paginate @tweets%>
 <% end %>
+
+<script>
+jQuery(function($){
+	$('input:checkbox').click(function() {
+		$(this).closest('.day_checkbox-items').find('input:checkbox').not(this).prop('checked', false);
+	});
+});
+</script>
