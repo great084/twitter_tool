@@ -106,12 +106,14 @@ text-align: left;
     text-align: left; 
   }
 .search_btn{
-  width: 20px;
-  background-color:rgba(0, 0, 0, 0.05);
   .btn-primary{
-    width: 100%; 
+   width: 50%;
+
   }
 }
+}
+.search-condition-btn {
+  display: none;
 }
 // ツイート詳細ページ
 .table-show{
@@ -282,4 +284,17 @@ text-align: left;
   .sort-item {
    display: block;
   }
+  .table_search{
+    display: none;
+    th,td{
+      font-size: small;
+    }
+  }
+  .table_search.is-open {
+    display: table-cell;
+  }
+  .search-condition-btn {
+    display: block;
+  }
+  
 }
