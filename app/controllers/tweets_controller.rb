@@ -2,11 +2,10 @@ class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show search retweet post_create]
+  before_action :tweet_user, only: %i[show search retweet post_create index]
   PER_PAGE = 10
   require "date"
   def index
-    tweet_user
     @now = Time.zone.today
     if params[:q].present?
       @q = if params[:sorts]
