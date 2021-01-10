@@ -77,14 +77,14 @@
     </thead>
     <tbody >
       <%@tweets.each do |tweet|%>
-        <tr class="waku clearfix">
+        <tr class="waku clearfix ">
           <%= render partial: 'flag_btn', locals: { tweet: tweet } ,class:"t-column"%>
           <td  class="align-middle day" ><%= l tweet.tweet_created_at, format: :short%></td>
           <td class="box-read  align-middle text in"><%= tweet.text %></td>
           <td class="media-row align-middle  in" >
             <% tweet.media.each_with_index do |media,index| %>
               <% if index==0 %>
-                 <%= image_tag media.media_url.to_s,class: "tweet_media  align-middle t-column " %>           
+              <%= image_tag media.media_url.to_s,class: "tweet_media  align-middle t-column " %>
               <% end %>
             <% end %>
           </td>         

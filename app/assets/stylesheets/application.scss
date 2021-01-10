@@ -75,7 +75,6 @@ table {
   }
   .day{
     width:15%;
-  
   }
   .t-column{
     width:10%;
@@ -187,7 +186,7 @@ text-align: left;
 // ツイート一覧
   .table_index {
     width: 100%;
-    text-align: left;
+    // text-align: left;
 
   }
 
@@ -206,11 +205,12 @@ text-align: left;
   }
 
   .table_index tr {
-    margin-bottom: 40px;
     border: 1px black solid;
-
+    border-bottom: 0px;
   }
-
+  .table_index tr:last-child {
+    border-bottom: 1px solid black;
+  }
   .table_index {
     thead,
     tbody {
@@ -225,16 +225,17 @@ text-align: left;
       .media_row {
         width: 20%;
         height: auto;
-        
+        text-align: right;
       }
       .tweet_media {
         width: 50px;
         height: 50px;
+        margin-right: 0px;
       }
     }
     .day {
       width: 100%;
-
+      text-align: left;
     }
     .t-column {
       width: auto;
@@ -255,7 +256,7 @@ text-align: left;
       overflow: hidden;
       text-overflow: ellipsis;
       text-align: left;
-      max-width: 200px;
+      max-width: 300px;
       width: 100%;
     }
     .badge-area{
@@ -302,5 +303,4 @@ text-align: left;
     font-size: small;
     width:80%
   }
-
 }
