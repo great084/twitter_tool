@@ -13,24 +13,11 @@ table {
   margin-left: auto;
   margin-right: auto;
   height: auto;
-
-    // リツイートボタンと再投稿ボタンの大きさ統一
-    .flag-btn {
-      width: 120px;
-      height: 30px;
-      font-size: small;
-    }
-    .flag-btn-add-date {
-      width: 300px;
-      height: 50px;
-      font-size: small;
-    }
   }
 // ナビゲーションメニュー
 .navbar-dark .navbar-nav .nav-link{
   color: #ffffff;
 }
-
 // ツイート一覧ページ
 .pagination {
   justify-content: center;
@@ -66,7 +53,6 @@ table {
         height: 50px;
       }
   }
-
   td{
     height: 80px;
   }
@@ -94,22 +80,21 @@ table {
   .btn-success{
     width:90%;
   }
-
 }
 // 検索テーブル
 .table_search {
-text-align: left;
-  th {
-    background-color:rgba(0, 0, 0, 0.05);
-    vertical-align: middle;
-    text-align: left; 
-  }
-.search_btn{
-  .btn-primary{
-   width: 50%;
+  text-align: left;
+    th {
+      background-color:rgba(0, 0, 0, 0.05);
+      vertical-align: middle;
+      text-align: left; 
+    }
+  .search_btn{
+    .btn-primary{
+    width: 50%;
 
+    }
   }
-}
 }
 .search-condition-btn {
   display: none;
@@ -121,7 +106,6 @@ text-align: left;
     width:20%;
     background-color: lightgray;;
   }
-
 }
 
 .show_tweet_media {
@@ -131,13 +115,11 @@ text-align: left;
 .sort-item{
   display: none;
 }
-
 // 再投稿モーダル
 .mordal-image{
   width:150px;
   height:150px;
 }
-
 // ツイート取得ページ
 .tweet_save_form{
   max-width: 500px;
@@ -145,7 +127,6 @@ text-align: left;
     background-color: #ffffff;
     padding-top: 200px;
   }
-
 }
 // ログイン画面
 .login_btn{
@@ -168,11 +149,9 @@ text-align: left;
     border-bottom: solid 1px #ccc;
     width: 100%;
   }
-
   .table-show {
     width: 80%;
   }
-
   .table-show th,
   .table-show td,{
     border-bottom: none;
@@ -186,14 +165,10 @@ text-align: left;
 // ツイート一覧
   .table_index {
     width: 100%;
-    // text-align: left;
-
   }
-
   .table_index thead {
     display: none;
   }
-
   .table_index tr,
   .table_index td {
     display: block;
@@ -203,7 +178,6 @@ text-align: left;
     border: none;
     padding:5px;
   }
-
   .table_index tr {
     border: 1px black solid;
     border-bottom: 0px;
@@ -212,69 +186,69 @@ text-align: left;
     border-bottom: 1px solid black;
   }
   .table_index {
-    thead,
-    tbody {
-      padding-left: 0;
-      padding-right: 0;
+  thead,
+  tbody {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .table-title {
+    width: 100%;
+  }
+  th,
+  td {
+    .media_row {
+      width: 20%;
+      height: auto;
+      text-align: right;
     }
-    .table-title {
-      width: 100%;
+    .tweet_media {
+      width: 50px;
+      height: 50px;
+      margin-right: 0px;
     }
-    th,
-    td {
-      .media_row {
-        width: 20%;
-        height: auto;
-        text-align: right;
-      }
-      .tweet_media {
-        width: 50px;
-        height: 50px;
-        margin-right: 0px;
-      }
-    }
-    .day {
-      width: 100%;
-      text-align: left;
-    }
-    .t-column {
-      width: auto;
-      white-space: nowrap;
-      .fas {
-       display: inline-block;
-      }
-      .fa-heart {
-        color: #007bff;
-      }
-    }
-    .show_btn{
-      display: none;
-    }
-    .box-read {
+  }
+  .day {
+    width: 100%;
+    text-align: left;
+    margin-left:5px;
+  }
+  .t-column {
+    width: auto;
+    white-space: nowrap;
+    .fas {
       display: inline-block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: left;
-      max-width: 300px;
-      width: 100%;
     }
-    .badge-area{
-      display: inline-block;
-      margin-left:auto;
-      margin-left:auto;
+    .fa-heart {
+      color: #007bff;
+    }
+  }
+  .show_btn{
+    display: none;
+  }
+  .box-read {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    max-width: 300px;
+    width: 100%;
+  }
+  .badge-area{
+    display: inline-block;
+    margin-left:auto;
+    margin-left:auto;
 
-    }
-    .count{
-    flex-basis: 10%
-    }
-  
+  }
+  .count{
+  flex-basis: 10%
+  }
+
   .waku {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
   }
-
   .in {
     padding: 10px;
     width: 50%;
@@ -282,7 +256,7 @@ text-align: left;
   }
 
 }
-  // 検索テーブル
+// 検索テーブル
   .sort-item {
    display: block;
   }
