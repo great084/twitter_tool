@@ -10,8 +10,20 @@ module TwitterApi
 
   def post_tweet(post_params, login_user)
     client = twitter_client(login_user)
-    @tweet = Tweet.new(post_params)
-    client.update("#{@tweet.text}\r")
+
+    post_images = []
+    post_params[:media_attributes]&.each do |_k, v|
+      # 画面で画像登録された場合
+      if v["media_url"]
+        post_images << v["media_url"].first.tempfile
+      # 画面で画像登録されておらず、元投稿の画像が存在する場合
+      elsif v["id"]
+        img_url = Medium.find(v[:id]).media_url
+        post_images << URI.parse(img_url).open
+      end
+    end
+
+    client.update_with_media("#{post_params[:text]}\r", post_images)
   end
 
   def post_retweet(params_retweet, login_user)

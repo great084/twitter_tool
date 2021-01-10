@@ -4,7 +4,10 @@ class TweetsController < ApplicationController
   before_action :date_params_check, only: [:search]
   before_action :tweet_user, only: %i[show index search retweet post_create]
   PER_PAGE = 10
+  MEDIA_MAX_COUNT = 4
   require "date"
+  require "open-uri"
+
   def index
     @q = @user.tweets.ransack(params[:q])
     @tweets = @q.result(distinct: true)
@@ -15,6 +18,9 @@ class TweetsController < ApplicationController
 
   def show
     @tweet = Tweet.find(params[:id])
+    # 再投稿時の最大4件分の画像登録のためのオブジェクト生成
+    media_count = @tweet.media.count
+    (MEDIA_MAX_COUNT - media_count).times { @tweet.media.build }
     redirect_to root_path if @tweet.user_id != current_user.id
   end
 
@@ -42,14 +48,14 @@ class TweetsController < ApplicationController
   end
 
   def post_create
-    @tweet_data_all = Tweet.find(params[:id])
-    post_tweet(post_params, @user)
-    @tweet_data_all.tweet_flag = true
-    @tweet_data_all.save
-    Repost.create!(tweet_id: @tweet_data_all.id)
-    redirect_to tweet_path(@tweet_data_all), success: "再投稿に成功しました"
+    @original_tweet = Tweet.find(params[:id])
+
+    post_tweet(post_params, current_user)
+    @original_tweet.update(tweet_flag: true)
+    Repost.create!(tweet_id: @original_tweet.id)
+    redirect_to tweet_path(@original_tweet), success: "再投稿に成功しました"
   rescue StandardError => e
-    redirect_to tweet_path(@tweet_data_all), danger: "再投稿に失敗しました#{e}"
+    redirect_to tweet_path(@original_tweet), danger: "再投稿に失敗しました#{e} "
   end
 
   def retweet
@@ -130,7 +136,7 @@ class TweetsController < ApplicationController
     end
 
     def post_params
-      params.require(:tweet).permit(:text)
+      params.require(:tweet).permit(:text, media_attributes: [{ media_url: [] }, :id, :tweet_id])
     end
 
     def params_retweet

@@ -10,4 +10,5 @@ class Tweet < ApplicationRecord
   has_many :media, dependent: :destroy
   has_many :reposts, dependent: :destroy
   has_many :retweets, dependent: :destroy
+  accepts_nested_attributes_for :media
 end
