@@ -1,5 +1,4 @@
 <div class="container text-center ">
-
 <% if logged_in? %>
 <h2 class="text-center mt-5 mb-3">ツイートの一覧</h2>
 <%= render 'flash' %>
@@ -56,8 +55,7 @@
       <%= f.select :sorts, { '並び替え': 'id desc', '投稿日時：昇順': 'tweet_created_at asc', '投稿日時：降順': 'tweet_created_at desc', 'リツート数：昇順': 'retweet_count asc', 'リツイート数：降順': 'retweet_count desc','いいね数：昇順': 'favorite_count asc', 'いいね数：降順': 'favorite_count desc' } , { selected: params[:q][:sorts] }, { onchange: 'this.form.submit()',class: "form-control my-3"}%> 
       <% f.submit "完了"%>
     </div>
-        <h4 class="text-left my-4 font-weight-bold search_count">検索結果：<%= @q.result(distinct: true).count %>件</h4>
- 
+    <h4 class="text-left my-4 font-weight-bold search_count">検索結果：<%= @q.result(distinct: true).count %>件</h4>
 <% end %>
 
   
@@ -103,6 +101,7 @@
   <%= link_to 'Twitterアカウントでログイン', "/auth/twitter" ,class:"btn btn-primary login_btn m-5" %>
 <% end %>
 </div>
+
 
 
 <script>
