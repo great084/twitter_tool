@@ -77,7 +77,7 @@
     </thead>
     <tbody >
       <%@tweets.each do |tweet|%>
-        <tr class="waku clearfix ">
+        <tr class="waku clearfix " data-href='/tweets/<%= tweet.id%>'>
           <%= render partial: 'flag_btn', locals: { tweet: tweet } ,class:"t-column"%>
           <td  class="align-middle day" ><%= l tweet.tweet_created_at, format: :short%></td>
           <td class="box-read  align-middle text in"><%= tweet.text %></td>
@@ -110,4 +110,11 @@ var $button = document.querySelector('.button')
 $button.addEventListener('click', function() {
   $target.classList.toggle('is-open')
 })
+
+$('tr[data-href]').addClass('clickable')
+  .click(function (e) {
+    if (!$(e.target).is('a')) {
+      window.location = $(e.target).closest('tr').data('href');
+    };
+});
 </script>
