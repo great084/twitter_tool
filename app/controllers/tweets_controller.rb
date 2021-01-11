@@ -2,13 +2,16 @@ class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show search retweet post_create index]
+  before_action :tweet_user, only: %i[show search retweet post_create]
   PER_PAGE = 10
   MEDIA_MAX_COUNT = 4
   require "date"
   require "open-uri"
 
   def index
+    return if current_user.nil?
+
+    @user = current_user
     @now = Time.zone.today
     if params[:q].present?
       @q = if params[:sorts]
@@ -24,6 +27,7 @@ class TweetsController < ApplicationController
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
   end
+
   def show
     @tweet = Tweet.find(params[:id])
     # 再投稿時の最大4件分の画像登録のためのオブジェクト生成
