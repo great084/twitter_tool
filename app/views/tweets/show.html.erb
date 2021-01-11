@@ -1,7 +1,7 @@
 
 <h2 class="text-center mt-5 mb-3">ツイートの詳細</h2>
 <%= render 'flash' %>
-<table class="table table-bordered  my-5 mx-auto table-show ">
+<table class="table table-bordered  mt-5 mx-auto table-show ">
   <tbody >
     <tr>
       <th scope="col">再投稿の状態</th>
@@ -25,7 +25,7 @@
     <%= render partial: 'show_column', locals: { heading: "いいね数",column_data: @tweet.favorite_count}%>
   </tbody>
 </table>
-
+<div class="text-right my-3 h6 " style="width:90%;" ><%= link_to 'ツイートの一覧へ戻る', 'javascript:history.back()',class:" text-muted"%></div>
  <div class="text-center ">
 
    <button type="button" class="btn btn-warning mx-2 method-btn" data-toggle="modal" data-target="#modal2" value=@tweet>
@@ -39,4 +39,3 @@
 
  </div>
 
-<div class="nozomi"></div>
