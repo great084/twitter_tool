@@ -4,19 +4,25 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <% if logged_in? %>
-      <div class="navbar-nav">
-        <%= link_to 'ツイートの保存', new_tweet_path, class: "nav-link nav-item" %>
-        <%= link_to 'ツイートの一覧', tweets_path, class: "nav-link nav-item" %>
-      </div>
+      <ul class="navbar-nav ">
+        <li class="nav-item">
+        <%= link_to 'ツイートの保存', new_tweet_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+       <%= link_to 'ツイートの一覧', root_path, class: "nav-link" %>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+             <p class="nav-link my-auto mr-4">ログインアカウント： @<%= current_user.nickname %></p>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'ログアウト', logout_path, class: "nav-link nav-item"  %>
+        </li>
+      </ul>
+    <% else %>
+    <div class="navbar-nav "> <%= link_to 'ログイン', "/auth/twitter" , class: "nav-link nav-item" %></div>
     <% end %>
   </div>
-    <div class="navbar-nav">
-      <% if logged_in? %>
-        <p class="nav-item nav-link my-auto mr-4">ログインアカウント： @<%= current_user.nickname %></p>
-        <%= link_to 'ログアウト', logout_path, class: "nav-link nav-item"  %>
-      <% else %>
-        <%= link_to 'ログイン', "/auth/twitter" , class: "nav-link nav-item" %>
-      <% end %>
-    </div>
 </nav>
 

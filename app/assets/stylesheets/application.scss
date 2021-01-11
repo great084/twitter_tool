@@ -12,38 +12,41 @@ table {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-    // リツイートボタンと再投稿ボタンの大きさ統一
-    .flag-btn {
-      width: 120px;
-      height: 50px;
-      font-size: small;
-    }
-    .flag-btn-add-date {
-      width: 300px;
-      height: 50px;
-      font-size: small;
-    }
+  height: auto;
+  
   }
 // ナビゲーションメニュー
 .navbar-dark .navbar-nav .nav-link{
   color: #ffffff;
 }
-// ツイート一覧テーブル
+// ツイート一覧ページ
+.pagination {
+  justify-content: center;
+}
+// ツイート表示テーブル
 .table_index{
   // テーブルヘッダーを固定
+  text-align: center;
   thead,
   tbody {
     display: inline-block;
+    width: 100%;
   }
+    thead,{
+ padding-left:25px;
+
+    }
   tbody {
+    width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
     height: 600px;
   }
+  .table-title{
+     width:10%;
+  }
   th,
   td {
-    width: 150px;
-    min-width: 150px;
       .media_row {
         width: 100px;
         height: 100px;
@@ -54,7 +57,20 @@ table {
       }
   }
   td{
-    height: 120px;
+    height: 80px;
+  }
+  .text{
+    width:30%;
+  }
+  .day{
+    width:15%;
+  }
+  .t-column{
+    width:10%;
+    white-space: nowrap;
+    .fas{
+      display: none;
+    }
   }
   // テキスト長文時、省略表示
   .box-read {
@@ -62,9 +78,29 @@ table {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 0;
+    text-align: left;
+  }
+  .btn-success{
+    width:90%;
   }
 }
-
+// 検索テーブル
+.table_search {
+  text-align: left;
+    th {
+      background-color:rgba(0, 0, 0, 0.05);
+      vertical-align: middle;
+      text-align: left; 
+    }
+  .search_btn{
+    .btn-primary{
+    width: 50%;
+    }
+  }
+}
+.search-condition-btn {
+  display: none;
+}
 // ツイート詳細ページ
 .table-show{
   width:80%;
@@ -72,26 +108,204 @@ table {
     width:20%;
     background-color: lightgray;;
   }
-  .show_media_row{
-    height:100px;
-  }
 }
 
 .show_tweet_media {
   width: 80px;
   height: 80px;
 }
+.sort-item{
+  display: none;
+}
+.method-btn {
+  width: 200px;
+}
 // 再投稿モーダル
 .mordal-image{
   width:150px;
   height:150px;
 }
+// ツイート取得ページ
+.tweet_save_form{
+  max-width: 500px;
+  .show-api-count {
+    background-color: #ffffff;
+    padding-top: 200px;
+  }
+}
+// ログイン画面
+.login_btn{
+  width: 50%;
 
-// 検索テーブル
-.table_search{
+  margin-left:auto;
+  margin-right:auto;
+}
+.index-badge {
+  width:100px;
+}
+.show-badge{
+    width:200px;
+    padding:10px;
+     margin-left:10px;
+}
 
-  th {
-    background-color: lightgray;
+@media screen and (max-width: 768px) {
+  .last td:last-child {
+    border-bottom: solid 1px #ccc;
+    width: 100%;
+  }
+  .table-show {
+    width: 80%;
+  }
+  .table-show th,
+  .table-show td,{
+    border-bottom: none;
+    display: block;
+    width: 100%;
+  }
+  .show-badge {
+  padding:10px;
+  margin-left:10px;
+  }
+  .method-btn{
+  width:150px;
   }
 
+// ツイート一覧
+  .table_index {
+    width: 100%;
+  }
+  .table_index thead {
+    display: none;
+  }
+  .table_index tr,
+  .table_index td {
+    display: block;
+    width: 100%;
+    position: relative;
+    height: auto;
+    border: none;
+    padding:5px;
+  }
+  .table_index tr {
+    border: 1px black solid;
+    border-bottom: 0px;
+  }
+  .table_index tr:last-child {
+    border-bottom: 1px solid black;
+  }
+  .table_index {
+  thead,
+  tbody {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .table-title {
+    width: 100%;
+  }
+  th,
+  td {
+    .media_row {
+      width: 20%;
+      height: auto;
+      text-align: right;
+    }
+    .tweet_media {
+      width: 50px;
+      height: 50px;
+      margin-right: 0px;
+    }
+  }
+  .day {
+    width: 100%;
+    text-align: left;
+    margin-left:5px;
+  }
+  .t-column {
+    width: auto;
+    white-space: nowrap;
+    .fas {
+      display: inline-block;
+    }
+    .fa-heart {
+      color: #007bff;
+    }
+  }
+  .show_btn{
+    display: none;
+  }
+  .box-read {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    max-width: 300px;
+    width: 100%;
+  }
+  .badge-area{
+    display: inline-block;
+    margin-left:auto;
+    margin-left:auto;
+
+  }
+  .count{
+  flex-basis: 10%
+  }
+
+  .waku {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .in {
+    padding: 10px;
+    width: 50%;
+    box-sizing: border-box;
+  }
+
+}
+// 検索テーブル
+  .sort-item {
+   display: block;
+   width: 100%;
+  }
+  .table_search{
+    display: none;
+       width:100%;
+       margin-left: auto;
+       margin-right: auto;
+    th,td{
+      // font-size: small;
+    }
+  }
+  .table_search.is-open {
+    display: table-cell;
+    width:100%;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+  .search-condition-btn {
+    display: block;
+  }
+  // ログイン画面
+  .login_btn{
+    font-size: small;
+    width:80%
+  }
+}
+@media screen and (max-width: 468px) {
+ 
+.table_search {
+    display: none;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    th,
+    td {
+      font-size: small;
+    }
+  }
 }

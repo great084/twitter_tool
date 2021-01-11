@@ -2,18 +2,30 @@ class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show index search retweet post_create]
+  before_action :tweet_user, only: %i[show search retweet post_create]
   PER_PAGE = 10
   MEDIA_MAX_COUNT = 4
   require "date"
   require "open-uri"
 
   def index
-    @q = @user.tweets.ransack(params[:q])
+    return if current_user.nil?
+
+    @user = current_user
+    @now = Time.zone.today
+    if params[:q].present?
+      @q = if params[:sorts]
+             @user.tweets.ransack(sort_params)
+           else
+             @user.tweets.ransack(params[:q])
+           end
+    else
+      params[:q] = { sorts: "tweet_created_at desc" }
+      @q = @user.tweets.ransack
+    end
     @tweets = @q.result(distinct: true)
                 .order(tweet_created_at: :desc).includes(:media)
                 .page(params[:page]).per(PER_PAGE)
-    @now = Time.zone.today
   end
 
   def show
@@ -37,14 +49,13 @@ class TweetsController < ApplicationController
 
       search_params.store("next", response["next"])
     end
-    redirect_to tweets_path, success: "#{@user.tweets.count - old_tweet_counts}件のツイートを新しく取得しました"
+    redirect_to root_path, success: "#{@user.tweets.count - old_tweet_counts}件のツイートを新しく取得しました"
   end
 
   def date_params_check
     return if params.permit(:period).present?
 
-    flash[:alert] = "期間が指定されていません。入力し直してください"
-    redirect_to new_tweet_path
+    redirect_to new_tweet_path, danger: "期間が指定されていません。入力し直してください"
   end
 
   def post_create
@@ -125,13 +136,13 @@ class TweetsController < ApplicationController
     end
 
     def tweet_user
-      redirect_to root_path, flash: { alert: "ログインしてください" } if current_user.nil?
+      redirect_to root_path, danger: "ログインしてください" if current_user.nil?
       @user = current_user
     end
 
     def response_data_nil?(response)
       !!if response["results"].empty?
-          redirect_to new_tweet_path, alert: "指定した期間内にデータはありませんでした。"
+          redirect_to new_tweet_path, danger: "指定した期間内にデータはありませんでした。"
         end
     end
 
@@ -145,8 +156,12 @@ class TweetsController < ApplicationController
 
     def error_status?(res_status)
       !!if res_status[:code] != "200"
-          flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
-          redirect_to new_tweet_path
+          # flash[:alert] = "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
+          redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
         end
+    end
+
+    def sort_params
+      params.require(:q).permit(:sorts)
     end
 end

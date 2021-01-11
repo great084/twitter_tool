@@ -2,8 +2,8 @@ class SessionsController < ApplicationController
   include SessionsHelper
 
   def failure
-    flash[:alert] = "ログインをキャンセルしました。もう一度ログインしてください"
-    redirect_to root_path
+    # flash[:alert] = "ログインをキャンセルしました。もう一度ログインしてください"
+    redirect_to root_path, danger: "ログインをキャンセルしました。もう一度ログインしてください"
   end
 
   def create
@@ -11,10 +11,11 @@ class SessionsController < ApplicationController
     if user_data[:uid]
       user = user_table_update(user_data)
       log_in(user)
+      redirect_to root_url
     else
-      flash[:alert] = "ログインできませんでした。もう一度ログインしてください"
+      redirect_to root_url, danger: "ログインできませんでした。もう一度ログインしてください"
+      # flash[:alert] = "ログインできませんでした。もう一度ログインしてください"
     end
-    redirect_to root_url
   end
 
   def destroy
