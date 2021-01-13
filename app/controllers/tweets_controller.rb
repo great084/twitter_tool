@@ -66,7 +66,7 @@ class TweetsController < ApplicationController
     Repost.create!(tweet_id: @original_tweet.id)
     redirect_to tweet_path(@original_tweet), success: "再投稿に成功しました"
   rescue StandardError => e
-    logger.debug "repost_error_reason:#{e}"
+    logger.debug "repost_error:#{e}"
     redirect_to tweet_path(@original_tweet), danger: "再投稿に失敗しました#{e} "
   end
 
@@ -77,7 +77,7 @@ class TweetsController < ApplicationController
     Retweet.create!(tweet_id: @tweet.id)
     redirect_to tweet_path(@tweet), success: "リツイートに成功しました"
   rescue StandardError => e
-    logger.debug "retweet_error_reason:#{e}"
+    logger.debug "retweet_error:#{e}"
     redirect_to tweet_path(@tweet), danger: "リツイートに失敗しました #{e}"
   end
 
@@ -156,8 +156,9 @@ class TweetsController < ApplicationController
       params.require(:tweet).permit(:add_comments, :tweet_string_id)
     end
 
-    def error_status?(response, res_status)
+    def error_status?(res_status, response)
       !!if res_status[:code] != "200"
+          logger.debug "search_error:#{response}"
           redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
         end
     end

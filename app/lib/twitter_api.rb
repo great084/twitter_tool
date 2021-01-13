@@ -5,7 +5,6 @@ module TwitterApi
     request = Net::HTTP::Post.new(uri.request_uri, http_headers)
     request.body = sent_query(search_params)
     api_response = http.request(request)
-    logger.debug "api_response:#{api_response.body}"
     [status_in_code(api_response), JSON.parse(api_response.body)]
   end
 
