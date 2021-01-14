@@ -28,7 +28,7 @@ module TwitterApi
 
   def post_retweet(params_retweet, login_user)
     client = twitter_client(login_user)
-    old_tweet_url = "https://twitter.com/#{login_user.nickname}/status/#{params_retweet[:tweet_id]}"
+    old_tweet_url = "https://twitter.com/#{login_user.nickname}/status/#{params_retweet[:tweet_string_id]}"
     client.update("#{params_retweet[:add_comments]}  #{old_tweet_url}")
   end
 

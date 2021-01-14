@@ -101,7 +101,7 @@ class TweetsController < ApplicationController
         tweet_created_at: res["created_at"],
         tweet_string_id: res["id_str"],
         text: res["text"],
-        retweet_count: res["retweet_count"],
+        retweet_count: all_retweet_count(res),
         favorite_count: res["favorite_count"]
       )
       tweet.update(text: res["extended_tweet"]["full_text"]) if res["extended_tweet"].present?
@@ -109,7 +109,7 @@ class TweetsController < ApplicationController
 
     def update_tweet_record(tweet, res)
       tweet.update(
-        retweet_count: res["retweet_count"],
+        retweet_count: all_retweet_count(res),
         favorite_count: res["favorite_count"]
       )
     end
@@ -165,5 +165,9 @@ class TweetsController < ApplicationController
 
     def sort_params
       params.require(:q).permit(:sorts)
+    end
+
+    def all_retweet_count(res)
+      res["retweet_count"] + res["quote_count"]
     end
 end
