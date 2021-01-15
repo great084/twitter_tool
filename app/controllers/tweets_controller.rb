@@ -150,7 +150,6 @@ class TweetsController < ApplicationController
     end
 
     def params_retweet
-      binding.pry
       params.require(:tweet).permit(:add_comments, :tweet_string_id)
     end
 
