@@ -53,7 +53,7 @@ class TweetsController < ApplicationController
   end
 
   def date_params_check
-    return if params.permit(:period).present?
+    return if params.require(:period).present?
 
     redirect_to new_tweet_path, danger: "期間が指定されていません。入力し直してください"
   end
@@ -130,9 +130,8 @@ class TweetsController < ApplicationController
     end
 
     def first_search_params
-      period = JSON.parse(params.require(:period))
-      count = params.permit(:count)
-      conditions = period.merge(count)
+      conditions = JSON.parse(params.require(:period))
+      conditions.store("count", params.require(:count))
       conditions.store("login_user", current_user.nickname)
       conditions
     end
