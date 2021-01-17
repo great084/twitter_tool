@@ -135,7 +135,7 @@ class TweetsController < ApplicationController
       return before_query if params[:commit] == "前回の続きから取得する"
       return condition_params if params[:commit] == "新しい条件を指定して取得する" && params[:period]
 
-      redirect_to new_tweet_path, flash[:danger] = "期間が指定されていないため、入力し直してください"
+      redirect_to new_tweet_path, danger: "期間が指定されていないため、入力し直してください"
     end
 
     def tweet_user
