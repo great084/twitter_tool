@@ -1,7 +1,6 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
-  before_action :date_params_check, only: [:search]
   before_action :tweet_user, only: %i[show search retweet post_create]
   PER_PAGE = 10
   MEDIA_MAX_COUNT = 4
@@ -38,6 +37,8 @@ class TweetsController < ApplicationController
 
   def search
     search_params = first_search_params
+    return if search_params.instance_of?(String)  # 入力値が異常な場合 HTML文がsearch_paramsに返されるため
+
     old_tweet_counts = @user.tweets.count
     remaing_number = RemaingNumber.new(search_params["count"].to_i)
     loop do
@@ -45,17 +46,13 @@ class TweetsController < ApplicationController
       return if error_status?(res_status) || response_data_nil?(response)
 
       create_records(response)
-      break if response["next"].nil? || remaing_number.lower_count.zero?
-
       search_params.store("next", response["next"])
+      if response["next"].nil? || remaing_number.lower_count.zero?
+        next_search_query(search_params)
+        break
+      end
     end
     redirect_to root_path, success: "#{@user.tweets.count - old_tweet_counts}件のツイートを新しく取得しました"
-  end
-
-  def date_params_check
-    return if params.require(:period).present?
-
-    redirect_to new_tweet_path, danger: "期間が指定されていません。入力し直してください"
   end
 
   def post_create
@@ -127,11 +124,18 @@ class TweetsController < ApplicationController
       end
     end
 
-    def first_search_params
+    def condition_params
       conditions = JSON.parse(params.require(:period))
       conditions.store("count", params.require(:count))
       conditions.store("login_user", current_user.nickname)
       conditions
+    end
+
+    def first_search_params
+      return before_query if params[:commit] == "前回の続きから取得する"
+      return condition_params if params[:commit] == "新しい条件を指定して取得する" && params[:period]
+
+      redirect_to new_tweet_path, flash[:danger] = "期間が指定されていないため、入力し直してください"
     end
 
     def tweet_user

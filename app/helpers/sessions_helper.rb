@@ -22,4 +22,14 @@ module SessionsHelper
     session.delete(:uid)
     @current_user = nil
   end
+
+  def before_query
+    session[:search_query]
+  end
+
+  def next_search_query(search_params)
+    return session[:search_query] = search_params if search_params["next"]
+
+    session[:search_query] = nil
+  end
 end
