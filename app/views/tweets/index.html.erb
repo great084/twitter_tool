@@ -1,8 +1,15 @@
-<div class="container text-center ">
+<div class="text-center ">
 <% if logged_in? %>
+
+<%# 検索ボックス %>
+<div class="row ">
+<% if current_user%>
+  <div class="col-md-3 mx-4 time-line"><a class="twitter-timeline" data-lang="ja" data-height="100%" data-chrome=”noheader,nofooter” href="https://twitter.com/<%= @user.nickname %>?ref_src=twsrc%5Etfw">twitterタイムライン</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+<% end %>
+
+<div class="col-md-8  mx-auto">
 <h2 class="text-center mt-5 mb-3">ツイートの一覧</h2>
 <%= render 'flash' %>
-<%# 検索ボックス %>
 <h5 class="text-left my-3 search-condition-btn">検索条件<i class="fas fa-plus-circle button"></i></h5>
   <%= search_form_for(@q,url: root_path) do |f| %>
     <table class="table table-bordered table_search ">
@@ -99,9 +106,8 @@
   <%= link_to 'Twitterアカウントでログイン', "/auth/twitter" ,class:"btn btn-primary login_btn m-5" %>
 <% end %>
 </div>
-
-
-
+</div>
+</div>
 <script>
 // 検索テーブルの表示・非表示の切り替え
 var $target = document.querySelector('.table_search ')
