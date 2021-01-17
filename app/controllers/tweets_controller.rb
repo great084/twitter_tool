@@ -2,30 +2,32 @@ class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show search retweet post_create]
+  before_action :tweet_user, only: %i[show search retweet post_create new]
   PER_PAGE = 10
   MEDIA_MAX_COUNT = 4
   require "date"
   require "open-uri"
 
   def index
-    return if current_user.nil?
-
-    @user = current_user
-    @now = Time.zone.today
-    if params[:q].present?
-      @q = if params[:sorts]
-             @user.tweets.ransack(sort_params)
-           else
-             @user.tweets.ransack(params[:q])
-           end
+    if current_user.nil?
+      redirect_to users_path
     else
-      params[:q] = { sorts: "tweet_created_at desc" }
-      @q = @user.tweets.ransack
+      @user = current_user
+      @now = Time.zone.today
+      if params[:q].present?
+        @q = if params[:sorts]
+               @user.tweets.ransack(sort_params)
+             else
+               @user.tweets.ransack(params[:q])
+             end
+      else
+        params[:q] = { sorts: "tweet_created_at desc" }
+        @q = @user.tweets.ransack
+      end
+      @tweets = @q.result(distinct: true)
+                  .order(tweet_created_at: :desc).includes(:media)
+                  .page(params[:page]).per(PER_PAGE)
     end
-    @tweets = @q.result(distinct: true)
-                .order(tweet_created_at: :desc).includes(:media)
-                .page(params[:page]).per(PER_PAGE)
   end
 
   def show
@@ -33,7 +35,7 @@ class TweetsController < ApplicationController
     # 再投稿時の最大4件分の画像登録のためのオブジェクト生成
     media_count = @tweet.media.count
     (MEDIA_MAX_COUNT - media_count).times { @tweet.media.build }
-    redirect_to root_path if @tweet.user_id != current_user.id
+    redirect_to users_path if @tweet.user_id != current_user.id
   end
 
   def search
@@ -78,6 +80,8 @@ class TweetsController < ApplicationController
   rescue StandardError => e
     redirect_to tweet_path(@tweet), danger: "リツイートに失敗しました #{e}"
   end
+
+  def new; end
 
   private
 
@@ -136,7 +140,7 @@ class TweetsController < ApplicationController
     end
 
     def tweet_user
-      redirect_to root_path, danger: "ログインしてください" if current_user.nil?
+      redirect_to users_path, danger: "ログインしてください" if current_user.nil?
       @user = current_user
     end
 

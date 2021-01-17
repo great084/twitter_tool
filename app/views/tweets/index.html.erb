@@ -1,5 +1,4 @@
 <div class="container text-center ">
-<% if logged_in? %>
 <h2 class="text-center mt-5 mb-3">ツイートの一覧</h2>
 <%= render 'flash' %>
 <%# 検索ボックス %>
@@ -13,7 +12,6 @@
             <%= f.radio_button :tweet_flag_eq, true %>含める
             <%= f.radio_button :tweet_flag_eq, false %>含めない
           </td>
-
         </tr>
         <tr>
           <th scope="row" ><%= f.label :retweet_flag %></th>
@@ -94,9 +92,6 @@
     </tbody>
   </table>
   <%= paginate @tweets%>
-<% end %>
-<% else %> 
-  <%= link_to 'Twitterアカウントでログイン', "/auth/twitter" ,class:"btn btn-primary login_btn m-5" %>
 <% end %>
 </div>
 

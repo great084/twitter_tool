@@ -10,5 +10,5 @@ Rails.application.routes.draw do
     end
   end
   post '/tweets/retweet', to: 'tweets#retweet'
- 
+  get '/users', to: 'users#index'
 end
