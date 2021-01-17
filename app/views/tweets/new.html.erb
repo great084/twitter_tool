@@ -21,7 +21,10 @@
         </div>
       </p>
       <div class="mt-5 mb-1">
-        <%= f.submit "取得する", class: "btn btn-primary btn-lg" %>
+        <%= f.submit "前回の続きから取得する", class: "btn btn-primary btn-lg" if session[:search_query] %>
+      </div>
+      <div class="mt-5 mb-1">
+        <%= f.submit "新しい条件を指定して取得する", class: "btn btn-primary btn-lg" %>
       </div>
     <% end %>
   </div>
