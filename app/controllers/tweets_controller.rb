@@ -35,9 +35,16 @@ class TweetsController < ApplicationController
     redirect_to root_path if @tweet.user_id != current_user.id
   end
 
+  def new
+    return unless before_query
+
+    @last_search_created_at = DateTime.parse(session[:last_search_created_at])
+    @first_day = DateTime.parse(before_query["date_from"])
+  end
+
   def search
     search_params = first_search_params
-    return if search_params.instance_of?(String)  # 入力値が異常な場合 HTML文がsearch_paramsに返されるため
+    return if search_params_error(search_params)
 
     old_tweet_counts = @user.tweets.count
     remaing_number = RemaingNumber.new(search_params["count"].to_i)
@@ -48,7 +55,7 @@ class TweetsController < ApplicationController
       create_records(response)
       search_params.store("next", response["next"])
       if response["next"].nil? || remaing_number.lower_count.zero?
-        next_search_query(search_params)
+        next_search_query(search_params, response)
         break
       end
     end
@@ -132,15 +139,21 @@ class TweetsController < ApplicationController
     end
 
     def first_search_params
-      return before_query if params[:commit] == "前回の続きから取得する"
-      return condition_params if params[:commit] == "新しい条件を指定して取得する" && params[:period]
-
-      redirect_to new_tweet_path, danger: "期間が指定されていないため、入力し直してください"
+      return before_query if params[:period] == "before_query"
+      return condition_params if params[:period]
+      # 上記に当てはまらなかった場合、nilを返す
     end
 
     def tweet_user
       redirect_to root_path, danger: "ログインしてください" if current_user.nil?
       @user = current_user
+    end
+
+    def search_params_error(search_params)
+      !!if search_params.nil?
+          flash.now[:danger] = "期間が指定されていないため、入力し直してください"
+          render :new
+        end
     end
 
     def response_data_nil?(response)
