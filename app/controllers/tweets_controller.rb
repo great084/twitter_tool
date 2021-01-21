@@ -35,13 +35,6 @@ class TweetsController < ApplicationController
     redirect_to root_path if @tweet.user_id != current_user.id
   end
 
-  def new
-    return unless before_query
-
-    @last_search_created_at = DateTime.parse(session[:last_search_created_at])
-    @first_day = DateTime.parse(before_query["date_from"])
-  end
-
   def search
     search_params = first_search_params
     return if search_params_error(search_params)

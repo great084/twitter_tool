@@ -14,14 +14,15 @@
             <%= f.radio_button :period, search_period(10.years, 1.year) %> 〜1年前
           </label></h5>
           <h5><label>
-            <%= f.radio_button :period, search_period(28.days, 0.year) %> 1年前〜現在
+            <%= f.radio_button :period, search_period(1.year, 0.year) %> 1年前〜現在
           </label></h5>
           <% if session[:last_search_created_at] %>
             <h5><label>
               <%= f.radio_button :period, "before_query" %>前回未取得ツイート
             </label></h5>
             <div class="margin-text">
-              <%= l @first_day, format: :short %>から<br><%= l @last_search_created_at, format: :short %>
+              <%= l before_query_first_day, format: :short %>から<br>
+              <%= l before_query_last_day, format: :short %>
             </div>
           <% end %>
         </div>
