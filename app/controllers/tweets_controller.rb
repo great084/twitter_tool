@@ -53,7 +53,7 @@ class TweetsController < ApplicationController
   end
 
   def date_params_check
-    return if params.require(:period).present?
+    return if params[:period]
 
     redirect_to new_tweet_path, danger: "期間が指定されていません。入力し直してください"
   end
