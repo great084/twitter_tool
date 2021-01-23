@@ -2,32 +2,28 @@ class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show search retweet post_create new]
+  before_action :tweet_user
   PER_PAGE = 10
   MEDIA_MAX_COUNT = 4
   require "date"
   require "open-uri"
 
   def index
-    if current_user.nil?
-      redirect_to users_path
+    @user = current_user
+    @now = Time.zone.today
+    if params[:q].present?
+      @q = if params[:sorts]
+              @user.tweets.ransack(sort_params)
+            else
+              @user.tweets.ransack(params[:q])
+            end
     else
-      @user = current_user
-      @now = Time.zone.today
-      if params[:q].present?
-        @q = if params[:sorts]
-               @user.tweets.ransack(sort_params)
-             else
-               @user.tweets.ransack(params[:q])
-             end
-      else
-        params[:q] = { sorts: "tweet_created_at desc" }
-        @q = @user.tweets.ransack
-      end
-      @tweets = @q.result(distinct: true)
-                  .order(tweet_created_at: :desc).includes(:media)
-                  .page(params[:page]).per(PER_PAGE)
+      params[:q] = { sorts: "tweet_created_at desc" }
+      @q = @user.tweets.ransack
     end
+    @tweets = @q.result(distinct: true)
+                .order(tweet_created_at: :desc).includes(:media)
+                .page(params[:page]).per(PER_PAGE)
   end
 
   def show
