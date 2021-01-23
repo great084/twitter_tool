@@ -13,10 +13,10 @@ class TweetsController < ApplicationController
     @now = Time.zone.today
     if params[:q].present?
       @q = if params[:sorts]
-              @user.tweets.ransack(sort_params)
-            else
-              @user.tweets.ransack(params[:q])
-            end
+             @user.tweets.ransack(sort_params)
+           else
+             @user.tweets.ransack(params[:q])
+           end
     else
       params[:q] = { sorts: "tweet_created_at desc" }
       @q = @user.tweets.ransack
@@ -56,9 +56,8 @@ class TweetsController < ApplicationController
     redirect_to new_tweet_path, danger: "期間が指定されていません。入力し直してください"
   end
 
-  def post_create
-    @original_tweet = Tweet.find(params[:id])
-
+  def repost
+    @original_tweet = Tweet.find_by(tweet_string_id: params_retweet[:tweet_string_id])
     post_tweet(post_params, current_user)
     @original_tweet.update(tweet_flag: true)
     Repost.create!(tweet_id: @original_tweet.id)
@@ -147,7 +146,7 @@ class TweetsController < ApplicationController
     end
 
     def post_params
-      params.require(:tweet).permit(:text, media_attributes: [{ media_url: [] }, :id, :tweet_id])
+      params.require(:tweet).permit(:text, :tweet_string_id, media_attributes: [{ media_url: [] }, :id, :tweet_id])
     end
 
     def params_retweet

@@ -5,12 +5,10 @@ Rails.application.routes.draw do
   get '/users', to: 'users#index'
   root to: "tweets#index"
   resources :tweets, only: [:new, :show] do
-    member do
-      post "post_create"
-    end
     collection do
       post "search"
       post "retweet"
+      post "repost"
     end
   end
 end
