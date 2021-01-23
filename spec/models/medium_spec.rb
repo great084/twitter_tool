@@ -24,7 +24,7 @@ RSpec.describe Medium, type: :model do
       medium.update(tweet_id: @tweet.id)
       @tweet.destroy
       @after_medium = Medium.find_by(id: medium.id)
-      expect(@after_medium).to_not be_present   
+      expect(@after_medium).to_not be_present
     end
   end
 

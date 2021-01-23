@@ -22,7 +22,7 @@ RSpec.describe Tweet, type: :model do
       expect(@tweet).to be_valid
     end
   end
-  
+
   context "without a any parameter" do
     it "is invalid without a tweet_created_at" do
       @tweet.update(tweet_created_at: nil)
@@ -51,7 +51,7 @@ RSpec.describe Tweet, type: :model do
     it "is invalid without a favorite_count" do
       @tweet.update(favorite_count: nil)
       @tweet.valid?
-      expect(@tweet.errors[:favorite_count]).to_not include("can't be blank")  
+      expect(@tweet.errors[:favorite_count]).to_not include("can't be blank")
     end
 
     it "is invalid without a tweet_flag" do
@@ -63,7 +63,7 @@ RSpec.describe Tweet, type: :model do
     it "is invalid without a retweet_flag" do
       @tweet.update(retweet_flag: nil)
       @tweet.valid?
-      expect(@tweet.errors[:retweet_flag]).to_not include("can't be blank")  
+      expect(@tweet.errors[:retweet_flag]).to_not include("can't be blank")
     end
   end
 end
