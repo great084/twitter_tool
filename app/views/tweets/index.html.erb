@@ -1,102 +1,105 @@
 <div class="container text-center ">
-<h2 class="text-center mt-5 mb-3">ツイートの一覧</h2>
-<%= render 'flash' %>
 <%# 検索ボックス %>
-<h5 class="text-left my-3 search-condition-btn">検索条件<i class="fas fa-plus-circle button"></i></h5>
-  <%= search_form_for(@q,url: root_path) do |f| %>
-    <table class="table table-bordered table_search ">
-      <tbody>
-        <tr>
-          <th scope="row" ><%= f.label :tweet_flag %></th>
-          <td>
-            <%= f.radio_button :tweet_flag_eq, true %>含める
-            <%= f.radio_button :tweet_flag_eq, false %>含めない
-          </td>
-        </tr>
-        <tr>
-          <th scope="row" ><%= f.label :retweet_flag %></th>
-          <td >
-            <%= f.radio_button :retweet_flag_eq, true %>含める
-            <%= f.radio_button :retweet_flag_eq, false %>含めない
-          </td>
-        </tr>
-        <tr>
-          <th scope="row"><%= f.label :tweet_created_at %></th>
-          <td >
-            <%= f.radio_button :tweet_created_at_lteq, @now.ago(2.years)%>2年以上前
-            <%= f.radio_button :tweet_created_at_lteq,@now.ago(1.years) %>1年以上前
-            <%= f.radio_button :tweet_created_at_lteq	,@now.ago(6.month)%>半年以上前
-          </td>
-        </tr>
-        <tr>
-          <th scope="row"><%= f.label :retweet_count%></th>
-          <td>
-            <%= f.number_field :retweet_count_gteq,min:"0"%>以上〜
-          </td>
-        </tr>
-        <tr>
-          <th scope="row"><%= f.label :favorite_count %></th>
-          <td>
-            <%= f.number_field :favorite_count_gteq,min:"0"%>以上〜
-          </td>
-        </tr>
-        <tr>
-           <td colspan= 2 class="pb-o text-center search_btn">
-            <%= f.submit "絞り込む" ,class:"btn btn-primary"%>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="sort-item">
-      <%= f.select :sorts, { '並び替え': 'id desc', '投稿日時：昇順': 'tweet_created_at asc', '投稿日時：降順': 'tweet_created_at desc', 'リツート数：昇順': 'retweet_count asc', 'リツイート数：降順': 'retweet_count desc','いいね数：昇順': 'favorite_count asc', 'いいね数：降順': 'favorite_count desc' } , { selected: params[:q][:sorts] }, { onchange: 'this.form.submit()',class: "form-control my-3"}%> 
-      <% f.submit "完了"%>
-    </div>
-    <h4 class="text-left my-4 font-weight-bold search_count ml-2">検索結果：<%= @q.result(distinct: true).count %>件</h4>
-<% end %>
-
-  
-<%# ツイート一覧表示 %>
-<% if @tweets.blank?  %>
-  <p class="text-center">該当データがありません</p>
-<% else %>
-  <table class="table table-striped  table_index align-middle " >
-    <thead>
-    <tr style="width=100%;">
-      <th scope="col"class="table-title"></th>
-      <th scope="col"class="day" ><%= sort_link(@q, :tweet_created_at, "投稿日時" ,{ default_order: :desc }, { class: "Editlink sort-link" }) %></th>
-      <th scope="col" class="text">投稿内容</th>
-      <th scope="col" class="table-title">投稿画像</th>
-      <th scope="col"class="table-title" ><%= sort_link(@q, :retweet_count, "リツイート", { default_order: :desc }, { class: "Editlink" }) %></th>
-      <th scope="col"class="table-title" ><%= sort_link(@q, :favorite_count, "いいね", { default_order: :desc }, { class: "Editlink" }) %></th>
-      <th scope="col"class="table-title "></th>
-    </tr>
-    </thead>
-    <tbody >
-      <%@tweets.each do |tweet|%>
-        <tr class="waku clearfix " data-href='/tweets/<%= tweet.id%>'>
-          <%= render partial: 'flag_btn', locals: { tweet: tweet } ,class:"t-column"%>
-          <td  class="align-middle day" ><%= l tweet.tweet_created_at, format: :short%></td>
-          <td class="box-read  align-middle text in"><%= tweet.text %></td>
-          <td class="media-row align-middle  in" >
-            <% tweet.media.each_with_index do |media,index| %>
-              <% if index==0 %>
-              <%= image_tag media.media_url.to_s,class: "tweet_media  align-middle t-column " %>
-              <% end %>
-            <% end %>
-          </td>         
-          <td class="align-middle t-column in count"><i class="fas fa-retweet"></i> <%= tweet.retweet_count%></td>
-          <td class="align-middle t-column in count"><i class="fas fa-heart" ></i> <%= tweet.favorite_count%></td>
-          <td class="align-middle t-column show_btn" ><%= link_to "詳細", tweet,class:"btn btn-success" %></td>
-        </tr>
+  <div class="row ">
+    <% if current_user%>
+      <div class="col-lg-3  time-line" id="time-line"><a class="twitter-timeline" data-lang="ja" data-height="100%" data-chrome=”noheader,nofooter” href="https://twitter.com/<%= @user.nickname %>?ref_src=twsrc%5Etfw">twitterタイムライン</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+    <% end %>
+    <div class="col-lg-9 mx-auto">
+      <h2 class="text-center mt-5 mb-3">ツイートの一覧</h2>
+      <%= render 'flash' %>
+      <h5 class="text-left my-3 search-condition-btn">検索条件<i class="fas fa-plus-circle button"></i></h5>
+      <%= search_form_for(@q,url: root_path) do |f| %>
+        <table class="table table-bordered table_search ">
+          <tbody>
+            <tr>
+              <th scope="row" ><%= f.label :tweet_flag %></th>
+              <td>
+                <%= f.radio_button :tweet_flag_eq, true %>含める
+                <%= f.radio_button :tweet_flag_eq, false %>含めない
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" ><%= f.label :retweet_flag %></th>
+              <td >
+                <%= f.radio_button :retweet_flag_eq, true %>含める
+                <%= f.radio_button :retweet_flag_eq, false %>含めない
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><%= f.label :tweet_created_at %></th>
+              <td >
+                <%= f.radio_button :tweet_created_at_lteq, @now.ago(2.years)%>2年以上前
+                <%= f.radio_button :tweet_created_at_lteq,@now.ago(1.years) %>1年以上前
+                <%= f.radio_button :tweet_created_at_lteq	,@now.ago(6.month)%>半年以上前
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><%= f.label :retweet_count%></th>
+              <td>
+                <%= f.number_field :retweet_count_gteq,min:"0"%>以上〜
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><%= f.label :favorite_count %></th>
+              <td>
+                <%= f.number_field :favorite_count_gteq,min:"0"%>以上〜
+              </td>
+            </tr>
+            <tr>
+              <td colspan= 2 class="pb-o text-center search_btn">
+                <%= f.submit "絞り込む" ,class:"btn btn-primary"%>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="sort-item">
+          <%= f.select :sorts, { '並び替え': 'id desc', '投稿日時：昇順': 'tweet_created_at asc', '投稿日時：降順': 'tweet_created_at desc', 'リツート数：昇順': 'retweet_count asc', 'リツイート数：降順': 'retweet_count desc','いいね数：昇順': 'favorite_count asc', 'いいね数：降順': 'favorite_count desc' } , { selected: params[:q][:sorts] }, { onchange: 'this.form.submit()',class: "form-control my-3"}%> 
+          <% f.submit "完了"%>
+        </div>
+        <h4 class="text-left my-4 font-weight-bold search_count ml-2">検索結果：<%= @q.result(distinct: true).count %>件</h4>
       <% end %>
-    </tbody>
-  </table>
-  <%= paginate @tweets%>
-<% end %>
+
+      <%# ツイート一覧表示 %>
+      <% if @tweets.blank?  %>
+        <p class="text-center">該当データがありません</p>
+      <% else %>
+        <table class="table table-striped  table_index align-middle " >
+          <thead>
+          <tr style="width=100%;">
+            <th scope="col"class="table-title"></th>
+            <th scope="col"class="day" ><%= sort_link(@q, :tweet_created_at, "投稿日時" ,{ default_order: :desc }, { class: "Editlink sort-link" }) %></th>
+            <th scope="col" class="text">投稿内容</th>
+            <th scope="col" class="table-title"><span> 投稿</span><span>画像</span>
+            <th scope="col"class="table-title nowrap" ><%= sort_link(@q, :retweet_count, "リツイート", { default_order: :desc }, { class: "Editlink" }) %></th>
+            <th scope="col"class="table-title nowrap " ><%= sort_link(@q, :favorite_count, "いいね", { default_order: :desc }, { class: "Editlink" }) %></th>
+            <th scope="col"class="table-title "></th>
+          </tr>
+          </thead>
+          <tbody >
+            <%@tweets.each do |tweet|%>
+              <tr class="waku clearfix " data-href='/tweets/<%= tweet.id%>'>
+                <%= render partial: 'flag_btn', locals: { tweet: tweet } ,class:"t-column"%>
+                <td  class="align-middle day" ><%= l tweet.tweet_created_at, format: :short%></td>
+                <td class="box-read  align-middle text in"><%= tweet.text %></td>
+                <td class="media-row align-middle  in" >
+                  <% tweet.media.each_with_index do |media,index| %>
+                    <% if index==0 %>
+                    <%= image_tag media.media_url.to_s,class: "tweet_media  align-middle t-column " %>
+                    <% end %>
+                  <% end %>
+                </td>         
+                <td class="align-middle t-column in count"><i class="fas fa-retweet"></i> <%= tweet.retweet_count%></td>
+                <td class="align-middle t-column in count"><i class="fas fa-heart" ></i> <%= tweet.favorite_count%></td>
+                <td class="align-middle t-column show_btn" ><%= link_to "詳細", tweet,class:"btn btn-success" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @tweets%>
+      <% end %>
+    </div>
+  </div>
 </div>
-
-
-
 <script>
 // 検索テーブルの表示・非表示の切り替え
 var $target = document.querySelector('.table_search ')

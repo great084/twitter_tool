@@ -40,7 +40,7 @@ class TweetsController < ApplicationController
     remaing_number = RemaingNumber.new(search_params["count"].to_i)
     loop do
       res_status, response = fetch_tweet(search_params)
-      return if error_status?(res_status) || response_data_nil?(response)
+      return if error_status?(res_status, response) || response_data_nil?(response)
 
       create_records(response)
       break if response["next"].nil? || remaing_number.lower_count.zero?
@@ -51,7 +51,7 @@ class TweetsController < ApplicationController
   end
 
   def date_params_check
-    return if params.permit(:period).present?
+    return if params[:period]
 
     redirect_to new_tweet_path, danger: "期間が指定されていません。入力し直してください"
   end
@@ -63,6 +63,7 @@ class TweetsController < ApplicationController
     Repost.create!(tweet_id: @original_tweet.id)
     redirect_to tweet_path(@original_tweet), success: "再投稿に成功しました"
   rescue StandardError => e
+    put_api_error_log("repost", status, e)
     redirect_to tweet_path(@original_tweet), danger: "再投稿に失敗しました#{e} "
   end
 
@@ -73,6 +74,7 @@ class TweetsController < ApplicationController
     Retweet.create!(tweet_id: @tweet.id)
     redirect_to tweet_path(@tweet), success: "リツイートに成功しました"
   rescue StandardError => e
+    put_api_error_log("retweet", status, e)
     redirect_to tweet_path(@tweet), danger: "リツイートに失敗しました #{e}"
   end
 
@@ -127,9 +129,8 @@ class TweetsController < ApplicationController
     end
 
     def first_search_params
-      period = JSON.parse(params.require(:period))
-      count = params.permit(:count)
-      conditions = period.merge(count)
+      conditions = JSON.parse(params.require(:period))
+      conditions.store("count", params.require(:count))
       conditions.store("login_user", current_user.nickname)
       conditions
     end
@@ -155,6 +156,7 @@ class TweetsController < ApplicationController
 
     def error_status?(res_status)
       !!if res_status[:code] != "200"
+          put_api_error_log("search", status, e)
           redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
         end
     end

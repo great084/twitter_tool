@@ -15,8 +15,10 @@
             <p><%= f.text_area :add_comments, class: "form-control", rows: 4 %></p>
           </div>
           <div class="p-2">
-            <p><%= f.label :label_old_tweet, "元投稿内容" %></p>
-            <p><%= f.text_area :old_tweet, class: "form-control", rows: 4, readonly: true, value: @tweet.text %></p>
+            <p><label>元投稿内容</label></p>
+            <p><textarea class="form-control" rows="4" readonly="true">
+              <%= @tweet.text %>
+            </textarea></p>
           </div>
           <div class="p-2">
             <p><%= f.label :label_show_image, "画像" %></p>
@@ -28,7 +30,6 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <%= f.hidden_field :tweet_string_id, value: @tweet.tweet_string_id %>
-          <%= f.hidden_field :id, value: @tweet.id %>
           <%= f.submit "リツイートする", class: "btn btn-primary" %>
         </div>
       <% end %>

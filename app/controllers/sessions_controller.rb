@@ -14,6 +14,9 @@ class SessionsController < ApplicationController
     else
       redirect_to users_path, danger: "ログインできませんでした。もう一度ログインしてください"
     end
+  rescue StandardError => e
+    put_api_error_log("login", "None", e)
+    redirect_to root_url, danger: "ログインできませんでした。もう一度ログインしてください"
   end
 
   def destroy
