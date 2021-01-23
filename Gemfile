@@ -26,6 +26,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-doc'
   gem 'rspec-rails'
+  gem 'shoulda-matchers'
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'webdrivers'
