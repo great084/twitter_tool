@@ -17,14 +17,14 @@
         <tr>
           <th scope="row" ><%= f.label :tweet_flag %></th>
           <td>
-            <%= f.check_box :tweet_flag_eq,{},true,false %>含める
+            <%= f.check_box :tweet_flag_false,{},true,false %>除外する
           </td>
 
         </tr>
         <tr>
           <th scope="row" ><%= f.label :retweet_flag %></th>
           <td >
-            <%= f.check_box :retweet_flag_eq,{},true,false %>含める 
+               <%= f.check_box :retweet_flag_false,{},true,false %>除外する
           </td>
         </tr>
         <tr>
