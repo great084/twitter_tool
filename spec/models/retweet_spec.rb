@@ -26,4 +26,12 @@ RSpec.describe Retweet, type: :model do
       expect(@after_retweet).to_not be_present
     end
   end
+
+  context "without any parameter" do
+    it"is invalid without a tweet_id" do
+      @retweet = Retweet.create(tweet_id: nil)
+      @retweet.valid?
+      expect(@retweet.errors[:tweet_id]).to_not include("can't be blank")
+    end
+  end
 end

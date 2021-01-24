@@ -26,4 +26,12 @@ RSpec.describe Repost, type: :model do
       expect(@after_repost).to_not be_present
     end
   end
+
+  context "without a any parameter" do
+    it "is invalid without a tweet_id" do
+      @repost = Repost.create(tweet_id: nil)
+      @repost.valid?
+      expect(@repost.errors[:tweet_id]).to_not include("can't be blank")
+    end
+  end
 end

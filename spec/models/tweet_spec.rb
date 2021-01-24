@@ -24,6 +24,12 @@ RSpec.describe Tweet, type: :model do
   end
 
   context "without a any parameter" do
+    it "is invalid without a user_id" do
+      @tweet.update(user_id: nil)
+      @tweet.valid?
+      expect(@tweet.errors[:user_id]).to_not include("can't be blank")
+    end
+
     it "is invalid without a tweet_created_at" do
       @tweet.update(tweet_created_at: nil)
       @tweet.valid?

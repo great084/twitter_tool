@@ -29,8 +29,15 @@ RSpec.describe Medium, type: :model do
   end
 
   context "without a any parameter" do
+    it "is invalid without a tweet_id" do
+      medium.update(tweet_id: nil)
+      medium.valid?
+      expect(medium.errors[:tweet_id]).to_not include("can't be blank")
+    end
+
     it "is invalid without a meia_url" do
       @medium = Medium.create(tweet_id: @tweet.id, media_url: nil)
+      @medium.valid?
       expect(@medium.errors[:media_url]).to_not include("can't be blank")
     end
   end
