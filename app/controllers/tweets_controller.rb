@@ -2,15 +2,13 @@ class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
   before_action :date_params_check, only: [:search]
-  before_action :tweet_user, only: %i[show search retweet post_create]
+  before_action :tweet_user
   PER_PAGE = 10
   MEDIA_MAX_COUNT = 4
   require "date"
   require "open-uri"
 
   def index
-    return if current_user.nil?
-
     @user = current_user
     @now = Time.zone.today
     if params[:q].present?
@@ -33,7 +31,7 @@ class TweetsController < ApplicationController
     # 再投稿時の最大4件分の画像登録のためのオブジェクト生成
     media_count = @tweet.media.count
     (MEDIA_MAX_COUNT - media_count).times { @tweet.media.build }
-    redirect_to root_path if @tweet.user_id != current_user.id
+    redirect_to users_path if @tweet.user_id != current_user.id
   end
 
   def search
@@ -58,8 +56,8 @@ class TweetsController < ApplicationController
     redirect_to new_tweet_path, danger: "期間が指定されていません。入力し直してください"
   end
 
-  def post_create
-    @original_tweet = Tweet.find(params[:id])
+  def repost
+    @original_tweet = Tweet.find_by(tweet_string_id: params_retweet[:tweet_string_id])
     post_tweet(post_params, current_user)
     @original_tweet.update(tweet_flag: true)
     Repost.create!(tweet_id: @original_tweet.id)
@@ -79,6 +77,8 @@ class TweetsController < ApplicationController
     put_api_error_log("retweet", status, e)
     redirect_to tweet_path(@tweet), danger: "リツイートに失敗しました #{e}"
   end
+
+  def new; end
 
   private
 
@@ -136,7 +136,7 @@ class TweetsController < ApplicationController
     end
 
     def tweet_user
-      redirect_to root_path, danger: "ログインしてください" if current_user.nil?
+      redirect_to users_path, danger: "ログインしてください" if current_user.nil?
       @user = current_user
     end
 
@@ -147,7 +147,7 @@ class TweetsController < ApplicationController
     end
 
     def post_params
-      params.require(:tweet).permit(:text, media_attributes: [{ media_url: [] }, :id, :tweet_id])
+      params.require(:tweet).permit(:text, :tweet_string_id, media_attributes: [{ media_url: [] }, :id, :tweet_id])
     end
 
     def params_retweet

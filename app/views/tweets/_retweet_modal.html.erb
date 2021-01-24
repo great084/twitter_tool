@@ -8,7 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <%= form_with model: @tweet, url: tweets_retweet_path, method: :post, local: true do |f| %>
+      <%= form_with model: @tweet, url: retweet_tweets_path, method: :post, local: true do |f| %>
         <div class="modal-body">
           <div class="p-2">
             <p><%= f.label :label_add_comments, "コメントを追加" %></p>
