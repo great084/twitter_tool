@@ -17,24 +17,22 @@
         <tr>
           <th scope="row" ><%= f.label :tweet_flag %></th>
           <td>
-            <%= f.radio_button :tweet_flag_eq, true %>含める
-            <%= f.radio_button :tweet_flag_eq, false %>含めない
+            <%= f.check_box :tweet_flag_false,{},true,false %>除外する
           </td>
 
         </tr>
         <tr>
           <th scope="row" ><%= f.label :retweet_flag %></th>
           <td >
-            <%= f.radio_button :retweet_flag_eq, true %>含める
-            <%= f.radio_button :retweet_flag_eq, false %>含めない
+               <%= f.check_box :retweet_flag_false,{},true,false %>除外する
           </td>
         </tr>
         <tr>
           <th scope="row"><%= f.label :tweet_created_at %></th>
           <td >
-            <%= f.radio_button :tweet_created_at_lteq, @now.ago(2.years)%>2年以上前
-            <%= f.radio_button :tweet_created_at_lteq,@now.ago(1.years) %>1年以上前
-            <%= f.radio_button :tweet_created_at_lteq	,@now.ago(6.month)%>半年以上前
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(2.years) %>2年以上前
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(1.years) %>1年以上前
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(6.month) %>半年以上前
           </td>
         </tr>
         <tr>
@@ -102,6 +100,8 @@
   </table>
   <%= paginate @tweets%>
 <% end %>
+
+
 <% else %> 
   <%= link_to 'Twitterアカウントでログイン', "/auth/twitter" ,class:"btn btn-primary login_btn m-5" %>
 <% end %>
@@ -125,6 +125,12 @@ if (windowWidth <= windowSm) {
     if (!$(e.target).is('a')) {
       window.location = $(e.target).closest('tr').data('href');
     };
+});
+// チェックボックスを1つだけ選択
+jQuery(function($){
+	$('input:checkbox').click(function() {
+		$(this).closest('.day_checkbox-items').find('input:checkbox').not(this).prop('checked', false);
+	});
 });
 
 } 
