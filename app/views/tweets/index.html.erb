@@ -1,63 +1,63 @@
 <div class="container text-center ">
 <%# 検索ボックス %>
-  <div class="row ">
-    <% if current_user%>
-      <div class="col-lg-3  time-line" id="time-line"><a class="twitter-timeline" data-lang="ja" data-height="100%" data-chrome=”noheader,nofooter” href="https://twitter.com/<%= @user.nickname %>?ref_src=twsrc%5Etfw">twitterタイムライン</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
-    <% end %>
-    <div class="col-lg-9 mx-auto">
-      <h2 class="text-center mt-5 mb-3">ツイートの一覧</h2>
-      <%= render 'flash' %>
-      <h5 class="text-left my-3 search-condition-btn">検索条件<i class="fas fa-plus-circle button"></i></h5>
-      <%= search_form_for(@q,url: root_path) do |f| %>
-        <table class="table table-bordered table_search ">
-          <tbody>
-            <tr>
-              <th scope="row" ><%= f.label :tweet_flag %></th>
-              <td>
-                <%= f.radio_button :tweet_flag_eq, true %>含める
-                <%= f.radio_button :tweet_flag_eq, false %>含めない
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" ><%= f.label :retweet_flag %></th>
-              <td >
-                <%= f.radio_button :retweet_flag_eq, true %>含める
-                <%= f.radio_button :retweet_flag_eq, false %>含めない
-              </td>
-            </tr>
-            <tr>
-              <th scope="row"><%= f.label :tweet_created_at %></th>
-              <td >
-                <%= f.radio_button :tweet_created_at_lteq, @now.ago(2.years)%>2年以上前
-                <%= f.radio_button :tweet_created_at_lteq,@now.ago(1.years) %>1年以上前
-                <%= f.radio_button :tweet_created_at_lteq	,@now.ago(6.month)%>半年以上前
-              </td>
-            </tr>
-            <tr>
-              <th scope="row"><%= f.label :retweet_count%></th>
-              <td>
-                <%= f.number_field :retweet_count_gteq,min:"0"%>以上〜
-              </td>
-            </tr>
-            <tr>
-              <th scope="row"><%= f.label :favorite_count %></th>
-              <td>
-                <%= f.number_field :favorite_count_gteq,min:"0"%>以上〜
-              </td>
-            </tr>
-            <tr>
-              <td colspan= 2 class="pb-o text-center search_btn">
-                <%= f.submit "絞り込む" ,class:"btn btn-primary"%>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="sort-item">
-          <%= f.select :sorts, { '並び替え': 'id desc', '投稿日時：昇順': 'tweet_created_at asc', '投稿日時：降順': 'tweet_created_at desc', 'リツート数：昇順': 'retweet_count asc', 'リツイート数：降順': 'retweet_count desc','いいね数：昇順': 'favorite_count asc', 'いいね数：降順': 'favorite_count desc' } , { selected: params[:q][:sorts] }, { onchange: 'this.form.submit()',class: "form-control my-3"}%> 
-          <% f.submit "完了"%>
-        </div>
-        <h4 class="text-left my-4 font-weight-bold search_count ml-2">検索結果：<%= @q.result(distinct: true).count %>件</h4>
-      <% end %>
+<div class="row ">
+<% if current_user%>
+  <div class="col-lg-3  time-line" id="time-line"><a class="twitter-timeline" data-lang="ja" data-height="100%" data-chrome=”noheader,nofooter” href="https://twitter.com/<%= @user.nickname %>?ref_src=twsrc%5Etfw">twitterタイムライン</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+<% end %>
+
+<div class="col-lg-9 mx-auto">
+<h2 class="text-center mt-5 mb-3">ツイートの一覧</h2>
+<%= render 'flash' %>
+<h5 class="text-left my-3 search-condition-btn">検索条件<i class="fas fa-plus-circle button"></i></h5>
+  <%= search_form_for(@q,url: root_path) do |f| %>
+    <table class="table table-bordered table_search ">
+      <tbody>
+        <tr>
+          <th scope="row" ><%= f.label :tweet_flag %></th>
+          <td>
+            <%= f.check_box :tweet_flag_false,{},true,false %>除外する
+          </td>
+
+        </tr>
+        <tr>
+          <th scope="row" ><%= f.label :retweet_flag %></th>
+          <td >
+               <%= f.check_box :retweet_flag_false,{},true,false %>除外する
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><%= f.label :tweet_created_at %></th>
+          <td >
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(2.years) %>2年以上前
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(1.years) %>1年以上前
+          <%= f.check_box :tweet_created_at_lteq_any,{ multiple: true },@now.ago(6.month) %>半年以上前
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><%= f.label :retweet_count%></th>
+          <td>
+            <%= f.number_field :retweet_count_gteq,min:"0"%>以上〜
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><%= f.label :favorite_count %></th>
+          <td>
+            <%= f.number_field :favorite_count_gteq,min:"0"%>以上〜
+          </td>
+        </tr>
+        <tr>
+           <td colspan= 2 class="pb-o text-center search_btn">
+            <%= f.submit "絞り込む" ,class:"btn btn-primary"%>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="sort-item">
+      <%= f.select :sorts, { '並び替え': 'id desc', '投稿日時：昇順': 'tweet_created_at asc', '投稿日時：降順': 'tweet_created_at desc', 'リツート数：昇順': 'retweet_count asc', 'リツイート数：降順': 'retweet_count desc','いいね数：昇順': 'favorite_count asc', 'いいね数：降順': 'favorite_count desc' } , { selected: params[:q][:sorts] }, { onchange: 'this.form.submit()',class: "form-control my-3"}%> 
+      <% f.submit "完了"%>
+    </div>
+    <h4 class="text-left my-4 font-weight-bold search_count ml-2">検索結果：<%= @q.result(distinct: true).count %>件</h4>
+<% end %>
 
       <%# ツイート一覧表示 %>
       <% if @tweets.blank?  %>
@@ -117,6 +117,12 @@ if (windowWidth <= windowSm) {
     if (!$(e.target).is('a')) {
       window.location = $(e.target).closest('tr').data('href');
     };
+});
+// チェックボックスを1つだけ選択
+jQuery(function($){
+	$('input:checkbox').click(function() {
+		$(this).closest('.day_checkbox-items').find('input:checkbox').not(this).prop('checked', false);
+	});
 });
 
 } 
