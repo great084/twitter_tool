@@ -1,15 +1,13 @@
 class TweetsController < ApplicationController
   include SessionsHelper
   include TwitterApi
-  before_action :tweet_user, only: %i[show search retweet post_create]
+  before_action :tweet_user
   PER_PAGE = 10
   MEDIA_MAX_COUNT = 4
   require "date"
   require "open-uri"
 
   def index
-    return if current_user.nil?
-
     @user = current_user
     @now = Time.zone.today
     if params[:q].present?
@@ -32,7 +30,7 @@ class TweetsController < ApplicationController
     # 再投稿時の最大4件分の画像登録のためのオブジェクト生成
     media_count = @tweet.media.count
     (MEDIA_MAX_COUNT - media_count).times { @tweet.media.build }
-    redirect_to root_path if @tweet.user_id != current_user.id
+    redirect_to users_path if @tweet.user_id != current_user.id
   end
 
   def search
@@ -43,7 +41,7 @@ class TweetsController < ApplicationController
     remaing_number = RemaingNumber.new(search_params["count"].to_i)
     loop do
       res_status, response = fetch_tweet(search_params)
-      return if error_status?(res_status) || response_data_nil?(response)
+      return if error_status?(res_status, response) || response_data_nil?(response)
 
       create_records(response)
       search_params.store("next", response["next"])
@@ -55,14 +53,14 @@ class TweetsController < ApplicationController
     redirect_to root_path, success: "#{@user.tweets.count - old_tweet_counts}件のツイートを新しく取得しました"
   end
 
-  def post_create
-    @original_tweet = Tweet.find(params[:id])
-
+  def repost
+    @original_tweet = Tweet.find_by(tweet_string_id: params_retweet[:tweet_string_id])
     post_tweet(post_params, current_user)
     @original_tweet.update(tweet_flag: true)
     Repost.create!(tweet_id: @original_tweet.id)
     redirect_to tweet_path(@original_tweet), success: "再投稿に成功しました"
   rescue StandardError => e
+    put_api_error_log("repost", status, e)
     redirect_to tweet_path(@original_tweet), danger: "再投稿に失敗しました#{e} "
   end
 
@@ -73,8 +71,11 @@ class TweetsController < ApplicationController
     Retweet.create!(tweet_id: @tweet.id)
     redirect_to tweet_path(@tweet), success: "リツイートに成功しました"
   rescue StandardError => e
+    put_api_error_log("retweet", status, e)
     redirect_to tweet_path(@tweet), danger: "リツイートに失敗しました #{e}"
   end
+
+  def new; end
 
   private
 
@@ -138,7 +139,7 @@ class TweetsController < ApplicationController
     end
 
     def tweet_user
-      redirect_to root_path, danger: "ログインしてください" if current_user.nil?
+      redirect_to users_path, danger: "ログインしてください" if current_user.nil?
       @user = current_user
     end
 
@@ -156,7 +157,7 @@ class TweetsController < ApplicationController
     end
 
     def post_params
-      params.require(:tweet).permit(:text, media_attributes: [{ media_url: [] }, :id, :tweet_id])
+      params.require(:tweet).permit(:text, :tweet_string_id, media_attributes: [{ media_url: [] }, :id, :tweet_id])
     end
 
     def params_retweet
@@ -165,6 +166,7 @@ class TweetsController < ApplicationController
 
     def error_status?(res_status)
       !!if res_status[:code] != "200"
+          put_api_error_log("search", status, e)
           redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
         end
     end

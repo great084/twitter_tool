@@ -13,15 +13,23 @@ table {
   margin-left: auto;
   margin-right: auto;
   height: auto;
-  
   }
 // ナビゲーションメニュー
 .navbar-dark .navbar-nav .nav-link{
   color: #ffffff;
 }
+// 自動改行防止
+span {
+  display: inline-block;
+}
+
 // ツイート一覧ページ
 .pagination {
   justify-content: center;
+}
+.time-line {
+  display: block;
+  margin-top: 100px;
 }
 // ツイート表示テーブル
 .table_index{
@@ -32,9 +40,8 @@ table {
     display: inline-block;
     width: 100%;
   }
-    thead,{
- padding-left:25px;
-
+  thead,{
+    padding-left:50px;
     }
   tbody {
     width: 100%;
@@ -43,7 +50,7 @@ table {
     height: 600px;
   }
   .table-title{
-     width:10%;
+    width: 10%;
   }
   th,
   td {
@@ -58,6 +65,13 @@ table {
   }
   td{
     height: 80px;
+  }
+  th {
+   font-size:0.8rem;
+  
+  }
+  .nowrap {
+    white-space: nowrap
   }
   .text{
     width:30%;
@@ -151,7 +165,12 @@ table {
     padding:10px;
      margin-left:10px;
 }
+@media screen and (max-width: 1024px) {
+.time-line {
+  display: none;
+}
 
+}
 @media screen and (max-width: 768px) {
   .last td:last-child {
     border-bottom: solid 1px #ccc;
@@ -175,6 +194,9 @@ table {
   }
 
 // ツイート一覧
+  .time-line{
+    display: none;
+  }
   .table_index {
     width: 100%;
   }

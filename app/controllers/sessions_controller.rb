@@ -2,8 +2,7 @@ class SessionsController < ApplicationController
   include SessionsHelper
 
   def failure
-    # flash[:alert] = "ログインをキャンセルしました。もう一度ログインしてください"
-    redirect_to root_path, danger: "ログインをキャンセルしました。もう一度ログインしてください"
+    redirect_to users_path, danger: "ログインをキャンセルしました。もう一度ログインしてください"
   end
 
   def create
@@ -13,14 +12,16 @@ class SessionsController < ApplicationController
       log_in(user)
       redirect_to root_url
     else
-      redirect_to root_url, danger: "ログインできませんでした。もう一度ログインしてください"
-      # flash[:alert] = "ログインできませんでした。もう一度ログインしてください"
+      redirect_to users_path, danger: "ログインできませんでした。もう一度ログインしてください"
     end
+  rescue StandardError => e
+    put_api_error_log("login", "None", e)
+    redirect_to root_url, danger: "ログインできませんでした。もう一度ログインしてください"
   end
 
   def destroy
     log_out if logged_in?
-    redirect_to root_url
+    redirect_to users_path
   end
 
   def user_table_update(user_data)

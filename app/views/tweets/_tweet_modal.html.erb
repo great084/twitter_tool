@@ -8,7 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <%= form_with model: @tweet,method: :post, url: "/tweets/#{params[:id]}/post_create", local:true,multipart: true do |f| %>
+      <%= form_with model: @tweet,method: :post, url: "/tweets/repost", local:true,multipart: true do |f| %>
         <div class="modal-body">
           <div class="p-2">
             <p><%= f.label :label_old_tweet, "元投稿内容" %></p>
@@ -27,6 +27,7 @@
           </div>
         </div>
         <div class="modal-footer">
+          <%= f.hidden_field :tweet_string_id, value: @tweet.tweet_string_id %>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <%= f.submit "再投稿する", class: "btn btn-primary" %>
         </div>
