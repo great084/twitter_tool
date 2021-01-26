@@ -154,7 +154,7 @@ class TweetsController < ApplicationController
       params.require(:tweet).permit(:add_comments, :tweet_string_id)
     end
 
-    def error_status?(res_status,response)
+    def error_status?(res_status)
       !!if res_status[:code] != "200"
           put_api_error_log("search", status, e)
           redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
