@@ -14,7 +14,7 @@ RSpec.describe Retweet, type: :model do
     it "is invalid when tweet record is invalid" do
       @tweet.destroy
       @invalid_retweet = Retweet.create(tweet_id: @tweet.id)
-      expect(@invalid_retweet).to_not be_valid
+      expect(@invalid_retweet).to be_invalid
     end
   end
 
@@ -30,7 +30,7 @@ RSpec.describe Retweet, type: :model do
     it"is invalid without a tweet_id" do
       @retweet.update(tweet_id: nil)
       @retweet.valid?
-      expect(@retweet.errors[:tweet_id]).to_not include("can't be blank")
+      expect(@retweet.errors[:tweet]).to include("を入力してください")
     end
   end
 end

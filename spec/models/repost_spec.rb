@@ -14,7 +14,7 @@ RSpec.describe Repost, type: :model do
     it "is invalid when tweet record is invalid" do
       @tweet.destroy
       @invalid_repost = Repost.create(tweet_id: @tweet.id)
-      expect(@invalid_repost).to_not be_valid
+      expect(@invalid_repost).to be_invalid
     end
   end
 
@@ -30,7 +30,7 @@ RSpec.describe Repost, type: :model do
     it "is invalid without a tweet_id" do
       @repost.update(tweet_id: nil)
       @repost.valid?
-      expect(@repost.errors[:tweet_id]).to_not include("can't be blank")
+      expect(@repost.errors[:tweet]).to include("を入力してください")
     end
   end
 end

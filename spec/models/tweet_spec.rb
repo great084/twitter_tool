@@ -27,49 +27,49 @@ RSpec.describe Tweet, type: :model do
     it "is invalid without a user_id" do
       @tweet.update(user_id: nil)
       @tweet.valid?
-      expect(@tweet.errors[:user_id]).to_not include("can't be blank")
+      expect(@tweet.errors[:user]).to include("を入力してください")
     end
 
     it "is invalid without a tweet_created_at" do
       @tweet.update(tweet_created_at: nil)
       @tweet.valid?
-      expect(@tweet.errors[:tweet_created_at]).to_not include("can't be blank")
+      expect(@tweet.errors[:tweet_created_at]).to include("を入力してください")
     end
 
     it "is invalid without a tweet_string_id" do
       @tweet.update(tweet_string_id: nil)
       @tweet.valid?
-      expect(@tweet.errors[:tweet_string_id]).to_not include("cant be blank")
+      expect(@tweet.errors[:tweet_string_id]).to include("を入力してください")
     end
 
     it "is invalid without a text" do
       @tweet.update(text: nil)
       @tweet.valid?
-      expect(@tweet.errors[:text]).to_not include("can't be blank")
+      expect(@tweet.errors[:text]).to include("を入力してください")
     end
 
     it "is invalid without a retweet_count" do
       @tweet.update(retweet_count: nil)
       @tweet.valid?
-      expect(@tweet.errors[:retweet_count]).to_not include("can't be blank")
+      expect(@tweet.errors[:retweet_count]).to include("を入力してください")
     end
 
     it "is invalid without a favorite_count" do
       @tweet.update(favorite_count: nil)
       @tweet.valid?
-      expect(@tweet.errors[:favorite_count]).to_not include("can't be blank")
+      expect(@tweet.errors[:favorite_count]).to include("を入力してください")
     end
 
     it "is invalid without a tweet_flag" do
       @tweet.update(tweet_flag: nil)
       @tweet.valid?
-      expect(@tweet.errors[:tweet_flag]).to_not include("can't be blank")
+      expect(@tweet.errors[:tweet_flag]).to include("は一覧にありません")
     end
 
     it "is invalid without a retweet_flag" do
       @tweet.update(retweet_flag: nil)
       @tweet.valid?
-      expect(@tweet.errors[:retweet_flag]).to_not include("can't be blank")
+      expect(@tweet.errors[:retweet_flag]).to include("は一覧にありません")
     end
   end
 end
