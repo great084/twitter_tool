@@ -37,7 +37,6 @@ class TweetsController < ApplicationController
     search_params = first_search_params
     return if search_params_error(search_params)
 
-    binding.pry
     old_tweet_counts = @user.tweets.count
     remaing_number = RemaingNumber.new(search_params["count"].to_i)
     loop do
