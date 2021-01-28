@@ -37,6 +37,7 @@ class TweetsController < ApplicationController
     search_params = first_search_params
     return if search_params_error(search_params)
 
+    binding.pry
     old_tweet_counts = @user.tweets.count
     remaing_number = RemaingNumber.new(search_params["count"].to_i)
     loop do
@@ -164,9 +165,8 @@ class TweetsController < ApplicationController
       params.require(:tweet).permit(:add_comments, :tweet_string_id)
     end
 
-    def error_status?(res_status)
+    def error_status?(res_status, response)
       !!if res_status[:code] != "200"
-          put_api_error_log("search", status, e)
           redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
         end
     end
