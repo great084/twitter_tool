@@ -167,6 +167,7 @@ class TweetsController < ApplicationController
 
     def error_status?(res_status, response)
       !!if res_status[:code] != "200"
+          put_api_error_log("search", res_status[:code], response["error"]["message"])
           redirect_to new_tweet_path, danger: "以下の理由でツイートを取得できませんでした。#{res_status[:message]}"
         end
     end
