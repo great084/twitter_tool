@@ -15,10 +15,6 @@
             <%= f.radio_button :period, search_period(1.year, 0.year) %> 1年前〜現在
           </label></h5>
         </div>
-        <div class="p-4">
-          <h5><label>取得ツイート上限件数</label></h5>
-          <h5><label><%= f.select :count, order_tweet_count %></label></h5>
-        </div>
       </div>
         
       <% if session[:last_search_created_at] %>
@@ -35,7 +31,11 @@
         </div>
       <% end %>
     </div>
-    <div class="mt-5 mb-1">
+    <div class="p-4 mt-3">
+      <h5><label>取得ツイート上限件数</label></h5>
+      <h5><label><%= f.select :count, order_tweet_count %></label></h5>
+    </div>
+    <div class="mt-3 mb-1">
       <%= f.submit "取得する", class: "btn btn-primary btn-lg" %>
     </div>
   <% end %>
