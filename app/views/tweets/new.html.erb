@@ -1,6 +1,6 @@
 <div class="container text-center tweet_save_form">
 
-  <h2 class="mt-5">ツイートの保存</h2>
+  <h2 class="mt-5 mb-4">ツイートの保存</h2>
   <%= render 'flash' %>
   <%= form_with model: @tweet, url: search_tweets_path, local: true do |f| %>
     <div class="row row-eq-height justify-content-md-center">
@@ -21,8 +21,8 @@
         </div>
       </div>
         
-      <div class="col col-lg-5 card card-body">
-        <% if session[:last_search_created_at] %>
+      <% if session[:last_search_created_at] %>
+        <div class="col col-lg-5 card card-body">
           <h4><label>前回の続きから取得</label></h4>
           <div class="text-left px-4 margin-text">
             <h5><label>取得期間</label></h5>
@@ -32,8 +32,8 @@
               <div class="margin-text"><%= l before_query_last_day, format: :short %></div>
             </label></h5>
           </div>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
     <div class="mt-5 mb-1">
       <%= f.submit "取得する", class: "btn btn-primary btn-lg" %>
