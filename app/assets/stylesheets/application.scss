@@ -154,6 +154,12 @@ span {
     display: flex;
     flex-wrap: wrap;
 }
+.bg-new-conditions {
+  background-color: rgb(191, 245, 227);
+}
+.bg-before-conditions {
+  background-color: rgb(238, 245, 207);
+}
 // ログイン画面
 .login_btn{
   width: 50%;

@@ -4,7 +4,7 @@
   <%= render 'flash' %>
   <%= form_with model: @tweet, url: search_tweets_path, local: true do |f| %>
     <div class="row row-eq-height justify-content-md-center">
-      <div class="col col-lg-5 card card-body">
+      <div class="col col-lg-5 mx-3 card card-body bg-new-conditions">
         <h4><label>条件を指定して取得</label></h4>
         <div class="text-left px-5">
           <h5><label>取得期間</label></h5>
@@ -18,7 +18,7 @@
       </div>
         
       <% if session[:last_search_created_at] %>
-        <div class="col col-lg-5 card card-body">
+        <div class="col col-lg-5 mx-3 card card-body bg-before-conditions">
           <h4><label>前回の続きから取得</label></h4>
           <div class="text-left px-4 margin-text">
             <h5><label>取得期間</label></h5>
