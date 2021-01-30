@@ -58,6 +58,13 @@ RSpec.describe User, type: :model do
        expect(@user).to be_valid
       end
     end
+    context "uidが空の時" do
+      it "エラーが発生する" do
+        @user.update(uid: nil)
+        expect(@user).to be_invalid
+        expect(@user.errors[:uid]).to include("を入力してください")
+      end
+    end
     context "nicknameが空の時" do
       it "エラーが発生する" do
         @user.update(nickname: nil)
