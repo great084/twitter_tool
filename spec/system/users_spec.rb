@@ -55,7 +55,7 @@ RSpec.describe User, type: :model do
   describe "バリテーション" do
     context "データが条件を満たすとき" do
       it "保存できる" do
-       expect(@user).to be_valid
+        expect(@user).to be_valid
       end
     end
     context "uidが空の時" do
@@ -94,13 +94,13 @@ RSpec.describe User, type: :model do
         @user.destroy
         @after_tweet = Tweet.find_by(user_id: @user.id)
         expect(@after_tweet).to be_nil
-     end 
+      end
     end
     context "ユーザーインスタンスを作成する" do
       it "そのユーザーのtweetインスタンスを作成できる" do
-        @tweet = FactoryBot.create(:tweet,user_id: @user.id)
-        expect(@tweet).to be_valid 
-     end 
+        @tweet = FactoryBot.create(:tweet, user_id: @user.id)
+        expect(@tweet).to be_valid
+      end
     end
   end
 end
