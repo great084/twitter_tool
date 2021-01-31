@@ -73,4 +73,13 @@ RSpec.configure do |config|
       with.library :rails
     end
   end
+
+  # テストケース共通の事前処理
+  config.before(:each) do
+    # let(:rspec_session) で指定された値を セッションの初期値とします
+    session = defined?(rspec_session) ? rspec_session : {}
+
+    # 変更 sessionメソッドをRSpec.configuration.sessionで上書き
+    allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(session)
+  end
 end
