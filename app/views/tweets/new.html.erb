@@ -3,7 +3,7 @@
   <%= render 'flash' %>
   <div class="bg-light p-4">
     <%= form_with model: @tweet, url: search_tweets_path, local: true do |f| %>
-      <div class="mx-5 card border border-primary">
+      <div class="mx-5 card border border-primary" style="height: 7rem;">
         <div class="card-header text-primary border-primary">
           <h6><b>条件を指定して取得</b></h6>
         </div>
@@ -18,7 +18,7 @@
       </div>
         
       <% if session[:last_search_created_at] %>
-        <div class="mx-5 mt-4 card border border-danger">
+        <div class="mx-5 mt-4 card border border-danger" style="height: 8rem;">
           <div class="card-header text-danger border-danger">
             <h6><b>前回のデータから取得</b></h6>
           </div>
@@ -31,11 +31,11 @@
           </div>
         </div>
       <% end %>
-      <div class="p-4 mt-3">
+      <div class="p-4 m-2">
         <h5><label>取得ツイート上限件数</label></h5>
         <h5><label><%= f.select :count, order_tweet_count %></label></h5>
       </div>
-      <div class="mt-3 mb-1">
+      <div class="mb-1">
         <%= f.submit "取得する", class: "btn btn-primary btn-lg" %>
       </div>
     <% end %>
