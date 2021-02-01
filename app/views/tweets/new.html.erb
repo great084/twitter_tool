@@ -1,42 +1,43 @@
 <div class="container text-center tweet_save_form">
-
-  <h2 class="mt-5 mb-4">ツイートの保存</h2>
+  <h2 class="mt-5">ツイートの保存</h2>
   <%= render 'flash' %>
-  <%= form_with model: @tweet, url: search_tweets_path, local: true do |f| %>
-    <div class="row row-eq-height justify-content-md-center">
-      <div class="col col-lg-5 mx-3 card card-body bg-new-conditions">
-        <h4><label>条件を指定して取得</label></h4>
-        <div class="text-left px-5">
-          <h5><label>取得期間</label></h5>
-          <h5><label>
-            <%= f.radio_button :period, search_period(10.years, 1.year) %> 〜1年前
-          </label></h5>
-          <h5><label>
+  <div class="bg-light p-4">
+    <%= form_with model: @tweet, url: search_tweets_path, local: true do |f| %>
+      <div class="mx-5 card border border-primary">
+        <div class="card-header text-primary border-primary">
+          <h6><b>条件を指定して取得</b></h6>
+        </div>
+        <div class="px-5 card-body">
+          <h6><label>
+            <span class="radio-button-space">
+              <%= f.radio_button :period, search_period(10.years, 1.year) %> 〜1年前
+            </span>
             <%= f.radio_button :period, search_period(1.year, 0.year) %> 1年前〜現在
-          </label></h5>
+          </label></h6>
         </div>
       </div>
         
       <% if session[:last_search_created_at] %>
-        <div class="col col-lg-5 mx-3 card card-body bg-before-conditions">
-          <h4><label>前回の続きから取得</label></h4>
-          <div class="text-left px-4 margin-text">
-            <h5><label>取得期間</label></h5>
-            <h5><label>
+        <div class="mx-5 mt-4 card border border-danger">
+          <div class="card-header text-danger border-danger">
+            <h6><b>前回のデータから取得</b></h6>
+          </div>
+          <div class="px-4 card-body">
+            <h6><label>
               <%= f.radio_button :period, "before_query" %>
               <%= l before_query_first_day, format: :short %>〜<br>
-              <div class="margin-text"><%= l before_query_last_day, format: :short %></div>
-            </label></h5>
+              <div><%= l before_query_last_day, format: :short %></div>
+            </label></h6>
           </div>
         </div>
       <% end %>
-    </div>
-    <div class="p-4 mt-3">
-      <h5><label>取得ツイート上限件数</label></h5>
-      <h5><label><%= f.select :count, order_tweet_count %></label></h5>
-    </div>
-    <div class="mt-3 mb-1">
-      <%= f.submit "取得する", class: "btn btn-primary btn-lg" %>
-    </div>
-  <% end %>
+      <div class="p-4 mt-3">
+        <h5><label>取得ツイート上限件数</label></h5>
+        <h5><label><%= f.select :count, order_tweet_count %></label></h5>
+      </div>
+      <div class="mt-3 mb-1">
+        <%= f.submit "取得する", class: "btn btn-primary btn-lg" %>
+      </div>
+    <% end %>
+  </div>
 </div>
