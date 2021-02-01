@@ -29,9 +29,8 @@ RSpec.describe "Tweets", type: :request do
 
       it "indexテンプレートが表示されること" do
         get root_path
-        sort = request.env["action_controller.instance"].params.require(:q).require(:sorts)
-        # ツイートソート用パラメータがあること
-        expect(sort).to eq "tweet_created_at desc"
+        # タイムラインが存在すること
+        expect(response.body).to include("タイムライン")
       end
     end
   end
