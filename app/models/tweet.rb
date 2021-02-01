@@ -15,7 +15,4 @@ class Tweet < ApplicationRecord
   scope :order_pagination, lambda { |page_param|
     order(tweet_created_at: :desc).includes(:media).page(page_param).per(PER_PAGE)
   }
-  # scope :order_pagination, ->(page_param) {
-  #   order(tweet_created_at: :desc).includes(:media).page(page_param).per(PER_PAGE)
-  # }
 end
