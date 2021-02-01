@@ -37,6 +37,7 @@ class TweetsController < ApplicationController
     search_params = first_search_params
     return if search_params_error(search_params)
 
+    binding.pry
     old_tweet_counts = @user.tweets.count
     remaing_number = RemaingNumber.new(search_params["count"].to_i)
     loop do
@@ -133,7 +134,10 @@ class TweetsController < ApplicationController
     end
 
     def first_search_params
-      return before_query if params[:period] == "before_query"
+      if params[:period] == "before_query"
+        before_query.store("count", params.require(:count)) 
+        return before_query
+      end
       return condition_params if params[:period]
       # 上記に当てはまらなかった場合、nilを返す
     end

@@ -8,12 +8,16 @@
           <h6><b>条件を指定して取得</b></h6>
         </div>
         <div class="px-5 card-body">
-          <h6><label>
+          <h6>
             <span class="radio-button-space">
-              <%= f.radio_button :period, search_period(10.years, 1.year) %> 〜1年前
+              <label>
+                <%= f.radio_button :period, search_period(10.years, 1.year) %> 〜1年前
+              </label>
             </span>
-            <%= f.radio_button :period, search_period(1.year, 0.year) %> 1年前〜現在
-          </label></h6>
+            <label>
+              <%= f.radio_button :period, search_period(1.year, 0.year) %> 1年前〜現在
+            </label>
+          </h6>
         </div>
       </div>
         
