@@ -9,7 +9,6 @@ class TweetsController < ApplicationController
   require "open-uri"
 
   def index
-    @user = current_user
     @now = Time.zone.today
     if params[:q].present?
       @q = if params[:sorts]
