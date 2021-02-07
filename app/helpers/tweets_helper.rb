@@ -19,4 +19,12 @@ module TweetsHelper
     end
     tweet_count
   end
+
+  def before_query_first_day
+    DateTime.parse(before_query["date_from"])
+  end
+
+  def before_query_last_day
+    DateTime.parse(session[:last_search_created_at])
+  end
 end

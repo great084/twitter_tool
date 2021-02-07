@@ -18,8 +18,21 @@ module SessionsHelper
 
   # 現在のユーザーをログアウトする
   def log_out
-    # binding.pry
     session.delete(:uid)
     @current_user = nil
+  end
+
+  def before_query
+    session[:search_query]
+  end
+
+  def next_search_query(search_params, response)
+    if search_params["next"]
+      session[:search_query] = search_params
+      session[:last_search_created_at] = response["results"].last["created_at"]
+    else
+      session.delete(:search_query)
+      session.delete(:last_search_created_at)
+    end
   end
 end
