@@ -27,7 +27,7 @@ RSpec.describe Retweet, type: :model do
   end
 
   context "without any parameter" do
-    it"is invalid without a tweet_id" do
+    it "is invalid without a tweet_id" do
       @retweet.update(tweet_id: nil)
       @retweet.valid?
       expect(@retweet.errors[:tweet]).to include("を入力してください")
