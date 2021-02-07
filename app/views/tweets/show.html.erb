@@ -15,7 +15,6 @@
       <th scope="col" class="">画像</th>
       <td>
         <% @tweet.media.each do |media| %>
-          <%# binding.pry %>
         <%= image_tag media.media_url.to_s,class: "show_tweet_media m-1" if media.media_url? %>
         <% end %>
       </td>
@@ -25,25 +24,7 @@
   </tbody>
 </table>
 <div class="text-right my-3 h6" style="width:90%;">
-  <input type="button" class="text-muted" id="link_back" value="ツイートの一覧へ戻る">
-  
-  <script>
-    const reloadPage = async () => {
-      console.log("reloadかいし")
-      await location.reload()
-      console.log("reload終了")
-    }
-
-    var link_back = document.getElementById("link_back");
-    link_back.addEventListener("click", () => {
-      reloadPage()
-      history.back() 
-      console.log("history.back終了")
-    });
-  </script>
-
-
-
+  <%= link_to "ツイートの一覧へ戻る", :back, class:"text-muted" %>
 </div>
 <div class="text-center">
   <button type="button" class="btn btn-warning mx-2 method-btn" data-toggle="modal" data-target="#modal2" value=@tweet>
