@@ -1,0 +1,2 @@
+class AutoTweet < ApplicationRecord
+end

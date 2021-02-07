@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_25_224613) do
+ActiveRecord::Schema.define(version: 2021_02_07_230229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "auto_tweets", force: :cascade do |t|
+    t.string "user_uid", null: false
+    t.integer "tweet_hour1"
+    t.integer "tweet_hour2"
+    t.integer "tweet_hour3"
+    t.integer "tweet_hour4"
+    t.integer "tweet_hour5"
+    t.string "sort_column", null: false
+    t.string "order", null: false
+    t.integer "exclude_tweet", null: false
+    t.integer "exclude_retweet", null: false
+    t.integer "count", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "media", force: :cascade do |t|
     t.bigint "tweet_id", null: false
