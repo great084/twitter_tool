@@ -3,27 +3,21 @@ class TweetsController < ApplicationController
   include TwitterApi
   before_action :date_params_check, only: [:search]
   before_action :tweet_user
-  PER_PAGE = 10
   MEDIA_MAX_COUNT = 4
   require "date"
   require "open-uri"
 
   def index
-    @user = current_user
     @now = Time.zone.today
     if params[:q].present?
-      @q = if params[:sorts]
-             @user.tweets.ransack(sort_params)
-           else
-             @user.tweets.ransack(params[:q])
-           end
+      @q = @user.tweets.ransack(
+        params[:sorts] ? sort_params : params[:q]
+      )
     else
       params[:q] = { sorts: "tweet_created_at desc" }
       @q = @user.tweets.ransack
     end
-    @tweets = @q.result(distinct: true)
-                .order(tweet_created_at: :desc).includes(:media)
-                .page(params[:page]).per(PER_PAGE)
+    @tweets = @q.result(distinct: true).order_pagination(params[:page])
   end
 
   def show
@@ -77,8 +71,6 @@ class TweetsController < ApplicationController
     put_api_error_log("retweet", status, e)
     redirect_to tweet_path(@tweet), danger: "リツイートに失敗しました #{e}"
   end
-
-  def new; end
 
   private
 
