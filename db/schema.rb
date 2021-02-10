@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_07_230229) do
+ActiveRecord::Schema.define(version: 2021_02_09_224206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "auto_tweets", force: :cascade do |t|
-    t.string "user_uid", null: false
     t.integer "tweet_hour1"
     t.integer "tweet_hour2"
     t.integer "tweet_hour3"
@@ -29,6 +28,8 @@ ActiveRecord::Schema.define(version: 2021_02_07_230229) do
     t.integer "count", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_auto_tweets_on_user_id"
   end
 
   create_table "media", force: :cascade do |t|
@@ -81,6 +82,7 @@ ActiveRecord::Schema.define(version: 2021_02_07_230229) do
     t.string "secret"
   end
 
+  add_foreign_key "auto_tweets", "users"
   add_foreign_key "media", "tweets"
   add_foreign_key "reposts", "tweets"
   add_foreign_key "retweets", "tweets"

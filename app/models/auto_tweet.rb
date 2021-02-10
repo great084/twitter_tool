@@ -1,5 +1,5 @@
 class AutoTweet < ApplicationRecord
-  validates :user_uid, presence: true
+  belongs_to :user
   validates :tweet_hour1, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 23 }
   validates :tweet_hour2, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 23 }
   validates :tweet_hour3, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 23 }
