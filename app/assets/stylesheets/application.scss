@@ -141,11 +141,17 @@ span {
 }
 // ツイート取得ページ
 .tweet_save_form{
-  max-width: 500px;
+  max-width: 800px;
   .show-api-count {
     background-color: #ffffff;
     padding-top: 200px;
   }
+}
+.margin-text{
+  margin-left: 5%;
+}
+.radio-button-space{
+  margin-right : 40px;
 }
 // ログイン画面
 .login_btn{

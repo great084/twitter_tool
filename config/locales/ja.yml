@@ -2,7 +2,7 @@ ja:
   time:
     formats:
       default: "%Y/%m/%d %H:%M:%S"
-      short: "%Y %m/%d %H:%M"
+      short: "%Y/%m/%d %H:%M"
   views:
     pagination:
       first: "最初"
