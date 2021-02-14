@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_09_224206) do
+ActiveRecord::Schema.define(version: 2021_02_14_093738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,12 +23,12 @@ ActiveRecord::Schema.define(version: 2021_02_09_224206) do
     t.integer "tweet_hour5"
     t.string "sort_column", null: false
     t.string "order", null: false
-    t.integer "exclude_tweet", null: false
     t.integer "exclude_retweet", null: false
     t.integer "count", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id"
+    t.integer "exclude_repost"
     t.index ["user_id"], name: "index_auto_tweets_on_user_id"
   end
 
