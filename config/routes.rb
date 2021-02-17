@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get '/auth/failure', to: 'sessions#failure'
   get '/logout', to: 'sessions#destroy'
   get '/users', to: 'users#index'
+  get '/auto_tweet', to: 'tweets#auto_tweet'
   root to: "tweets#index"
   resources :tweets, only: [:new, :show] do
     collection do

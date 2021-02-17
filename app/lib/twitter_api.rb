@@ -10,7 +10,6 @@ module TwitterApi
 
   def post_tweet(post_params, login_user)
     client = twitter_client(login_user)
-
     post_images = []
     post_params[:media_attributes]&.each do |_k, v|
       # 画面で画像登録された場合
@@ -22,7 +21,6 @@ module TwitterApi
         post_images << URI.parse(img_url).open
       end
     end
-
     client.update_with_media("#{post_params[:text]}\r", post_images)
   end
 
