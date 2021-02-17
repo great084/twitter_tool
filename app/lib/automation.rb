@@ -23,7 +23,8 @@ module Automation
     # )
     ############################
 
-    @params = AutoTweet.find(user.id)    # 仮のユーザ
+    @params = AutoTweet.find_by(user_id: user.id)    # 仮のユーザ
+    binding.pry
     tweet_count = @params.count
     while tweet_count != 0
       tweet = choice_tweet(@params, user)
