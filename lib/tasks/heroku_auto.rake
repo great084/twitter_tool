@@ -6,7 +6,7 @@ namespace :heroku_auto do
 
   desc "自動投稿するタスク"
   task tweet: :environment do
-    @user = User.find(1)
+    @user = User.find(1) # 仮作成
     auto_tweet(@user)
   end
 end
