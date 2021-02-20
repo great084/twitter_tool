@@ -24,7 +24,23 @@
   </tbody>
 </table>
 <div class="text-right my-3 h6" style="width:90%;">
-  <%= link_to "ツイートの一覧へ戻る", :back, class:"text-muted" %>
+  <input type="button" class="text-muted" id="link_back" value="ツイートの一覧へ戻る">
+  
+  <script>
+    window.onpopstate = function(event) {
+      window.location.reload();
+    };
+
+    var link_back = document.getElementById("link_back");
+    link_back.addEventListener("click", () => {
+      old_url = location.href
+      history.back()
+      //再投稿、リツイートにより1ページ戻っても一覧画面に戻らない場合
+      if (location.href == old_url) {
+        history.back()
+      }
+    });
+  </script>
 </div>
 <div class="text-center">
   <button type="button" class="btn btn-warning mx-2 method-btn" data-toggle="modal" data-target="#modal2" value=@tweet>
