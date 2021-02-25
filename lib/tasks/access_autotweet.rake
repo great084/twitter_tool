@@ -4,15 +4,10 @@ namespace :access_autotweet do
   task auto_tweets: :environment do
     @now = Time.zone.now.hour
     # 18:58 などにheroku schedulerが起動した際に、3分足すことで時間誤差を修正する
-    @lag = Time.zone.now + (60 * 3)
-    @time_lag = @lag.hour
+    @add_three_min = Time.zone.now + (60 * 3)
+    @fix_timelag = @add_three_min.hour
     # Autotweetの時間と今の時間が一致しているか確認
-    @autotweet_first = AutoTweet.where(tweet_hour1: @time_lag)
-    @autotweet_second = AutoTweet.where(tweet_hour2: @time_lag)
-    @autotweet_third = AutoTweet.where(tweet_hour3: @time_lag)
-    @autotweet_fourth = AutoTweet.where(tweet_hour4: @time_lag)
-    @autotweet_fifth = AutoTweet.where(tweet_hour5: @time_lag)
-    @autotweets_array = [@autotweet_first, @autotweet_second, @autotweet_third, @autotweet_fourth, @autotweet_fifth]
+    @autotweet_user_ids = AutoTweet.where("(tweet_hour1 = ?) OR (tweet_hour2 = ?)OR (tweet_hour3 = ?) OR (tweet_hour4 = ?) OR (tweet_hour5 = ?)", @fix_timelag, @fix_timelag, @fix_timelag, @fix_timelag, @fix_timelag).pluck(:user_id)
 
     # 仮設定したメソッド
     def auto_tweet(user)
@@ -21,15 +16,14 @@ namespace :access_autotweet do
     end
 
     # auto_tweetを呼び出す
-    def call_auto_tweet(autotweets)
-      autotweets&.each do |autotweet|
-        @user = User.find_by(id: autotweet.user_id)
+    def call_auto_tweet(user_ids)
+      user_ids.each do |user_id|
+        @user = User.find_by(id: user_id)
         auto_tweet(@user)
       end
     end
+
     # call_auto_tweetを呼び出す
-    @autotweets_array.each do |argument|
-      call_auto_tweet(argument)
-    end
+    call_auto_tweet(@autotweet_user_ids)
   end
 end
