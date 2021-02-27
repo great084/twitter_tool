@@ -2,7 +2,7 @@ module Automation
   def choice_tweet(params, user)
     tweets = user.tweets
     last_tweet_date = Time.zone.now.ago(params.exclude_tweet.month)
-    last_repost_date = Time.zone.now.ago(params.exclude_retweet.month)
+    last_repost_date = Time.zone.now.ago(params.exclude_repost.month)
     exclude = Repost.where("created_at >= ?", last_repost_date).pluck(:tweet_id).uniq
 
     exclude_tweets = tweets.where("tweet_created_at <= ?", last_tweet_date).where.not(id: exclude)
@@ -11,19 +11,7 @@ module Automation
   end
 
   def auto_tweet(user)
-    # テスト用パラメータ##############
-    # AutoTweet.create!(
-    #   user_id: user.id,
-    #   tweet_hour1: 12,
-    #   sort_column: "favorite_count",
-    #   order: "desc",
-    #   exclude_tweet: 1,
-    #   exclude_retweet: 1,
-    #   count: 2
-    # )
-    ############################
-
-    @params = AutoTweet.find_by(user_id: user.id)    # 仮のユーザ
+    @params = AutoTweet.find_by(user_id: user.id)
     tweet_count = @params.count
     while tweet_count != 0
       tweet = choice_tweet(@params, user)
@@ -41,6 +29,6 @@ module Automation
       tweet_count -= 1
     end
   rescue StandardError => e
-    put_api_error_log("auto_tweet", status, e)
+    logger.error "error_status: #{status}\rauto_tweet_error: #{e}"
   end
 end
