@@ -9,7 +9,7 @@ FactoryBot.define do
     sort_column { "MyString" }
     order { "MyString" }
     exclude_tweet { 1 }
-    exclude_retweet { 1 }
+    exclude_repost { 1 }
     count { 1 }
   end
 end
