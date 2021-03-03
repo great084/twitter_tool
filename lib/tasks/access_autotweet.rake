@@ -7,6 +7,7 @@ namespace :access_autotweet do
 
   desc "AutoTweetテーブルへアクセスする"
   task auto_tweets: :environment do
+    Rails.logger.info "##### heroku Schedulerによる定期的な処理を開始します。#####"
     @now = Time.zone.now.hour
     # 18:58 などにheroku schedulerが起動した際に、3分足すことで時間誤差を修正する
     @add_three_min = Time.zone.now + (60 * 3)
@@ -24,5 +25,6 @@ namespace :access_autotweet do
 
     # call_auto_tweetを呼び出す
     call_auto_tweet(@autotweet_user_ids)
+    Rails.logger.info "##### heroku Schedulerによる定期的な処理を終了します。#####"
   end
 end
