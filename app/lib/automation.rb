@@ -11,12 +11,14 @@ module Automation
   end
 
   def auto_tweet(user)
+    puts "##### 現在時刻と再投稿希望時刻が一致したため処理を開始しました。#####"
+    puts "##### user_name: #{user.nickname} #####"
     @params = AutoTweet.find_by(user_id: user.id)
     tweet_count = @params.count
     while tweet_count != 0
       tweet = choice_tweet(@params, user)
       unless tweet
-        put_api_error_log("該当のツイートが無いため、ツイートができませんでした。")
+        logger.error "該当のツイートが無いため、ツイートができませんでした。"
         return
       end
       auto_post_params = {
@@ -28,7 +30,6 @@ module Automation
       Repost.create!(tweet_id: tweet.id)
       tweet_count -= 1
     end
-  rescue StandardError => e
-    logger.error "error_status: #{status}\rauto_tweet_error: #{e}"
+    puts "##### 再投稿が終了しました。再投稿件数: #{@params.count - tweet_count} #####"
   end
 end
