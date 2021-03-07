@@ -11,8 +11,8 @@ module Automation
   end
 
   def auto_tweet(user)
-    logger.info "##### 現在時刻と再投稿希望時刻が一致したため処理を開始しました。#####"
-    logger.info "##### user_name: #{user.nickname} #####"
+    Rails.logger.info "##### 現在時刻と再投稿希望時刻が一致したため処理を開始しました。#####"
+    Rails.logger.info "##### user_name: #{user.nickname} #####"
     @params = AutoTweet.find_by(user_id: user.id)
     tweet_count = @params.count
     while tweet_count != 0
@@ -30,6 +30,6 @@ module Automation
       Repost.create!(tweet_id: tweet.id)
       tweet_count -= 1
     end
-    logger.info "##### 再投稿が終了しました。再投稿件数: #{@params.count - tweet_count} #####"
+    Rails.logger.info "##### 再投稿が終了しました。再投稿件数: #{@params.count - tweet_count} #####"
   end
 end
