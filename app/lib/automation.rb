@@ -32,4 +32,6 @@ module Automation
     end
     Rails.logger.info "##### 再投稿が終了しました。再投稿件数: #{@params.count - tweet_count} #####"
   end
+rescue StandardError => e
+  logger.error "error_status: #{status}\rauto_tweet_error: #{error}"
 end
