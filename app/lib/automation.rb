@@ -18,7 +18,7 @@ module Automation
     while tweet_count != 0
       tweet = choice_tweet(@params, user)
       unless tweet
-        logger.error "該当のツイートが無いため、ツイートができませんでした。"
+        Rails.logger.error "該当のツイートが無いため、ツイートができませんでした。"
         return
       end
       auto_post_params = {
